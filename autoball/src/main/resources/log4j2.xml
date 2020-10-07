@@ -24,7 +24,6 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="${package}" level="INFO"/>
         <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
 <!--            <AppenderRef ref="R"/>-->

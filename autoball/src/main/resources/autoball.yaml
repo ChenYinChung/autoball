@@ -1,1 +1,3 @@
 lib : /Users/sammy/git/survey/autoball/go/autoballapi.so
+
+localtest : true

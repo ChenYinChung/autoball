@@ -1,11 +1,13 @@
 package com.nexio.autoball.service;
 
 import autoball.AutoBallLibrary;
+import com.nexio.sunzing.TestingData;
 import com.sun.jna.NativeLong;
 import com.sun.jna.platform.win32.WTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
@@ -19,6 +21,10 @@ public class AutoBallService {
 
     @Autowired
     AutoBallLibrary autoBallLibrary;
+
+    @Value("${localtest}")
+    Boolean localtest;
+
 
     /**
      * 開始開球。參數一 nGameCount表示要連續開球的次數，如果不設置默認為1，即只開一盤；參數nTimeSpan表示下一次開球與上一次開球的時間間隔，默認為0，即開完一盤接著開下一盤
@@ -56,8 +62,15 @@ public class AutoBallService {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
+        if(localtest){
+            logger.info("getGameInfo run in local testing mode please disable flag in autoball.yaml");
+            gameInfoStruct = TestingData.gameInfoStruct(100,12);
+        }
+
+
         boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
-        logger.info("getGameInfo={}",isError);
+        logger.info("isError={}",isError);
+        logger.info("getGameInfo={}",gameInfoStruct);
         return gameInfoStruct;
     }
 
@@ -269,10 +282,10 @@ public class AutoBallService {
      * @throws Exception
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public byte setControlStyle(int nControlStyle) {
+    public int setControlStyle(int nControlStyle) {
         //SetControlStyle(int nControlStyle);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        byte isError =  autoBallLibrary.SetControlStyle(nControlStyle);
+        int isError =  autoBallLibrary.SetControlStyle(nControlStyle);
         logger.info("SetControlStyle={}",isError);
         logger.info("SetControlStyle LPSTR={}",lpstr.getValue());
         return isError;

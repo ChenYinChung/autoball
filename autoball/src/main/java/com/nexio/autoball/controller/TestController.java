@@ -5,9 +5,9 @@ import com.nexio.autoball.service.AutoBallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 接收ABService的測試資料
@@ -22,46 +22,113 @@ public class TestController {
 
     @PostMapping(path = "/startGame", consumes = "application/json", produces = "application/json")
     public String startGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
-                       @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan)  {
-        autoBallService.startGame(nGameCount,nTimeSpan);
+                            @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan) {
+        autoBallService.startGame(nGameCount, nTimeSpan);
         return "OK";
     }
 
     @PostMapping(path = "/hasGamePlayed", consumes = "application/json", produces = "application/json")
-    public Boolean hasGamePlayed()  {
+    public Boolean hasGamePlayed() {
         boolean isError = autoBallService.hasGamePlayed();
         return isError;
     }
 
     @PostMapping(path = "/getGameInfo", consumes = "application/json", produces = "application/json")
-    public AutoBallLibrary.GameInfoStruct getGameInfo()  {
+    public AutoBallLibrary.GameInfoStruct getGameInfo() {
         AutoBallLibrary.GameInfoStruct gameInfoStruct = autoBallService.getGameInfo();
         return gameInfoStruct;
     }
 
     @PostMapping(path = "/terminateGame", consumes = "application/json", produces = "application/json")
-    public Integer terminateGame()  {
+    public Integer terminateGame() {
         int isError = autoBallService.terminateGame();
         return isError;
     }
 
     @PostMapping(path = "/suspendGame", consumes = "application/json", produces = "application/json")
-    public Integer suspendGame()  {
+    public Integer suspendGame() {
         int isError = autoBallService.suspendGame();
         return isError;
     }
 
     @PostMapping(path = "/resumeGame", consumes = "application/json", produces = "application/json")
-    public Integer resumeGame()  {
+    public Integer resumeGame() {
         int isError = autoBallService.resumeGame();
         return isError;
     }
 
     @PostMapping(path = "/connectReader", consumes = "application/json", produces = "application/json")
     public Boolean connectReader(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
-                            @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate)  {
-        boolean isError = autoBallService.connectReader(nCommNum,laudrate);
+                                 @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+        boolean isError = autoBallService.connectReader(nCommNum, laudrate);
         return isError;
     }
 
+    @PostMapping(path = "/connectRD1", consumes = "application/json", produces = "application/json")
+    public Boolean connectRD1(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
+                              @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+        boolean isError = autoBallService.connectRD1(nCommNum, laudrate);
+        return isError;
+    }
+
+    @PostMapping(path = "/connectRD2", consumes = "application/json", produces = "application/json")
+    public Boolean connectRD2(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
+                              @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+        boolean isError = autoBallService.connectRD2(nCommNum, laudrate);
+        return isError;
+    }
+
+    @PostMapping(path = "/disconnectReader", consumes = "application/json", produces = "application/json")
+    public Boolean disconnectReader() {
+        boolean isError = autoBallService.disconnectReader();
+        return isError;
+    }
+
+    @PostMapping(path = "/disconnectRD1", consumes = "application/json", produces = "application/json")
+    public Boolean disconnectRD1() {
+        boolean isError = autoBallService.disconnectRD1();
+        return isError;
+    }
+
+    @PostMapping(path = "/disconnectRD2", consumes = "application/json", produces = "application/json")
+    public Boolean disconnectRD2() {
+        boolean isError = autoBallService.disconnectRD2();
+        return isError;
+    }
+
+    @PostMapping(path = "/getLastError", consumes = "application/json", produces = "application/json")
+    public Integer getLastError() {
+        Integer isError = autoBallService.getLastError();
+        return isError;
+    }
+
+    @PostMapping(path = "/getAntennaPara", consumes = "application/json", produces = "application/json")
+    public Boolean getAntennaPara() {
+        boolean isError = autoBallService.getAntennaPara();
+        return isError;
+    }
+
+    @PostMapping(path = "/setAntennaPara", consumes = "application/json", produces = "application/json")
+    public Boolean setAntennaPara() {
+        boolean isError = autoBallService.setAntennaPara();
+        return isError;
+    }
+
+    @PostMapping(path = "/getControlProcess", consumes = "application/json", produces = "application/json")
+    public Boolean getControlProcess() {
+        boolean isError = autoBallService.getControlProcess();
+        return isError;
+    }
+
+    @PostMapping(path = "/setControlProcess", consumes = "application/json", produces = "application/json")
+    public Boolean setControlProcess() {
+        boolean isError = autoBallService.setControlProcess();
+        return isError;
+    }
+
+    @PostMapping(path = "/setControlStyle", consumes = "application/json", produces = "application/json")
+    public Integer setControlStyle(@RequestParam(value = "nControlStyle", defaultValue = "1") int nControlStyle) {
+        Integer isError = autoBallService.setControlStyle(nControlStyle);
+        return isError;
+    }
 }
