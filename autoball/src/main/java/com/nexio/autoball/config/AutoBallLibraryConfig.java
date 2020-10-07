@@ -8,11 +8,19 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AutoBallLibraryConfig {
-    @Value("${lib}")
-    String lib;
+    @Value("${lib.path}")
+    String libPath;
+
+    @Value("${lib.local}")
+    String libLocal;
+
+    @Value("${lib.test}")
+    Boolean libTest;
 
     @Bean("autoBallLibrary")
     public AutoBallLibrary autoBallLibrary() {
+
+        String lib = libTest ? libLocal : libPath;
 //        String pwd = System.getProperty("user.dir");
 //        String lib = pwd + "/go/autoballapi.so";
         AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);

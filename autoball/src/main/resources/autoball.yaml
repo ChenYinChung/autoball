@@ -1,3 +1,4 @@
-lib : /Users/sammy/git/survey/autoball/go/autoballapi.so
-
-localtest : true
+lib :
+  path  : /Users/sammy/git/survey/autoball/go/autoball.so
+  local : /Users/sammy/git/survey/autoball/go/autoballapi.so
+  test : false

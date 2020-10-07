@@ -38,14 +38,14 @@ func HasGamePlayed() bool {
 	fmt.Println("Current Unix Time: %v\n", time.Now().Unix())
 	time.Sleep(2 * time.Second)
 	fmt.Println("Current Unix Time: %v\n", time.Now().Unix())
-	return true
+	return false
 }
 
 // 獲取開出的一局球的完整信息。返回True表示取到，false表示沒取到。
 //export GetGameInfo
 func GetGameInfo(gameInfoStruct string) bool {
 
-	return true
+	return false
 }
 
 // 打斷并終止一局開球。
@@ -57,49 +57,49 @@ func TerminateGame() int {
 // 掛起一局開球，即暫停開球。
 //export SuspendGame
 func SuspendGame() int {
-	return 2
+	return 1
 }
 
 // 繼續掛起的開球進程。
 //export ResumeGame
 func ResumeGame() int {
-	return 3
+	return 1
 }
 
 // 連接Reader2000設備。參數一nCommNum是連接Reader2000的串口號，l audrate是串口波特率。
 //export ConnectReader
 func ConnectReader(nCommNum int, laudrate int64) bool {
-	return true
+	return false
 }
 
 // 連接第一臺RD-1000設備。參數一nCommNum是連接第一臺RD-1000的串口號，l audrate是串口波特率。
 //export ConnectRD1
 func ConnectRD1(nCommNum int, laudrate int64) bool {
-	return true
+	return false
 }
 
 // 連接第二臺RD-1000設備。參數一nCommNum是連接第二臺RD-1000的串口號，l audrate是串口波特率。
 //export ConnectRD2
 func ConnectRD2(nCommNum int64, laudrate int64) bool {
-	return true
+	return false
 }
 
 // 斷開與Reader2000設備的連接，釋放串口
 //export DisconnectReader
 func DisconnectReader() bool {
-	return true
+	return false
 }
 
 // 斷開與第二臺RD-1000設備的連接，釋放串口
 //export DisconnectRD1
 func DisconnectRD1() bool {
-	return true
+	return false
 }
 
 // 斷開與第二臺RD-1000設備的連接，釋放串口
 //export DisconnectRD2
 func DisconnectRD2() bool {
-	return true
+	return false
 }
 
 // 獲取最近的錯誤信息。參數strErrorMessage是錯誤的詳細說明。沒有錯誤返回0，其它表示錯誤編號。
@@ -107,8 +107,8 @@ func DisconnectRD2() bool {
 func GetLastError(strErrorMessage *string) int {
 	str1 := new(string)
 	*str1 = "Hello GetLastError"
-	strErrorMessage = str1
-	return 9
+	//strAntennaPara += str1
+	return 0
 }
 
 // 獲取系统当前的天線设置信息。參數strAntennaPara是保存當前天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。
@@ -118,7 +118,7 @@ func GetAntennaPara(strAntennaPara *string) bool {
 	*str1 = "Hello GetAntennaPara"
 	strAntennaPara = str1
 
-	return true
+	return false
 }
 
 // 修改系统当前的天線设置信息。參數strAntennaPara是存有天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。
@@ -127,7 +127,7 @@ func SetAntennaPara(strAntennaPara *string) bool {
 	str1 := new(string)
 	*str1 = "Hello SetAntennaPara"
 	strAntennaPara = str1
-	return true
+	return false
 }
 
 // 獲取系统当前的開球控制流程設置。參數strContorlProcess是保存當前開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。
@@ -137,7 +137,7 @@ func GetControlProcess(strContorlProcess *string) bool {
 	*str1 = "Hello GetControlProcess"
 	strContorlProcess = str1
 
-	return true
+	return false
 }
 
 // 修改系统当前的開球控制流程設置。參數strContorlProcess是存有開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。
@@ -147,14 +147,14 @@ func SetControlProcess(strContorlProcess *string) bool {
 	*str1 = "Hello SetControlProcess"
 	strContorlProcess = str1
 
-	return true
+	return false
 }
 
 // 修改系统当前開球流程的控制方式。參數nControlStyle是開球流程控制方式，同時開時為1，輪流開時為2，開完一個開開一個時為3。沒有錯誤返回ture，有錯誤返回false。
 //export SetControlStyle
 func SetControlStyle(nControlStyle int) bool {
-	return true
+	return false
 }
 
-//go build -o autoballapi.so -buildmode=c-shared autoballapi.go
+//go build -o autoball.so -buildmode=c-shared autoball.go
 func main() {}

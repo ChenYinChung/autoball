@@ -10,10 +10,7 @@ AutoBall 搖彩機API串接測試
  
  curl http://localhost:8008/getGameInfo -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
  
+ curl http://localhost:8008/getLastError -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
+
+ curl http://localhost:8008/getAntennaPara -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
  
- terminateGame
- suspendGame
- resumeGame
- 
- 
- terminateGame
