@@ -32,10 +32,10 @@ subprojects {
 apply from: file("${rootDir}/gradle/project.gradle")
 //apply from: file("${rootDir}/gradle/check.gradle")
 
-// only flyway project setting db migration
-configure(subprojects.findAll { it.name.endsWith('-flyway') }) {
-    apply from: file("${rootDir}/gradle/db-migration.gradle")
-}
+//// only flyway project setting db migration
+//configure(subprojects.findAll { it.name.endsWith('-flyway') }) {
+//    apply from: file("${rootDir}/gradle/db-migration.gradle")
+//}
 
 // only flyway project setting db migration
 configure(subprojects.findAll { it.name.equals('autoball') }) {
@@ -62,7 +62,7 @@ project("autoball"){
         implementation "org.springframework.boot:spring-boot-starter-undertow:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-log4j2:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-data-rest:${SpringBootStarterVersion}"
-        implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
+//        implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
 
         /**
          * db libs
@@ -91,12 +91,12 @@ project("autoball"){
 
 }
 
-project("autoball-flyway") {
-    bootJar {
-        enabled = false
-    }
-
-    dependencies{
-        implementation "org.postgresql:postgresql:42.2.5"
-    }
-}
+//project("autoball-flyway") {
+//    bootJar {
+//        enabled = false
+//    }
+//
+//    dependencies{
+//        implementation "org.postgresql:postgresql:42.2.5"
+//    }
+//}

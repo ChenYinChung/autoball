@@ -3,11 +3,15 @@ package com.nexio;
 import com.nexio.autoball.config.YamlPropertySourceFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@SpringBootApplication(scanBasePackages = {"com.nexio.autoball"})
+@SpringBootApplication(exclude = {
+        DataSourceAutoConfiguration.class},scanBasePackages = {"com.nexio.autoball"})
+
+//@SpringBootApplication(scanBasePackages = {"com.nexio.autoball"})
 @EnableAsync
 @EnableRetry
 //@Import({PersistenceConfig.class, RestTemplateConfig.class})

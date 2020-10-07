@@ -2,6 +2,7 @@ package autoball;
 
 import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.*;
+import com.sun.jna.platform.win32.WTypes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +17,9 @@ public interface AutoBallLibrary extends Library {
     //    public static final String JNA_LIBRARY_NAME = LibraryExtractor.getLibraryPath("AutoBoll", true, AutoBallLibrary.class);
 //    public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(AutoBallLibrary.JNA_LIBRARY_NAME, MangledFunctionMapper.DEFAULT_OPTIONS);
 //    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary)Native.loadLibrary(AutoBallLibrary.JNA_LIBRARY_NAME, AutoBallLibrary.class, MangledFunctionMapper.DEFAULT_OPTIONS);
-    static String pwd = System.getProperty("user.dir");
-    static String lib = pwd + "/go/autoballapi.so";
-    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
+//    static String pwd = System.getProperty("user.dir");
+//    static String lib = pwd + "/go/autoballapi.so";
+//    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
 
     public static final int _NUMBEROFBALLCODE_ = (int)8;
     public static final int _NUMBEROFBARRELBALL_ = (int)32;
@@ -219,43 +220,35 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>int GetLastError(LPSTR)</code><br>
      * <i>native declaration : line 77</i>
      */
-    int GetLastError(LPSTR strErrorMessage);
+    int GetLastError(WTypes.LPSTR strErrorMessage);
     /**
      * 獲取系统当前的天線设置信息。參數strAntennaPara是保存當前天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool GetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 80</i>
      */
-    boolean GetAntennaPara(LPSTR strAntennaPara);
+    boolean GetAntennaPara(WTypes.LPSTR strAntennaPara);
     /**
      * 修改系统当前的天線设置信息。參數strAntennaPara是存有天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 83</i>
      */
-    boolean SetAntennaPara(LPSTR strAntennaPara);
+    boolean SetAntennaPara(WTypes.LPSTR strAntennaPara);
     /**
      * 獲取系统当前的開球控制流程設置。參數strContorlProcess是保存當前開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool GetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 86</i>
      */
-    boolean GetControlProcess(LPSTR strContorlProcess);
+    boolean GetControlProcess(WTypes.LPSTR strContorlProcess);
     /**
      * 修改系统当前的開球控制流程設置。參數strContorlProcess是存有開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 89</i>
      */
-    boolean SetControlProcess(LPSTR strContorlProcess);
+    boolean SetControlProcess(WTypes.LPSTR strContorlProcess);
     /**
      * 修改系统当前開球流程的控制方式。參數nControlStyle是開球流程控制方式，同時開時為1，輪流開時為2，開完一個開開一個時為3。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetControlStyle(int)</code><br>
      * <i>native declaration : line 92</i>
      */
     byte SetControlStyle(int nControlStyle);
-    public static class LPSTR extends PointerType {
-        public LPSTR(Pointer address) {
-            super(address);
-        }
-        public LPSTR() {
-            super();
-        }
-    };
 }
