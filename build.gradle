@@ -79,9 +79,14 @@ project("autoball"){
         implementation 'org.apache.httpcomponents:httpclient:4.5.8'
         implementation "org.projectlombok:lombok:1.18.12"
         implementation "org.springframework.retry:spring-retry:1.2.4.RELEASE"
-
         implementation "org.apache.commons:commons-lang3:3.11"
 
+        /**
+         * JNA Libs
+         */
+        implementation "net.java.dev.jna:jna:4.2.0"
+        implementation "com.nativelibs4java:jnaerator:0.12"
+        implementation "net.java.dev.jna:jna-platform:4.2.0"
     }
 
 }
