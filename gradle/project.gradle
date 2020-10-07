@@ -1,0 +1,61 @@
+defaultTasks 'clean', 'build'
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.deprecation = true
+        options.compilerArgs += ['-Xlint:all', '-proc:none']
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    buildDir = "${rootDir}/build/${name}"
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += ["-Xlint:none", "-nowarn"]
+        options.encoding = 'UTF-8'
+    }
+
+    afterEvaluate {
+        def buildTime = new Date()
+        tasks.withType(Jar) {
+            String ClassPathString = ''
+//            configurations.runtime.each { ClassPathString += " lib\\" + it.name }
+            manifest {
+                attributes 'Implementation-Title': project.name,
+                        'Implementation-Version': project.version,
+                        'Created-By': "${System.getProperty('java.version')} (${System.getProperty('java.vendor')})",
+                        'Built-With': "gradle-${project.gradle.gradleVersion}, groovy-${GroovySystem.version}",
+                        'Built-By': System.getProperty('user.name'),
+                        'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}",
+                        'Build-Time': buildTime.format('yyyy/MM/dd HH:mm:ss'),
+                        'Class-Path': ClassPathString
+            }
+        }
+    }
+
+}
+
+allprojects {
+    apply plugin: 'idea'
+    idea.module.inheritOutputDirs = true
+}
+
+
+/**
+ * >> groovy默认使用最高版本帮助我们解决版本冲突
+ * >> 修改默认策略,如果有版本冲突,就构建失败
+ */
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+    }
+}

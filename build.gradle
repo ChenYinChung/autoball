@@ -1,0 +1,97 @@
+
+buildscript {
+    ext {
+        // Spring Boot 2.2 will support Jedis 3.1.0, but springfox-swagger2 not support Spring Boot 2.2 only support 2.1.6 and below
+        SpringBootStarterVersion = "2.3.4.RELEASE"
+//        SpringBootStarterVersion = "2.1.6.RELEASE"
+    }
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${SpringBootStarterVersion}")
+        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:2.0.0"
+        classpath 'org.flywaydb:flyway-gradle-plugin:6.0.0-beta2'
+        classpath files("${rootDir}/lib/postgresql-42.2.2.jar")
+    }
+}
+
+ext {
+    jdbiJdbi3Version = '3.14.4'
+}
+
+
+subprojects {
+    group 'com.nexio'
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply from: file("${rootDir}/gradle/project.gradle")
+//apply from: file("${rootDir}/gradle/check.gradle")
+
+// only flyway project setting db migration
+configure(subprojects.findAll { it.name.endsWith('-flyway') }) {
+    apply from: file("${rootDir}/gradle/db-migration.gradle")
+}
+
+// only flyway project setting db migration
+configure(subprojects.findAll { it.name.equals('autoball') }) {
+    apply from: file("${rootDir}/gradle/app.gradle")
+}
+
+// 第三方引用改為implementation 加速compile ,
+// 內容project 改為api project(":xxx") 接口
+project("autoball"){
+    configurations {
+        // remove default logger
+        all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        // remove tomcat , replace with undertow
+        all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+
+    dependencies {
+        /**
+         *  spring boot libs
+         */
+        implementation "org.springframework.boot:spring-boot-starter-actuator:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-aop:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-web:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-undertow:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-log4j2:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-data-rest:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
+
+        /**
+         * db libs
+         */
+        api "org.jdbi:jdbi3-core:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-postgres:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-json:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-jackson2:${jdbiJdbi3Version}"
+        /**
+         *  postreesql libs
+         */
+        api "org.postgresql:postgresql:42.2.5"
+
+        implementation 'org.apache.httpcomponents:httpclient:4.5.8'
+        implementation "org.projectlombok:lombok:1.18.12"
+        implementation "org.springframework.retry:spring-retry:1.2.4.RELEASE"
+
+        implementation "org.apache.commons:commons-lang3:3.11"
+
+    }
+
+}
+
+project("autoball-flyway") {
+    bootJar {
+        enabled = false
+    }
+
+    dependencies{
+        implementation "org.postgresql:postgresql:42.2.5"
+    }
+}

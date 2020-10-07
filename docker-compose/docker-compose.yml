@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  postgresql-11M:
+    container_name: postgresql-11M
+    image: docker.pf/devops/postgres:latest
+    ports:
+      - 5432:5432
+    privileged: true
+    environment:
+      - initdb=true
+      - postgrepasswd=admin

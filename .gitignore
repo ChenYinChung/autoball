@@ -1,0 +1,16 @@
+/.idea
+
+*.iml
+build
+/.gradle
+
+.idea/
+/build/
+/classes/
+out
+
+logs/
+
+/ab/production/
+
+/ab/test/
