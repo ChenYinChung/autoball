@@ -20,7 +20,6 @@ public interface AutoBallLibrary extends Library {
 //    static String pwd = System.getProperty("user.dir");
 //    static String lib = pwd + "/go/autoballapi.so";
 //    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
-
     public static final int _NUMBEROFBALLCODE_ = (int)8;
     public static final int _NUMBEROFBARRELBALL_ = (int)32;
     public static class BallCode extends Structure<BallCode, BallCode.ByValue, BallCode.ByReference > {

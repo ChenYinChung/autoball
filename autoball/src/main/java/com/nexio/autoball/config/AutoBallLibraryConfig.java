@@ -14,6 +14,8 @@ public class AutoBallLibraryConfig {
     @Bean("autoBallLibrary")
     public AutoBallLibrary autoBallLibrary() {
         String pwd = System.getProperty("user.dir");
+        System.setProperty("java.library.path", pwd);
+
         String lib = pwd + libPath;
         AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
         return INSTANCE;
