@@ -1,6 +1,7 @@
 package com.nexio.sunzing;
 
 import autoball.AutoBallLibrary;
+import com.sun.jna.Native;
 
 public class TestingData {
 
@@ -42,6 +43,8 @@ public class TestingData {
 //        AutoBallLibrary.BallCode ballCode = getBallCode(2);
 //
 //        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
+
+        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.load("AutoBall", AutoBallLibrary.class);
 
         AutoBallLibrary.GameInfoStruct gameInfoStruct = gameInfoStruct(100,12);
 

@@ -14,12 +14,6 @@ import java.util.List;
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
 public interface AutoBallLibrary extends Library {
-    //    public static final String JNA_LIBRARY_NAME = LibraryExtractor.getLibraryPath("AutoBoll", true, AutoBallLibrary.class);
-//    public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(AutoBallLibrary.JNA_LIBRARY_NAME, MangledFunctionMapper.DEFAULT_OPTIONS);
-//    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary)Native.loadLibrary(AutoBallLibrary.JNA_LIBRARY_NAME, AutoBallLibrary.class, MangledFunctionMapper.DEFAULT_OPTIONS);
-//    static String pwd = System.getProperty("user.dir");
-//    static String lib = pwd + "/go/autoballapi.so";
-//    public static final AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
     public static final int _NUMBEROFBALLCODE_ = (int)8;
     public static final int _NUMBEROFBARRELBALL_ = (int)32;
     public static class BallCode extends Structure<BallCode, BallCode.ByValue, BallCode.ByReference > {
@@ -28,7 +22,7 @@ public interface AutoBallLibrary extends Library {
         public BallCode() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("bCodeByte");
         }
         /** @param bCodeByte C type : BYTE[8] */
@@ -65,7 +59,7 @@ public interface AutoBallLibrary extends Library {
         public BarrelStruct() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nBallCount", "bcArray");
         }
         /**
@@ -109,7 +103,7 @@ public interface AutoBallLibrary extends Library {
         public GameInfoStruct() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nGameNum", "dwGameTime", "bsArray");
         }
         /**
