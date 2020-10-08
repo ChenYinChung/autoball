@@ -22,10 +22,6 @@ public class AutoBallService {
     @Autowired
     AutoBallLibrary autoBallLibrary;
 
-    @Value("${lib.test}")
-    Boolean libTest;
-
-
     /**
      * 開始開球。參數一 nGameCount表示要連續開球的次數，如果不設置默認為1，即只開一盤；參數nTimeSpan表示下一次開球與上一次開球的時間間隔，默認為0，即開完一盤接著開下一盤
      * @param nGameCount
@@ -62,11 +58,6 @@ public class AutoBallService {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-        if(libTest){
-            logger.info("getGameInfo run in local testing mode please disable flag in autoball.yaml");
-            gameInfoStruct = TestingData.gameInfoStruct(100,12);
-        }
-
 
         boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
         logger.info("isError={}",isError);
@@ -208,12 +199,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR("getLastError in product mode");
-
-        if(libTest){
-            lpstr = new WTypes.LPSTR("getLastError in testing mode");
-        }
-
+        WTypes.LPSTR lpstr = new WTypes.LPSTR();
         int isError =  autoBallLibrary.GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
         logger.info("GetLastError LPSTR={}",lpstr.getValue());
@@ -229,10 +215,6 @@ public class AutoBallService {
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
-        if(libTest){
-            lpstr = new WTypes.LPSTR("getAntennaPara in testing mode");
-        }
 
         boolean isError =  autoBallLibrary.GetAntennaPara(lpstr);
         logger.info("GetAntennaPara={}",isError);
@@ -250,10 +232,6 @@ public class AutoBallService {
         //SetAntennaPara(LPSTR strAntennaPara);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
 
-        if(libTest){
-            lpstr = new WTypes.LPSTR("setAntennaPara in testing mode");
-        }
-
         boolean isError =  autoBallLibrary.SetAntennaPara(lpstr);
         logger.info("SetAntennaPara={}",isError);
         logger.info("SetAntennaPara LPSTR={}",lpstr.getValue());
@@ -269,10 +247,6 @@ public class AutoBallService {
     public boolean getControlProcess() {
         //GetControlProcess(LPSTR strContorlProcess);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
-        if(libTest){
-            lpstr = new WTypes.LPSTR("getControlProcess in testing mode");
-        }
 
         boolean isError =  autoBallLibrary.GetControlProcess(lpstr);
         logger.info("GetControlProcess={}",isError);
@@ -290,10 +264,6 @@ public class AutoBallService {
         //SetControlProcess(LPSTR strContorlProcess);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
 
-        if(libTest){
-            lpstr = new WTypes.LPSTR("setControlProcess in testing mode");
-        }
-
         boolean isError =  autoBallLibrary.SetControlProcess(lpstr);
         logger.info("SetControlProcess={}",isError);
         logger.info("SetControlProcess LPSTR={}",lpstr.getValue());
@@ -310,9 +280,6 @@ public class AutoBallService {
     public int setControlStyle(int nControlStyle) {
         //SetControlStyle(int nControlStyle);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        if(libTest){
-            lpstr = new WTypes.LPSTR("setControlStyle in testing mode");
-        }
         int isError =  autoBallLibrary.SetControlStyle(nControlStyle);
         logger.info("SetControlStyle={}",isError);
         logger.info("SetControlStyle LPSTR={}",lpstr.getValue());

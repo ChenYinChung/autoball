@@ -3,6 +3,7 @@ package main
 import "C"
 import (
 	"fmt"
+	"github.com/lxn/win"
 	"time"
 )
 
