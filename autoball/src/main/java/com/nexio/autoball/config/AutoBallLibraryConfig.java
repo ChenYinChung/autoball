@@ -13,9 +13,9 @@ public class AutoBallLibraryConfig {
 
     @Bean("autoBallLibrary")
     public AutoBallLibrary autoBallLibrary() {
-//        String pwd = System.getProperty("user.dir");
-//        String lib = pwd + "/go/autoballapi.so";
-        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(libPath, AutoBallLibrary.class);
+        String pwd = System.getProperty("user.dir");
+        String lib = pwd + libPath;
+        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.loadLibrary(lib, AutoBallLibrary.class);
         return INSTANCE;
     }
 
