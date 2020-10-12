@@ -23,6 +23,12 @@ public class TestController {
     @PostMapping(path = "/init", consumes = "application/json", produces = "application/json")
     public Boolean init() {
         boolean isError = autoBallService.hasGamePlayed();
+        autoBallService.connectReader(5, 115200);
+        autoBallService.connectRD1(3,9600);
+        autoBallService.connectRD2(4,9600);
+        autoBallService.getAntennaPara();
+        autoBallService.getControlProcess();
+        autoBallService.setControlStyle(1);
         return isError;
     }
 
@@ -67,7 +73,7 @@ public class TestController {
 
     @PostMapping(path = "/connectReader", consumes = "application/json", produces = "application/json")
     public Boolean connectReader(@RequestParam(value = "nCommNum", defaultValue = "5") int nCommNum,
-                                 @RequestParam(value = "laudrate ", defaultValue = "15200") int laudrate) {
+                                 @RequestParam(value = "laudrate ", defaultValue = "115200") int laudrate) {
         boolean isError = autoBallService.connectReader(nCommNum, laudrate);
         return isError;
     }
