@@ -30,8 +30,8 @@ public class AutoBallService {
      * @throws Exception
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public void startGame(int nGameCount, int nTimeSpan){
-        autoBallLibrary.StartGame(nGameCount,nTimeSpan);
+    public void startGame(int nGameCount, int nTimeSpan,int nCurGameNum){
+        autoBallLibrary.StartGame(nGameCount,nTimeSpan,nCurGameNum);
         logger.info("startGame");
     }
 
@@ -214,11 +214,11 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
-        boolean isError =  autoBallLibrary.GetAntennaPara(lpstr);
+        // WTypes.LPSTR lpstr = new WTypes.LPSTR("");
+        byte[] bytes = new byte[4096];
+        boolean isError =  autoBallLibrary.GetAntennaPara(bytes);
         logger.info("GetAntennaPara={}",isError);
-        logger.info("GetAntennaPara LPSTR={}",lpstr.getValue());
+        logger.info("GetAntennaPara LPSTR={}",new String(bytes));
         return isError;
     }
 
@@ -247,8 +247,8 @@ public class AutoBallService {
     public boolean getControlProcess() {
         //GetControlProcess(LPSTR strContorlProcess);
         WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
-        boolean isError =  autoBallLibrary.GetControlProcess(lpstr);
+        byte[] bytes = new byte[4096];
+        boolean isError =  autoBallLibrary.GetControlProcess(bytes);
         logger.info("GetControlProcess={}",isError);
         logger.info("GetControlProcess LPSTR={}",lpstr.getValue());
         return isError;

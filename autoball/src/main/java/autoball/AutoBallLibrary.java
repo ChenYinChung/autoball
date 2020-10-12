@@ -136,12 +136,15 @@ public interface AutoBallLibrary extends Library {
 
         };
     };
+
+
+    boolean ABDll_Init();
     /**
      * 開始開球。參數一 nGameCount表示要連續開球的次數，如果不設置默認為1，即只開一盤；參數nTimeSpan表示下一次開球與上一次開球的時間間隔，默認為0，即開完一盤接著開下一盤。<br>
      * Original signature : <code>void StartGame(int, int)</code><br>
      * <i>native declaration : line 41</i>
      */
-    void StartGame(int nGameCount, int nTimeSpan);
+    void StartGame(int nGameCount, int nTimeSpan,int nCurGameNum);
     /**
      * 查看是否已經開出一盤球。返回True表示已經開出，false表示還未開出。<br>
      * Original signature : <code>bool HasGamePlayed()</code><br>
@@ -219,7 +222,7 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>bool GetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 80</i>
      */
-    boolean GetAntennaPara(WTypes.LPSTR strAntennaPara);
+    boolean GetAntennaPara(byte[] strAntennaPara);
     /**
      * 修改系统当前的天線设置信息。參數strAntennaPara是存有天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetAntennaPara(LPSTR)</code><br>
@@ -231,7 +234,7 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>bool GetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 86</i>
      */
-    boolean GetControlProcess(WTypes.LPSTR strContorlProcess);
+    boolean GetControlProcess(byte[] strContorlProcess);
     /**
      * 修改系统当前的開球控制流程設置。參數strContorlProcess是存有開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetControlProcess(LPSTR)</code><br>
