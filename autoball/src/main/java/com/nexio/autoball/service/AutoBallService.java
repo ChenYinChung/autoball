@@ -3,6 +3,7 @@ package com.nexio.autoball.service;
 import autoball.AutoBallLibrary;
 import com.nexio.sunzing.TestingData;
 import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,12 @@ public class AutoBallService {
 
     @Autowired
     AutoBallLibrary autoBallLibrary;
+
+    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
+    public void init(){
+        autoBallLibrary.ABDll_Init();
+        logger.info("init dll.........");
+    }
 
     /**
      * 開始開球。參數一 nGameCount表示要連續開球的次數，如果不設置默認為1，即只開一盤；參數nTimeSpan表示下一次開球與上一次開球的時間間隔，默認為0，即開完一盤接著開下一盤
@@ -199,7 +206,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
+        WTypes.LPSTR lpstr = new WTypes.LPSTR("");
         int isError =  autoBallLibrary.GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
         logger.info("GetLastError LPSTR={}",lpstr.getValue());

@@ -20,6 +20,13 @@ public class TestController {
     @Autowired
     AutoBallService autoBallService;
 
+    @PostMapping(path = "/init", consumes = "application/json", produces = "application/json")
+    public Boolean init() {
+        boolean isError = autoBallService.hasGamePlayed();
+        return isError;
+    }
+
+
     @PostMapping(path = "/startGame", consumes = "application/json", produces = "application/json")
     public String startGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
                             @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan,
