@@ -144,7 +144,7 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>void StartGame(int, int)</code><br>
      * <i>native declaration : line 41</i>
      */
-    void StartGame(int nGameCount, int nTimeSpan,int nCurGameNum);
+    boolean StartGame(int nGameCount, int nTimeSpan,int nCurGameNum);
     /**
      * 查看是否已經開出一盤球。返回True表示已經開出，false表示還未開出。<br>
      * Original signature : <code>bool HasGamePlayed()</code><br>

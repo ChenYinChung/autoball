@@ -34,11 +34,11 @@ public class TestController {
 
 
     @PostMapping(path = "/startGame", consumes = "application/json", produces = "application/json")
-    public String startGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
+    public Boolean startGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
                             @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan,
                             @RequestParam(value = "nCurGameNum", defaultValue = "1") int nCurGameNum) {
-        autoBallService.startGame(nGameCount, nTimeSpan,nCurGameNum);
-        return "OK";
+        Boolean isError = autoBallService.startGame(nGameCount, nTimeSpan,nCurGameNum);
+        return isError;
     }
 
     @PostMapping(path = "/hasGamePlayed", consumes = "application/json", produces = "application/json")

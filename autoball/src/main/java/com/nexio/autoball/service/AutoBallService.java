@@ -39,9 +39,10 @@ public class AutoBallService {
      * @throws Exception
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public void startGame(int nGameCount, int nTimeSpan,int nCurGameNum){
-        autoBallLibrary.StartGame(nGameCount,nTimeSpan,nCurGameNum);
-        logger.info("startGame");
+    public Boolean startGame(int nGameCount, int nTimeSpan,int nCurGameNum){
+        boolean isError = autoBallLibrary.StartGame(nGameCount,nTimeSpan,nCurGameNum);
+        logger.info("startGame...{}",isError);
+        return isError;
     }
 
     /**
