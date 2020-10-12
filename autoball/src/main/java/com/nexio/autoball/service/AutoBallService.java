@@ -24,9 +24,11 @@ public class AutoBallService {
     AutoBallLibrary autoBallLibrary;
 
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public void init(){
-        autoBallLibrary.ABDll_Init();
+    public Boolean init(){
+        boolean isError = autoBallLibrary.ABDll_Init();
         logger.info("init dll.........");
+
+        return isError;
     }
 
     /**

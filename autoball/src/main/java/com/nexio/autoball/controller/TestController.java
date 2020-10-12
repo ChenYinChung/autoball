@@ -22,7 +22,7 @@ public class TestController {
 
     @PostMapping(path = "/init", consumes = "application/json", produces = "application/json")
     public Boolean init() {
-        boolean isError = autoBallService.hasGamePlayed();
+        boolean isError = autoBallService.init();
         autoBallService.connectReader(5, 115200);
         autoBallService.connectRD1(3,9600);
         autoBallService.connectRD2(4,9600);
