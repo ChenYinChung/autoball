@@ -58,22 +58,22 @@ public class TestController {
     }
 
     @PostMapping(path = "/connectReader", consumes = "application/json", produces = "application/json")
-    public Boolean connectReader(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
-                                 @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+    public Boolean connectReader(@RequestParam(value = "nCommNum", defaultValue = "5") int nCommNum,
+                                 @RequestParam(value = "laudrate ", defaultValue = "15200") int laudrate) {
         boolean isError = autoBallService.connectReader(nCommNum, laudrate);
         return isError;
     }
 
     @PostMapping(path = "/connectRD1", consumes = "application/json", produces = "application/json")
-    public Boolean connectRD1(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
-                              @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+    public Boolean connectRD1(@RequestParam(value = "nCommNum", defaultValue = "3") int nCommNum,
+                              @RequestParam(value = "laudrate ", defaultValue = "9600") int laudrate) {
         boolean isError = autoBallService.connectRD1(nCommNum, laudrate);
         return isError;
     }
 
     @PostMapping(path = "/connectRD2", consumes = "application/json", produces = "application/json")
-    public Boolean connectRD2(@RequestParam(value = "nCommNum", defaultValue = "1") int nCommNum,
-                              @RequestParam(value = "laudrate ", defaultValue = "0") int laudrate) {
+    public Boolean connectRD2(@RequestParam(value = "nCommNum", defaultValue = "4") int nCommNum,
+                              @RequestParam(value = "laudrate ", defaultValue = "9600") int laudrate) {
         boolean isError = autoBallService.connectRD2(nCommNum, laudrate);
         return isError;
     }
