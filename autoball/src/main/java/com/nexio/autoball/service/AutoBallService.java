@@ -58,7 +58,7 @@ public class AutoBallService {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-
+        gameInfoStruct.nGameNum=101;
         boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
         logger.info("isError={}",isError);
         logger.info("getGameInfo={}",gameInfoStruct);

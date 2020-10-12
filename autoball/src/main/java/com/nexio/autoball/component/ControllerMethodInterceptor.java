@@ -18,7 +18,7 @@ public class ControllerMethodInterceptor {
 
     private static Logger logger = LoggerFactory.getLogger(ControllerMethodInterceptor.class);
 
-    @Around("execution(* com.nexio.autoball.controller..*.*(..))")
+//    @Around("execution(* com.nexio.autoball.controller..*.*(..))")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
         long start = System.currentTimeMillis();
