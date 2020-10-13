@@ -44,9 +44,9 @@ public class TestingData {
 //
 //        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
 
-        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.load("AutoBall", AutoBallLibrary.class);
-
-        AutoBallLibrary.GameInfoStruct gameInfoStruct = gameInfoStruct(100,12);
+//        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.load("AutoBall", AutoBallLibrary.class);
+//
+//        AutoBallLibrary.GameInfoStruct gameInfoStruct = gameInfoStruct(100,12);
 
 //        System.out.println("test");
     }
