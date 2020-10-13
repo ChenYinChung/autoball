@@ -237,10 +237,12 @@ public class AutoBallService {
             if(b==0)
                 break;
 
-            char c = (char) (b & 0xFF);
+            char c = (char)b;
             logger.info("GetLastError MSG char={}",c);
         }
+//        x-windows-950
 
+        String String3 = new String(bytes, Charset.forName("x-windows-950"));
         String String2 = new String(bytes, StandardCharsets.US_ASCII);
         String String21 = new String(bytes, StandardCharsets.ISO_8859_1);
 
