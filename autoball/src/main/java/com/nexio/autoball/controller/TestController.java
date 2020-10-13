@@ -32,6 +32,14 @@ public class TestController {
         return isError;
     }
 
+    @PostMapping(path = "/close", consumes = "application/json", produces = "application/json")
+    public Boolean close() {
+        boolean isError = autoBallService.disconnectReader();
+        autoBallService.disconnectRD1();
+        autoBallService.disconnectRD2();
+       return isError;
+    }
+
 
     @PostMapping(path = "/startGame", consumes = "application/json", produces = "application/json")
     public Boolean startGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
