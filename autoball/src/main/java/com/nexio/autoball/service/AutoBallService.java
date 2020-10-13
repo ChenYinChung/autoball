@@ -6,7 +6,6 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
@@ -18,22 +17,21 @@ import org.springframework.stereotype.Service;
 public class AutoBallService {
     private static final Logger logger = LoggerFactory.getLogger(AutoBallService.class);
 
-    @Autowired
-    AutoBallLibrary autoBallLibrary;
-
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public Boolean init(){
-        boolean isError = autoBallLibrary.ABDll_Init();
+        boolean isError = AutoBallLibrary.aBDllInit();
         logger.info("init dll.........");
 
         return isError;
     }
 
     public String gameStr(){
-        String  s = autoBallLibrary.GetGameInfoStr();
-        logger.info("s....{}",s);
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
+        boolean isError = AutoBallLibrary.getGameInfoStr(lpstr);
+        logger.info("isError....{}",isError);
+        logger.info("gameStr....{}",lpstr.toString());
 
-        return s;
+        return lpstr.toString();
     }
 
 
@@ -47,7 +45,7 @@ public class AutoBallService {
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public Boolean startGame(int nGameCount, int nTimeSpan,int nCurGameNum){
-        boolean isError = autoBallLibrary.StartGame(nGameCount,nTimeSpan,nCurGameNum);
+        boolean isError = AutoBallLibrary.startGame(nGameCount,nTimeSpan,nCurGameNum);
         logger.info("startGame...{}",isError);
         return isError;
     }
@@ -60,7 +58,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean hasGamePlayed() {
         //HasGamePlayed
-        boolean isGamePlayed = autoBallLibrary.HasGamePlayed();
+        boolean isGamePlayed = AutoBallLibrary.hasGamePlayed();
         logger.info("isGamePlayed={}",isGamePlayed);
         return isGamePlayed;
     }
@@ -75,7 +73,7 @@ public class AutoBallService {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-        boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
+        boolean isError = AutoBallLibrary.getGameInfo(gameInfoStruct);
         logger.info("isError={}",isError);
         logger.info("getGameInfo={}",gameInfoStruct);
         return gameInfoStruct;
@@ -89,7 +87,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int terminateGame() {
         //TerminateGame
-        int isTerrmateGame = autoBallLibrary.TerminateGame();
+        int isTerrmateGame = AutoBallLibrary.terminateGame();
         logger.info("terminateGame={}",isTerrmateGame);
         return isTerrmateGame;
     }
@@ -102,7 +100,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int suspendGame() {
         //SuspendGame
-        int isSuspendGame = autoBallLibrary.SuspendGame();
+        int isSuspendGame = AutoBallLibrary.suspendGame();
         logger.info("suspendGame={}",isSuspendGame);
         return isSuspendGame;
     }
@@ -115,7 +113,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int resumeGame() {
         //ResumeGame
-        int isResumeGame = autoBallLibrary.ResumeGame();
+        int isResumeGame = AutoBallLibrary.resumeGame();
         logger.info("ResumeGame={}",isResumeGame);
         return isResumeGame;
     }
@@ -131,7 +129,7 @@ public class AutoBallService {
     public boolean connectReader(int nCommNum, long laudrate) {
         //ConnectReader(int nCommNum, long l audrate);
         NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectReader(nCommNum,nativeLong);
+        boolean isError = AutoBallLibrary.connectReader(nCommNum,nativeLong);
         logger.info("ConnectReader={}",isError);
         return isError;
     }
@@ -147,7 +145,7 @@ public class AutoBallService {
     public boolean connectRD1(int nCommNum, long laudrate) {
         //ConnectRD1(int nCommNum, long l audrate);
         NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectRD1(nCommNum,nativeLong);
+        boolean isError = AutoBallLibrary.connectRD1(nCommNum,nativeLong);
         logger.info("ConnectRD1={}",isError);
         return isError;
     }
@@ -163,7 +161,7 @@ public class AutoBallService {
     public boolean connectRD2(int nCommNum, long laudrate) {
         //ConnectRD2(int nCommNum, long l audrate);
         NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectRD2(nCommNum,nativeLong);
+        boolean isError = AutoBallLibrary.connectRD2(nCommNum,nativeLong);
         logger.info("ConnectRD2={}",isError);
         return isError;
     }
@@ -176,7 +174,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean disconnectReader() {
         //DisconnectReader (void);
-        boolean isError = autoBallLibrary.DisconnectReader();
+        boolean isError = AutoBallLibrary.disconnectReader();
         logger.info("DisconnectReader={}",isError);
         return isError;
     }
@@ -189,7 +187,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean disconnectRD1() {
         //DisconnectRD1 (void);
-        boolean isError = autoBallLibrary.DisconnectRD1();
+        boolean isError = AutoBallLibrary.disconnectRD1();
         logger.info("DisconnectRD1={}",isError);
         return isError;
     }
@@ -202,7 +200,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean disconnectRD2() {
         //DisconnectRD2 (void);
-        boolean isError = autoBallLibrary.DisconnectRD2();
+        boolean isError = AutoBallLibrary.disconnectRD2();
         logger.info("DisconnectRD2={}",isError);
         return isError;
     }
@@ -216,8 +214,9 @@ public class AutoBallService {
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
 
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        int isError =  autoBallLibrary.GetLastError(lpstr);
+//        WTypes.LPSTR lpstr = new WTypes.LPSTR();
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
+        int isError =  AutoBallLibrary.aBGetLastError(lpstr);
         logger.info("GetLastError={}",isError);
         logger.info("GetLastError={}",lpstr.toString());
         return isError;
@@ -232,7 +231,7 @@ public class AutoBallService {
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
         AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
-        boolean isError =  autoBallLibrary.GetAntennaPara(antennaSet);
+        boolean isError =  AutoBallLibrary.getAntennaPara(antennaSet);
         logger.info("GetAntennaPara isError ={}",isError);
         logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
         return isError;
@@ -247,7 +246,7 @@ public class AutoBallService {
     public boolean setAntennaPara() {
         //SetAntennaPara(LPSTR strAntennaPara);
         AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
-        boolean isError =  autoBallLibrary.SetAntennaPara(antennaSet);
+        boolean isError =  AutoBallLibrary.setAntennaPara(antennaSet);
         logger.info("SetAntennaPara={}",isError);
         return isError;
     }
@@ -263,7 +262,7 @@ public class AutoBallService {
 
         AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
 
-        boolean isError =  autoBallLibrary.GetControlProcess(processFlow);
+        boolean isError =  AutoBallLibrary.getControlProcess(processFlow);
 
         logger.info("getControlProcess isError ={}",isError);
         logger.info("getControlProcess={}",processFlow.pfItem);
@@ -281,7 +280,7 @@ public class AutoBallService {
     public boolean setControlProcess() {
         //SetControlProcess(LPSTR strContorlProcess);
         AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
-        boolean isError =  autoBallLibrary.SetControlProcess(processFlow);
+        boolean isError =  AutoBallLibrary.setControlProcess(processFlow);
         logger.info("SetControlProcess={}",isError);
         return isError;
     }
@@ -294,10 +293,10 @@ public class AutoBallService {
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setControlStyle(int nControlStyle) {
-        byte isError =  autoBallLibrary.SetControlStyle(nControlStyle);
+        boolean isError =  AutoBallLibrary.setControlStyle(nControlStyle);
         logger.info("SetControlStyle={}",isError);
 
-       return isError == 1 ? true:false;
+       return isError;
     }
 
 
