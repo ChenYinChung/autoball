@@ -224,10 +224,8 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
-        boolean isError =  autoBallLibrary.GetAntennaPara(lpstr);
-
-        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(lpstr.getPointer());
+        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
+        boolean isError =  autoBallLibrary.GetAntennaPara(antennaSet);
         logger.info("GetAntennaPara isError ={}",isError);
         logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
         return isError;
@@ -241,8 +239,8 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setAntennaPara() {
         //SetAntennaPara(LPSTR strAntennaPara);
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
-        boolean isError =  autoBallLibrary.SetAntennaPara(lpstr);
+        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
+        boolean isError =  autoBallLibrary.SetAntennaPara(antennaSet);
         logger.info("SetAntennaPara={}",isError);
         return isError;
     }
@@ -255,12 +253,13 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getControlProcess() {
         //GetControlProcess(LPSTR strContorlProcess);
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
-        boolean isError =  autoBallLibrary.GetControlProcess(lpstr);
 
-        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(lpstr.getPointer());
-        logger.info("GetAntennaPara isError ={}",isError);
-        logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
+        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
+
+        boolean isError =  autoBallLibrary.GetControlProcess(processFlow);
+
+        logger.info("getControlProcess isError ={}",isError);
+        logger.info("getControlProcess={}",processFlow.pfItem);
 
         logger.info("GetControlProcess={}",isError);
         return isError;

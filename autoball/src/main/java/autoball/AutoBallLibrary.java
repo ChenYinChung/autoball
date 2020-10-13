@@ -422,19 +422,19 @@ public interface AutoBallLibrary extends StdCallLibrary {
      * Original signature : <code>BOOL GetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 116</i>
      */
-    boolean GetAntennaPara(AutoBallLibrary.LPSTR strAntennaPara);
+    boolean GetAntennaPara(AutoBallLibrary.AntennaSet strAntennaPara);
     /**
      * 獲取系统当前的天線设置信息。參數strAntennaPara是保存當前天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>BOOL SetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 119</i>
      */
-    boolean SetAntennaPara(AutoBallLibrary.LPSTR strAntennaPara);
+    boolean SetAntennaPara(AutoBallLibrary.AntennaSet strAntennaPara);
     /**
      * 修改系统当前的天線设置信息。參數strAntennaPara是存有天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>BOOL GetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 122</i>
      */
-    boolean GetControlProcess(AutoBallLibrary.LPSTR strContorlProcess);
+    boolean GetControlProcess(AutoBallLibrary.ProcessFlow  strContorlProcess);
     /**
      * 獲取系统当前的開球控制流程設置。參數strContorlProcess是保存當前開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>BOOL SetControlProcess(LPSTR)</code><br>
