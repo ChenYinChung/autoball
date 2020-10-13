@@ -211,6 +211,7 @@ public class AutoBallService {
         AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
         int isError =  autoBallLibrary.AB_GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
+        logger.info("GetLastError={}",lpstr.toString());
         return isError;
     }
 
@@ -224,7 +225,10 @@ public class AutoBallService {
         //GetAntennaPara(LPSTR strErrorMessage);
         AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
         boolean isError =  autoBallLibrary.GetAntennaPara(lpstr);
-        logger.info("GetAntennaPara={}",isError);
+
+        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(lpstr.getPointer());
+        logger.info("GetAntennaPara isError ={}",isError);
+        logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
         return isError;
     }
 
@@ -252,6 +256,11 @@ public class AutoBallService {
         //GetControlProcess(LPSTR strContorlProcess);
         AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
         boolean isError =  autoBallLibrary.GetControlProcess(lpstr);
+
+        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(lpstr.getPointer());
+        logger.info("GetAntennaPara isError ={}",isError);
+        logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
+
         logger.info("GetControlProcess={}",isError);
         return isError;
     }

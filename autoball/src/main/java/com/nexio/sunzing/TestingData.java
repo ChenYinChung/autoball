@@ -27,8 +27,8 @@ public class TestingData {
 
     public static AutoBallLibrary.GameInfoStruct gameInfoStruct(int gameNum, int antenllaCount){
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-        gameInfoStruct.nGameNum = gameNum;
-        gameInfoStruct.dwGameTime = System.currentTimeMillis();
+//        gameInfoStruct.nGameNum = gameNum;
+//        gameInfoStruct.dwGameTime = System.currentTimeMillis();
         //各天線開出球號，預設6個
         for (int i=0 ; i<antenllaCount ;i++){
             gameInfoStruct.bsArray[i] = getBarrelStruct(32);
