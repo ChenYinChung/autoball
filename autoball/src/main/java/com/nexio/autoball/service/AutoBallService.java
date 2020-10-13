@@ -228,26 +228,14 @@ public class AutoBallService {
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
 
-//        WTypes.LPSTR lpstr = new WTypes.LPSTR();
+        WTypes.LPSTR lpstr = new WTypes.LPSTR();
         byte[] bytes = new byte[4096];
         int isError =  autoBallLibrary.AB_GetLastError(bytes);
         logger.info("GetLastError={}",isError);
 
-        for(byte b: bytes) {
-            if(b==0)
-                break;
+        String ms950 = new String(bytes, Charset.forName("x-windows-950"));
+        logger.info("GetLastError MSG {}",ms950);
 
-            char c = (char)b;
-            logger.info("GetLastError MSG char={}",c);
-        }
-//        x-windows-950
-
-        String String3 = new String(bytes, Charset.forName("x-windows-950"));
-        String String2 = new String(bytes, StandardCharsets.US_ASCII);
-        String String21 = new String(bytes, StandardCharsets.ISO_8859_1);
-
-        logger.info("GetLastError MSG ascii={}",String2);
-        logger.info("GetLastError MSG iso8859-1={}",String21);
         return isError;
     }
 
