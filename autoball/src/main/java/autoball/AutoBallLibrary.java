@@ -350,6 +350,8 @@ public interface AutoBallLibrary extends Library {
      * <i>native declaration : line 47</i>
      */
     boolean GetGameInfo(GameInfoStruct GameInfo);
+
+    String GetGameInfoStr();
     /**
      * 打斷并終止一局開球。<br>
      * Original signature : <code>int TerminateGame()</code><br>

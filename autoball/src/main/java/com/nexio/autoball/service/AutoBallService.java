@@ -29,6 +29,15 @@ public class AutoBallService {
         return isError;
     }
 
+    public String gameStr(){
+        String  s = autoBallLibrary.GetGameInfoStr();
+        logger.info("s....{}",s);
+
+        return s;
+    }
+
+
+
     /**
      * 開始開球。參數一 nGameCount表示要連續開球的次數，如果不設置默認為1，即只開一盤；參數nTimeSpan表示下一次開球與上一次開球的時間間隔，默認為0，即開完一盤接著開下一盤
      * @param nGameCount
