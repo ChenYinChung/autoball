@@ -65,11 +65,8 @@ public class AutoBallService {
     public AutoBallLibrary.GameInfoStruct  getGameInfo() {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
-        boolean isError = autoBallLibrary.GetGameInfo(lpstr);
-
-        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(lpstr.getPointer());
-
+        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
+        boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
         logger.info("isError={}",isError);
         logger.info("getGameInfo={}",gameInfoStruct);
         return gameInfoStruct;
@@ -209,8 +206,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
-        int isError =  autoBallLibrary.AB_GetLastError(lpstr);
+
+        WTypes.LPSTR lpstr = new WTypes.LPSTR();
+        int isError =  autoBallLibrary.GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
         logger.info("GetLastError={}",lpstr.toString());
         return isError;
@@ -273,8 +271,8 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setControlProcess() {
         //SetControlProcess(LPSTR strContorlProcess);
-        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR(new Pointer(0));
-        boolean isError =  autoBallLibrary.SetControlProcess(lpstr);
+        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
+        boolean isError =  autoBallLibrary.SetControlProcess(processFlow);
         logger.info("SetControlProcess={}",isError);
         return isError;
     }
@@ -287,10 +285,10 @@ public class AutoBallService {
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setControlStyle(int nControlStyle) {
-        boolean isError =  autoBallLibrary.SetControlStyle(nControlStyle);
+        byte isError =  autoBallLibrary.SetControlStyle(nControlStyle);
         logger.info("SetControlStyle={}",isError);
 
-       return isError;
+       return isError == 1 ? true:false;
     }
 
 

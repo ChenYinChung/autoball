@@ -2,6 +2,7 @@ package com.nexio.autoball.controller;
 
 import autoball.AutoBallLibrary;
 import com.nexio.autoball.service.AutoBallService;
+import com.sun.jna.ptr.PointerByReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +83,8 @@ public class TestController {
     @PostMapping(path = "/connectReader", consumes = "application/json", produces = "application/json")
     public Boolean connectReader(@RequestParam(value = "nCommNum", defaultValue = "5") int nCommNum,
                                  @RequestParam(value = "laudrate ", defaultValue = "115200") int laudrate) {
-        boolean isError = autoBallService.connectReader(nCommNum, laudrate);
-        return isError;
+        boolean isSuccess = autoBallService.connectReader(nCommNum, laudrate);
+        return isSuccess;
     }
 
     @PostMapping(path = "/connectRD1", consumes = "application/json", produces = "application/json")
