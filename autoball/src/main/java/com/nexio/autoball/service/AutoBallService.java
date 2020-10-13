@@ -231,7 +231,10 @@ public class AutoBallService {
         byte[] bytes = new byte[4096];
         int isError =  autoBallLibrary.AB_GetLastError(bytes);
         logger.info("GetLastError={}",isError);
+        logger.info("GetLastError MSG default={}",new String(bytes));
         logger.info("GetLastError MSG iso8859-1={}",new String(bytes, Charset.forName("iso8859-1")));
+        logger.info("GetLastError MSG ms950-1={}",new String(bytes, Charset.forName("ms950")));
+        logger.info("GetLastError MSG utf8={}",new String(bytes, Charset.forName("UTF-8")));
         return isError;
     }
 
