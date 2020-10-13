@@ -47,7 +47,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public AntennaItem() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nAntennaID", "bScanState", "nOpenTimes", "nOpenBallNode", "nOpenBallNode1", "nOpenBallNode2", "nInductionNode", "nAirBlowerNode", "nAntennaPower");
         }
         public AntennaItem(int nAntennaID, byte bScanState, int nOpenTimes, int nOpenBallNode, int nOpenBallNode1, int nOpenBallNode2, int nInductionNode, int nAirBlowerNode, int nAntennaPower) {
@@ -79,7 +79,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public AntennaSet() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nFillBallNode", "aiAntennaItem");
         }
         public AntennaSet(int nFillBallNode, AutoBallLibrary.AntennaItem aiAntennaItem[]) {
@@ -109,7 +109,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public ProcessFlowItem() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nOperation", "nCondition", "nTime");
         }
         public ProcessFlowItem(int nOperation, int nCondition, int nTime) {
@@ -136,7 +136,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public ProcessFlow() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nControlStyle", "pfItem");
         }
         public ProcessFlow(int nControlStyle, AutoBallLibrary.ProcessFlowItem pfItem[]) {
@@ -161,7 +161,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public BallCode() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("bCodeByte");
         }
         public BallCode(byte bCodeByte[]) {
@@ -188,7 +188,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public BarrelStruct() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nBallCount", "bcArray");
         }
         public BarrelStruct(int nBallCount, AutoBallLibrary.BallCode bcArray[]) {
@@ -218,7 +218,7 @@ public class AutoBallLibrary implements StdCallLibrary {
         public GameInfoStruct() {
             super();
         }
-        protected List<? > getFieldOrder() {
+        protected List<String> getFieldOrder() {
             return Arrays.asList("nGameNum", "dwGameTime", "bsArray");
         }
         public GameInfoStruct(int nGameNum, int dwGameTime, AutoBallLibrary.BarrelStruct bsArray[]) {
@@ -268,4 +268,10 @@ public class AutoBallLibrary implements StdCallLibrary {
             super();
         }
     };
+
+
+    public static void main(String arg[]){
+
+        AutoBallLibrary.disconnectRD1();
+    }
 }
