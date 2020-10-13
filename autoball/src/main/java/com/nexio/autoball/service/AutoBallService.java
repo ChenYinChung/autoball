@@ -1,14 +1,11 @@
 package com.nexio.autoball.service;
 
 import autoball.AutoBallLibrary;
-import com.nexio.sunzing.TestingData;
 import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
@@ -67,9 +64,11 @@ public class AutoBallService {
     public AutoBallLibrary.GameInfoStruct  getGameInfo() {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
-        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-        gameInfoStruct.nGameNum=101;
-        boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
+        boolean isError = autoBallLibrary.GetGameInfo(lpstr);
+
+        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(lpstr.getPointer());
+
         logger.info("isError={}",isError);
         logger.info("getGameInfo={}",gameInfoStruct);
         return gameInfoStruct;
@@ -209,10 +208,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR("");
-        int isError =  autoBallLibrary.GetLastError(lpstr);
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
+        int isError =  autoBallLibrary.AB_GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
-        logger.info("GetLastError LPSTR={}",lpstr.getValue());
         return isError;
     }
 
@@ -224,11 +222,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
-        // WTypes.LPSTR lpstr = new WTypes.LPSTR("");
-        byte[] bytes = new byte[4096];
-        boolean isError =  autoBallLibrary.GetAntennaPara(bytes);
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
+        boolean isError =  autoBallLibrary.GetAntennaPara(lpstr);
         logger.info("GetAntennaPara={}",isError);
-        logger.info("GetAntennaPara LPSTR={}",new String(bytes));
         return isError;
     }
 
@@ -240,11 +236,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setAntennaPara() {
         //SetAntennaPara(LPSTR strAntennaPara);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
         boolean isError =  autoBallLibrary.SetAntennaPara(lpstr);
         logger.info("SetAntennaPara={}",isError);
-        logger.info("SetAntennaPara LPSTR={}",lpstr.getValue());
         return isError;
     }
 
@@ -256,11 +250,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getControlProcess() {
         //GetControlProcess(LPSTR strContorlProcess);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        byte[] bytes = new byte[4096];
-        boolean isError =  autoBallLibrary.GetControlProcess(bytes);
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
+        boolean isError =  autoBallLibrary.GetControlProcess(lpstr);
         logger.info("GetControlProcess={}",isError);
-        logger.info("GetControlProcess LPSTR={}",lpstr.getValue());
         return isError;
     }
 
@@ -272,11 +264,9 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setControlProcess() {
         //SetControlProcess(LPSTR strContorlProcess);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-
+        AutoBallLibrary.LPSTR lpstr = new AutoBallLibrary.LPSTR();
         boolean isError =  autoBallLibrary.SetControlProcess(lpstr);
         logger.info("SetControlProcess={}",isError);
-        logger.info("SetControlProcess LPSTR={}",lpstr.getValue());
         return isError;
     }
 
@@ -287,13 +277,11 @@ public class AutoBallService {
      * @throws Exception
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public int setControlStyle(int nControlStyle) {
-        //SetControlStyle(int nControlStyle);
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        int isError =  autoBallLibrary.SetControlStyle(nControlStyle);
+    public boolean setControlStyle(int nControlStyle) {
+        boolean isError =  autoBallLibrary.SetControlStyle(nControlStyle);
         logger.info("SetControlStyle={}",isError);
-        logger.info("SetControlStyle LPSTR={}",lpstr.getValue());
-        return isError;
+
+       return isError;
     }
 
 

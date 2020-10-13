@@ -141,8 +141,8 @@ public class TestController {
     }
 
     @PostMapping(path = "/setControlStyle", consumes = "application/json", produces = "application/json")
-    public Integer setControlStyle(@RequestParam(value = "nControlStyle", defaultValue = "1") int nControlStyle) {
-        Integer isError = autoBallService.setControlStyle(nControlStyle);
+    public Boolean setControlStyle(@RequestParam(value = "nControlStyle", defaultValue = "1") int nControlStyle) {
+        boolean isError = autoBallService.setControlStyle(nControlStyle);
         return isError;
     }
 }
