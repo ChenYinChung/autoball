@@ -33,10 +33,11 @@ public class AutoBallService {
     }
 
     public String gameStr(){
-        String  s = autoBallLibrary.GetGameInfoStr();
-        logger.info("s....{}",s);
+        byte[] bytes = new byte[4096];
+        boolean  s = autoBallLibrary.GetGameInfoStr(bytes);
+        logger.info("s....{}",new String(bytes));
 
-        return s;
+        return new String(bytes);
     }
 
 
@@ -228,14 +229,20 @@ public class AutoBallService {
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
 
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        byte[] bytes = new byte[4096];
-        int isError =  autoBallLibrary.AB_GetLastError(bytes);
+        WTypes.LPSTR lpstr = new WTypes.LPSTR(new Pointer(4096));
+        int isError =  autoBallLibrary.AB_GetLastError(lpstr);
         logger.info("GetLastError={}",isError);
 
-        String ms950 = new String(bytes, Charset.forName("x-windows-950"));
-        logger.info("GetLastError MSG {}",ms950);
-        logger.info("GetLastError MSG {}",new String(ms950.getBytes(Charset.forName("UTF-8"))));
+        logger.info("GetLastError MSG {}",lpstr.getValue());
+
+
+//        byte[] bytes = new byte[4096];
+//        int isError =  autoBallLibrary.AB_GetLastError(bytes);
+//        logger.info("GetLastError={}",isError);
+//
+//        String ms950 = new String(bytes, Charset.forName("x-windows-950"));
+//        logger.info("GetLastError MSG {}",ms950);
+//        logger.info("GetLastError MSG {}",new String(ms950.getBytes(Charset.forName("UTF-8"))));
 
         return isError;
     }

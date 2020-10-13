@@ -351,7 +351,7 @@ public interface AutoBallLibrary extends Library {
      */
     boolean GetGameInfo(GameInfoStruct GameInfo);
 
-    String GetGameInfoStr();
+    boolean GetGameInfoStr(byte[] bytes);
     /**
      * 打斷并終止一局開球。<br>
      * Original signature : <code>int TerminateGame()</code><br>
@@ -411,7 +411,8 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>int GetLastError(LPSTR)</code><br>
      * <i>native declaration : line 77</i>
      */
-    int AB_GetLastError(byte[] bytes);
+//    int AB_GetLastError(byte[] bytes);
+    int AB_GetLastError(WTypes.LPSTR lpstr);
     /**
      * 獲取系统当前的天線设置信息。參數strAntennaPara是保存當前天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool GetAntennaPara(LPSTR)</code><br>
