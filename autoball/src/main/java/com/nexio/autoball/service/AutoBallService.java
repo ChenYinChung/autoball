@@ -234,6 +234,7 @@ public class AutoBallService {
         logger.info("GetLastError={}",isError);
 
         String ms950 = new String(bytes, Charset.forName("x-windows-950"));
+        logger.info("GetLastError MSG {}",ms950);
         logger.info("GetLastError MSG {}",new String(ms950.getBytes(Charset.forName("UTF-8"))));
 
         return isError;
