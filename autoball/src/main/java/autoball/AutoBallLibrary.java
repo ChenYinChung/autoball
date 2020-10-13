@@ -411,7 +411,7 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>int GetLastError(LPSTR)</code><br>
      * <i>native declaration : line 77</i>
      */
-    int GetLastError(WTypes.LPSTR strErrorMessage);
+    int GetLastError(byte[] bytes);
     /**
      * 獲取系统当前的天線设置信息。參數strAntennaPara是保存當前天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool GetAntennaPara(LPSTR)</code><br>

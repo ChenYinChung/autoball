@@ -13,6 +13,8 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
+
 @Service
 @EnableRetry
 public class AutoBallService {
@@ -133,6 +135,9 @@ public class AutoBallService {
         NativeLong nativeLong =  new NativeLong(laudrate);
         boolean isError = autoBallLibrary.ConnectReader(nCommNum,nativeLong);
         logger.info("ConnectReader={}",isError);
+        if(!isError){
+            getLastError();
+        }
         return isError;
     }
 
@@ -149,6 +154,9 @@ public class AutoBallService {
         NativeLong nativeLong =  new NativeLong(laudrate);
         boolean isError = autoBallLibrary.ConnectRD1(nCommNum,nativeLong);
         logger.info("ConnectRD1={}",isError);
+        if(!isError){
+            getLastError();
+        }
         return isError;
     }
 
@@ -165,6 +173,9 @@ public class AutoBallService {
         NativeLong nativeLong =  new NativeLong(laudrate);
         boolean isError = autoBallLibrary.ConnectRD2(nCommNum,nativeLong);
         logger.info("ConnectRD2={}",isError);
+        if(!isError){
+            getLastError();
+        }
         return isError;
     }
 
@@ -216,10 +227,11 @@ public class AutoBallService {
     public int getLastError() {
         //GetLastError(LPSTR strErrorMessage);
 
-        WTypes.LPSTR lpstr = new WTypes.LPSTR();
-        int isError =  autoBallLibrary.GetLastError(lpstr);
+//        WTypes.LPSTR lpstr = new WTypes.LPSTR();
+        byte[] bytes = new byte[4096];
+        int isError =  autoBallLibrary.GetLastError(bytes);
         logger.info("GetLastError={}",isError);
-        logger.info("GetLastError={}",lpstr.toString());
+        logger.info("GetLastError MSG iso8859-1={}",new String(bytes, Charset.forName("iso8859-1")));
         return isError;
     }
 
