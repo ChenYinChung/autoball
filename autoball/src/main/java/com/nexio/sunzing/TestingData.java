@@ -1,7 +1,9 @@
 package com.nexio.sunzing;
 
 import autoball.AutoBallLibrary;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 
 public class TestingData {
 
@@ -27,6 +29,7 @@ public class TestingData {
 
     public static AutoBallLibrary.GameInfoStruct gameInfoStruct(int gameNum, int antenllaCount){
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
+
 //        gameInfoStruct.nGameNum = gameNum;
 //        gameInfoStruct.dwGameTime = System.currentTimeMillis();
         //各天線開出球號，預設6個
@@ -37,11 +40,24 @@ public class TestingData {
         return gameInfoStruct;
     }
 
+    public static Pointer asPointer(String charArray) {
+        // The code is from com.sun.jna.NativeString.NativeString(java.lang.String, java.lang.String)
+        byte[] data = Native.toByteArray(charArray);
+        Pointer pointer = new Memory(data.length + 1);
+        pointer.write(0, data, 0, data.length);
+        pointer.setByte(data.length, (byte) 0);
+        return pointer;
+    }
+
+
 
     public static void main (String arg[]){
 
 
         AutoBallLibrary.BallCode ballCode = getBallCode(2);
+
+
+
 //
 //        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
 
