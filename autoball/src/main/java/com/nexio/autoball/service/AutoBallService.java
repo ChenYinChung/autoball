@@ -35,7 +35,8 @@ public class AutoBallService {
     public String gameStr(){
         byte[] bytes = new byte[4096];
         boolean  s = autoBallLibrary.GetGameInfoStr(bytes);
-        logger.info("s....{}",new String(bytes));
+        logger.info("s....{}",s);
+        logger.info("string....{}",new String(bytes));
 
         return new String(bytes);
     }
