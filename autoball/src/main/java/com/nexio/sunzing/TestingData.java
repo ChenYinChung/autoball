@@ -41,7 +41,7 @@ public class TestingData {
     public static void main (String arg[]){
 
 
-//        AutoBallLibrary.BallCode ballCode = getBallCode(2);
+        AutoBallLibrary.BallCode ballCode = getBallCode(2);
 //
 //        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
 
