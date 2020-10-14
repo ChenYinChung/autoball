@@ -1,16 +1,20 @@
 package com.nexio.sunzing;
 
 import autoball.AutoBallLibrary;
+import com.nexio.autoball.service.AutoBallService;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class TestingData {
+    private static final Logger logger = LoggerFactory.getLogger(TestingData.class);
 
     public static AutoBallLibrary.BallCode getBallCode(int a){
         AutoBallLibrary.BallCode ballCode = new AutoBallLibrary.BallCode.ByReference();
@@ -37,7 +41,7 @@ public class TestingData {
 
 //        gameInfoStruct.nGameNum = gameNum;
 //        gameInfoStruct.dwGameTime = System.currentTimeMillis();
-        //??????????6?
+
         for (int i=0 ; i<antenllaCount ;i++){
             gameInfoStruct.bsArray[i] = getBarrelStruct(32);
         }
@@ -59,31 +63,97 @@ public class TestingData {
     public static void main (String arg[]) {
 
         String dir = System.getProperty("user.dir");
-        File test = new File(dir+"/Data/Ball2020101411.dat");
+        File test = new File(dir+"/Data/Ball2019102611.dat");
         try {
 
-//            byte[] data = FileUtils.readFileToByteArray(test);
-           String dataStr =  FileUtils.readFileToString(test, Charset.forName("x-windows-950"));
-            byte[] data = Native.toByteArray(dataStr);
+            byte[] data = FileUtils.readFileToByteArray(test);
             Pointer pointer = new Memory(data.length + 1);
             pointer.write(0, data, 0, data.length);
             pointer.setByte(data.length, (byte) 0);
 
-            AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
 
-            int len = gameInfoStruct.bsArray.length;
+
+            AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
+            gameInfoStruct.read();
+
+            for(int i=0 ;i < gameInfoStruct.bsArray.length;i++ ){
+                AutoBallLibrary.BarrelStruct barrelStruct = gameInfoStruct.bsArray[i];
+
+                for(int j=0 ;j<barrelStruct.bcArray.length;j++){
+                    StringBuffer stringBuffer = new StringBuffer();
+                    AutoBallLibrary.BallCode ballCode=barrelStruct.bcArray[j];
+                    for (byte b:ballCode.bCodeByte){
+//                        if (b==0) break;
+                        if(b!=0){
+                            char c = (char)b;
+                            stringBuffer.append((char)b);
+                        }
+                    }
+
+                    if(stringBuffer.toString().length()>0)
+                        logger.info("BS {},{} string[{}]",i,j,stringBuffer.toString());
+//                        System.out.println("bs...."+stringBuffer.toString());
+                }
+            }
+
+
+
+            for (AutoBallLibrary.BarrelStruct barrelStruct:gameInfoStruct.bsArray){
+//                barrelStruct.read();
+
+//                for(int i=0 ; i<barrelStruct.nBallCount ;i++){
+//                    StringBuffer stringBuffer = new StringBuffer();
+//                    AutoBallLibrary.BallCode ballCodes = barrelStruct.bcArray[i];
+//                    ballCodes.read();
+//                    for(byte b : ballCodes.bCodeByte){
+//                        if(b!=0){
+//                            stringBuffer.append((char)b);
+//                        }
+//                    }
+//                    System.out.println(stringBuffer.toString());
+//                }
+
+                for(AutoBallLibrary.BallCode ballCode:barrelStruct.bcArray){
+//                    ballCode.read();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    for (byte b:ballCode.bCodeByte){
+                        if (b==0) break;
+                        if(b!=0){
+                            System.out.println("b...."+(char)b);
+                            stringBuffer.append((char)b);
+                        }
+                    }
+
+                    if(stringBuffer.toString().length()>0)
+                        System.out.println("bs...."+stringBuffer.toString());
+                }
+            }
+
+
+
+            System.out.println(gameInfoStruct.bsArray.length);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+//        String dir = System.getProperty("user.dir");
+//        File ant = new File(dir+"/ANTENNA.DAT");
+//        byte[] data = new byte[0];
+//        try {
+//            data = FileUtils.readFileToByteArray(ant);
+//            Pointer pointer = new Memory(data.length + 1);
+//            pointer.write(0, data, 0, data.length);
+//            pointer.setByte(data.length, (byte) 0);
+//            AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(pointer);
+//            antennaSet.read();
+//            System.out.println(antennaSet.aiAntennaItem.length);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
-
-        AutoBallLibrary.BallCode ballCode = getBallCode(2);
-
-
-
+//        AutoBallLibrary.BallCode ballCode = getBallCode(2);
 //
 //        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
 
