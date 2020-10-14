@@ -4,6 +4,10 @@ import autoball.AutoBallLibrary;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 public class TestingData {
 
@@ -32,7 +36,7 @@ public class TestingData {
 
 //        gameInfoStruct.nGameNum = gameNum;
 //        gameInfoStruct.dwGameTime = System.currentTimeMillis();
-        //各天線開出球號，預設6個
+        //??????????6?
         for (int i=0 ; i<antenllaCount ;i++){
             gameInfoStruct.bsArray[i] = getBarrelStruct(32);
         }
@@ -51,7 +55,25 @@ public class TestingData {
 
 
 
-    public static void main (String arg[]){
+    public static void main (String arg[]) {
+
+        String dir = System.getProperty("user.dir");
+        File test = new File(dir+"/Data/Ball2020101315.dat");
+        try {
+            byte[] data = FileUtils.readFileToByteArray(test);
+            Pointer pointer = new Memory(data.length + 1);
+            pointer.write(0, data, 0, data.length);
+            pointer.setByte(data.length, (byte) 0);
+
+            AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
+
+            int len = gameInfoStruct.bsArray.length;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
 
         AutoBallLibrary.BallCode ballCode = getBallCode(2);

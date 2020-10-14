@@ -81,12 +81,16 @@ project("autoball"){
         implementation "org.springframework.retry:spring-retry:1.2.4.RELEASE"
         implementation "org.apache.commons:commons-lang3:3.11"
 
+        implementation "commons-io:commons-io:2.8.0"
+
         /**
          * JNA Libs
          */
         implementation "net.java.dev.jna:jna:5.6.0"
         implementation "com.nativelibs4java:jnaerator:0.12"
         implementation "net.java.dev.jna:jna-platform:5.6.0"
+
+
     }
 
 }
