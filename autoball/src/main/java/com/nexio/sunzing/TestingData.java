@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class TestingData {
 
@@ -58,9 +59,12 @@ public class TestingData {
     public static void main (String arg[]) {
 
         String dir = System.getProperty("user.dir");
-        File test = new File(dir+"/Data/Ball2020101315.dat");
+        File test = new File(dir+"/Data/Ball2020101411.dat");
         try {
-            byte[] data = FileUtils.readFileToByteArray(test);
+
+//            byte[] data = FileUtils.readFileToByteArray(test);
+           String dataStr =  FileUtils.readFileToString(test, Charset.forName("x-windows-950"));
+            byte[] data = Native.toByteArray(dataStr);
             Pointer pointer = new Memory(data.length + 1);
             pointer.write(0, data, 0, data.length);
             pointer.setByte(data.length, (byte) 0);
