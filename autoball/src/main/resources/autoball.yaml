@@ -1,4 +1,8 @@
-lib : AutoBallDll
+#for windows
+#lib : AutoBallDll
+
+#for mac
+lib : /Users/sammy/git/survey/autoball/go/AutoBall.so
 
 socket :
     endpoint : localhost
