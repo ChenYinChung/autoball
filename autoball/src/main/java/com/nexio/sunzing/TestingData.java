@@ -1,7 +1,6 @@
 package com.nexio.sunzing;
 
 import autoball.AutoBallLibrary;
-import com.nexio.autoball.service.AutoBallService;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -11,38 +10,37 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 public class TestingData {
     private static final Logger logger = LoggerFactory.getLogger(TestingData.class);
 
-    public static AutoBallLibrary.BallCode getBallCode(int a){
+    public static AutoBallLibrary.BallCode getBallCode(int a) {
         AutoBallLibrary.BallCode ballCode = new AutoBallLibrary.BallCode.ByReference();
         byte[] bytes = new byte[8];
-        for(int i = 0;i<8;i++){
-            bytes[i] = (byte) ((a+i)%10+48);
+        for (int i = 0; i < 8; i++) {
+            bytes[i] = (byte) ((a + i) % 10 + 48);
 
         }
         ballCode.bCodeByte = bytes;
         return ballCode;
     }
 
-    public static AutoBallLibrary.BarrelStruct getBarrelStruct(int ballCount ){
+    public static AutoBallLibrary.BarrelStruct getBarrelStruct(int ballCount) {
         AutoBallLibrary.BarrelStruct barrelStruct = new AutoBallLibrary.BarrelStruct.ByReference();
         barrelStruct.nBallCount = ballCount;
-        for(int i=0 ; i< ballCount;i++){
+        for (int i = 0; i < ballCount; i++) {
             barrelStruct.bcArray[i] = getBallCode(i);
         }
-        return  barrelStruct;
+        return barrelStruct;
     }
 
-    public static AutoBallLibrary.GameInfoStruct gameInfoStruct(int gameNum, int antenllaCount){
+    public static AutoBallLibrary.GameInfoStruct gameInfoStruct(int gameNum, int antenllaCount) {
         AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
 
 //        gameInfoStruct.nGameNum = gameNum;
 //        gameInfoStruct.dwGameTime = System.currentTimeMillis();
 
-        for (int i=0 ; i<antenllaCount ;i++){
+        for (int i = 0; i < antenllaCount; i++) {
             gameInfoStruct.bsArray[i] = getBarrelStruct(32);
         }
 
@@ -58,12 +56,26 @@ public class TestingData {
         return pointer;
     }
 
-
-
-    public static void main (String arg[]) {
-
+    public static void getAntenna() {
         String dir = System.getProperty("user.dir");
-        File test = new File(dir+"/Data/Ball2019102611.dat");
+        File ant = new File(dir + "/ANTENNA.DAT");
+        byte[] data = new byte[0];
+        try {
+            data = FileUtils.readFileToByteArray(ant);
+            Pointer pointer = new Memory(data.length + 1);
+            pointer.write(0, data, 0, data.length);
+            pointer.setByte(data.length, (byte) 0);
+            AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(pointer);
+            antennaSet.read();
+            System.out.println(antennaSet.aiAntennaItem.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getData() {
+        String dir = System.getProperty("user.dir");
+        File test = new File(dir + "/Data/Ball2020101411.dat");
         try {
 
             byte[] data = FileUtils.readFileToByteArray(test);
@@ -72,33 +84,33 @@ public class TestingData {
             pointer.setByte(data.length, (byte) 0);
 
 
-
             AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
             gameInfoStruct.read();
 
-            for(int i=0 ;i < gameInfoStruct.bsArray.length;i++ ){
+            AutoBallLibrary.GameInfoStruct[] gameInfoStructs = gameInfoStruct.castToArray();
+
+            for (int i = 0; i < gameInfoStruct.bsArray.length; i++) {
                 AutoBallLibrary.BarrelStruct barrelStruct = gameInfoStruct.bsArray[i];
 
-                for(int j=0 ;j<barrelStruct.bcArray.length;j++){
+                for (int j = 0; j < barrelStruct.bcArray.length; j++) {
                     StringBuffer stringBuffer = new StringBuffer();
-                    AutoBallLibrary.BallCode ballCode=barrelStruct.bcArray[j];
-                    for (byte b:ballCode.bCodeByte){
-//                        if (b==0) break;
-                        if(b!=0){
-                            char c = (char)b;
-                            stringBuffer.append((char)b);
+                    AutoBallLibrary.BallCode ballCode = barrelStruct.bcArray[j];
+                    for (byte b : ballCode.bCodeByte) {
+                        if (b==0) break;
+                        if (b != 0) {
+                            char c = (char) b;
+                            stringBuffer.append((char) b);
                         }
                     }
 
-                    if(stringBuffer.toString().length()>0)
-                        logger.info("BS {},{} string[{}]",i,j,stringBuffer.toString());
+                    if (stringBuffer.toString().length() > 0)
+                        logger.info("BS {},{} string[{}]", i, j, stringBuffer.toString());
 //                        System.out.println("bs...."+stringBuffer.toString());
                 }
             }
 
 
-
-            for (AutoBallLibrary.BarrelStruct barrelStruct:gameInfoStruct.bsArray){
+//            for (AutoBallLibrary.BarrelStruct barrelStruct : gameInfoStruct.bsArray) {
 //                barrelStruct.read();
 
 //                for(int i=0 ; i<barrelStruct.nBallCount ;i++){
@@ -113,55 +125,41 @@ public class TestingData {
 //                    System.out.println(stringBuffer.toString());
 //                }
 
-                for(AutoBallLibrary.BallCode ballCode:barrelStruct.bcArray){
+//                for (AutoBallLibrary.BallCode ballCode : barrelStruct.bcArray) {
 //                    ballCode.read();
-                    StringBuffer stringBuffer = new StringBuffer();
-                    for (byte b:ballCode.bCodeByte){
-                        if (b==0) break;
-                        if(b!=0){
-                            System.out.println("b...."+(char)b);
-                            stringBuffer.append((char)b);
-                        }
-                    }
-
-                    if(stringBuffer.toString().length()>0)
-                        System.out.println("bs...."+stringBuffer.toString());
-                }
-            }
-
-
-
-            System.out.println(gameInfoStruct.bsArray.length);
-
+//                    StringBuffer stringBuffer = new StringBuffer();
+//                    for (byte b : ballCode.bCodeByte) {
+//                        if (b == 0) break;
+//                        if (b != 0) {
+//                            System.out.println("b...." + (char) b);
+//                            stringBuffer.append((char) b);
+//                        }
+//                    }
+//
+//                    if (stringBuffer.toString().length() > 0)
+//                        System.out.println("bs...." + stringBuffer.toString());
+//                }
+//            }
+//
+//
+//            System.out.println(gameInfoStruct.bsArray.length);
+//
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        String dir = System.getProperty("user.dir");
-//        File ant = new File(dir+"/ANTENNA.DAT");
-//        byte[] data = new byte[0];
-//        try {
-//            data = FileUtils.readFileToByteArray(ant);
-//            Pointer pointer = new Memory(data.length + 1);
-//            pointer.write(0, data, 0, data.length);
-//            pointer.setByte(data.length, (byte) 0);
-//            AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(pointer);
-//            antennaSet.read();
-//            System.out.println(antennaSet.aiAntennaItem.length);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    }
 
 
-//        AutoBallLibrary.BallCode ballCode = getBallCode(2);
-//
-//        AutoBallLibrary.BarrelStruct barrelStruct = getBarrelStruct(2);
+    public static void main(String arg[]) {
+//        getAntenna();
+        getData();
 
-//        AutoBallLibrary INSTANCE = (AutoBallLibrary) Native.load("AutoBall", AutoBallLibrary.class);
-//
+
+
+
+
 //        AutoBallLibrary.GameInfoStruct gameInfoStruct = gameInfoStruct(100,12);
 
-//        System.out.println("test");
     }
 
 }

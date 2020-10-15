@@ -349,7 +349,7 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>bool GetGameInfo(GameInfoStruct&)</code><br>
      * <i>native declaration : line 47</i>
      */
-    boolean GetGameInfo(GameInfoStruct GameInfo);
+    boolean GetGameInfo(byte[] GameInfo);
 
     boolean GetGameInfoStr(byte[] bytes);
     /**
@@ -417,25 +417,25 @@ public interface AutoBallLibrary extends Library {
      * Original signature : <code>bool GetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 80</i>
      */
-    boolean GetAntennaPara(AntennaSet strAntennaPara);
+    boolean GetAntennaPara(byte[] strAntennaPara);
     /**
      * 修改系统当前的天線设置信息。參數strAntennaPara是存有天線設置信息的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetAntennaPara(LPSTR)</code><br>
      * <i>native declaration : line 83</i>
      */
-    boolean SetAntennaPara(AntennaSet strAntennaPara);
+    boolean SetAntennaPara(byte[] strAntennaPara);
     /**
      * 獲取系统当前的開球控制流程設置。參數strContorlProcess是保存當前開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool GetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 86</i>
      */
-    boolean GetControlProcess(ProcessFlow strContorlProcess);
+    boolean GetControlProcess(byte[] strContorlProcess);
     /**
      * 修改系统当前的開球控制流程設置。參數strContorlProcess是存有開球控制流程設置的指針。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetControlProcess(LPSTR)</code><br>
      * <i>native declaration : line 89</i>
      */
-    boolean SetControlProcess(ProcessFlow strContorlProcess);
+    boolean SetControlProcess(byte[] strContorlProcess);
     /**
      * 修改系统当前開球流程的控制方式。參數nControlStyle是開球流程控制方式，同時開時為1，輪流開時為2，開完一個開開一個時為3。沒有錯誤返回ture，有錯誤返回false。<br>
      * Original signature : <code>bool SetControlStyle(int)</code><br>

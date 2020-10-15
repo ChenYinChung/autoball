@@ -1,6 +1,8 @@
 package com.nexio.autoball.service;
 
 import autoball.AutoBallLibrary;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WTypes;
@@ -79,8 +81,12 @@ public class AutoBallService {
     public AutoBallLibrary.GameInfoStruct  getGameInfo() {
         //GetGameInfo(GameInfoStruct &GameInfo)
 
-        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct.ByReference();
-        boolean isError = autoBallLibrary.GetGameInfo(gameInfoStruct);
+        byte[] bytes = new byte[4096];
+        boolean isError = autoBallLibrary.GetGameInfo(bytes);
+        Pointer pointer = asPointer(bytes);
+        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
+        gameInfoStruct.read();
+
         logger.info("isError={}",isError);
         logger.info("getGameInfo={}",gameInfoStruct);
         return gameInfoStruct;
@@ -252,8 +258,13 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean getAntennaPara() {
         //GetAntennaPara(LPSTR strErrorMessage);
-        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
-        boolean isError =  autoBallLibrary.GetAntennaPara(antennaSet);
+
+        byte[] bytes = new byte[4096];
+        boolean isError =  autoBallLibrary.GetAntennaPara(bytes);
+        Pointer pointer = asPointer(bytes);
+        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(pointer);
+        antennaSet.read();
+
         logger.info("GetAntennaPara isError ={}",isError);
         logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
         return isError;
@@ -268,7 +279,9 @@ public class AutoBallService {
     public boolean setAntennaPara() {
         //SetAntennaPara(LPSTR strAntennaPara);
         AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
-        boolean isError =  autoBallLibrary.SetAntennaPara(antennaSet);
+        byte[] bytes = new byte[4096];
+
+        boolean isError =  autoBallLibrary.SetAntennaPara(bytes);
         logger.info("SetAntennaPara={}",isError);
         return isError;
     }
@@ -282,9 +295,11 @@ public class AutoBallService {
     public boolean getControlProcess() {
         //GetControlProcess(LPSTR strContorlProcess);
 
-        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
-
-        boolean isError =  autoBallLibrary.GetControlProcess(processFlow);
+        byte[] bytes = new byte[4096];
+        boolean isError =  autoBallLibrary.GetControlProcess(bytes);
+        Pointer pointer = asPointer(bytes);
+        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow(pointer);
+        processFlow.read();
 
         logger.info("getControlProcess isError ={}",isError);
         logger.info("getControlProcess={}",processFlow.pfItem);
@@ -301,9 +316,16 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public boolean setControlProcess() {
         //SetControlProcess(LPSTR strContorlProcess);
-        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow.ByReference();
-        boolean isError =  autoBallLibrary.SetControlProcess(processFlow);
+
+        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow();
+        byte[] bytes = new byte[4096];
+
+        boolean isError =  autoBallLibrary.SetControlProcess(bytes);
         logger.info("SetControlProcess={}",isError);
+
+
+
+
         return isError;
     }
 
@@ -321,6 +343,16 @@ public class AutoBallService {
         return isError == 1 ? true:false;
     }
 
+    private Pointer asPointer(String charArray) {
+        byte[] data = Native.toByteArray(charArray);
+        return asPointer(data);
+    }
 
+    private Pointer asPointer(byte[] bytesArray) {
+        Pointer pointer = new Memory(bytesArray.length + 1);
+        pointer.write(0, bytesArray, 0, bytesArray.length);
+        pointer.setByte(bytesArray.length, (byte) 0);
+        return pointer;
+    }
 
 }
