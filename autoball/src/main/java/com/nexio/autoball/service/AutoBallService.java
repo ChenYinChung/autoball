@@ -1,6 +1,7 @@
 package com.nexio.autoball.service;
 
 import autoball.AutoBallLibrary;
+import com.nexio.autoball.component.SocketClient;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
@@ -15,6 +16,7 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -25,6 +27,9 @@ public class AutoBallService {
 
     @Autowired
     AutoBallLibrary autoBallLibrary;
+
+    @Autowired
+    SocketClient socketClient;
 
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public Boolean init(){
@@ -319,10 +324,6 @@ public class AutoBallService {
 
         boolean isError =  autoBallLibrary.SetControlProcess(bytes);
         logger.info("SetControlProcess={}",isError);
-
-
-
-
         return isError;
     }
 
@@ -338,6 +339,16 @@ public class AutoBallService {
 
         return isError == 1 ? true:false;
     }
+
+    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
+    public String socketStartGame(int nGameCount, int nTimeSpan,int nCurGameNum) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("startGame:").append(nCurGameNum).append(",").append(nGameCount).append(",").append(nTimeSpan);
+
+
+        return socketClient.send(sb.toString());
+    }
+
 
     private Pointer asPointer(String charArray) {
         byte[] data = Native.toByteArray(charArray);

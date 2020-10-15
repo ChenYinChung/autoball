@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 /**
  * 接收ABService的測試資料
  * 一併檢查header 及 傳送payload是否有誤
@@ -160,4 +162,14 @@ public class TestController {
         boolean isError = autoBallService.setControlStyle(nControlStyle);
         return isError;
     }
+
+    @PostMapping(path = "/socketStartGame", consumes = "application/json", produces = "application/json")
+    public String socket(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
+                             @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan,
+                             @RequestParam(value = "nCurGameNum", defaultValue = "1") int nCurGameNum) throws IOException {
+        String ret = autoBallService.socketStartGame(nGameCount,nTimeSpan,nCurGameNum);
+        return ret;
+    }
+
+
 }

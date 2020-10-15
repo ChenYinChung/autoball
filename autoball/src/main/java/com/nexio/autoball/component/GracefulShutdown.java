@@ -27,6 +27,9 @@ public class GracefulShutdown implements ApplicationListener<ContextClosedEvent>
 
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
+
+
+
         gracefulShutdownWrapper.getGracefulShutdownHandler().shutdown();
         logger.info("Server graceful shutdown now");
         try {

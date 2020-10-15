@@ -1,1 +1,5 @@
 lib : AutoBallDll
+
+socket :
+    endpoint : localhost
+    port : 5566
