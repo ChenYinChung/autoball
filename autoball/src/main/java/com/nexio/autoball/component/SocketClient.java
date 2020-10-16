@@ -30,11 +30,11 @@ public class SocketClient {
             byte[] sendBytes = message.getBytes();
             output.write(sendBytes);
 
+
             byte[] bytes = new byte[1024];
             input.read(bytes);
             String inputMessage = new String(bytes);
-            logger.info("Message from Server: " + inputMessage);
-
+            System.out.println("Message from Server: " + inputMessage);
             return inputMessage;
         }
         catch(IOException ioException) {

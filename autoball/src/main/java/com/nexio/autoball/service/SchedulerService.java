@@ -31,7 +31,8 @@ public class SchedulerService {
 
     //每隔5秒执行一次
     @Async
-    @Scheduled(fixedRate = 120000)
+//    @Scheduled(fixedRate = 120000)
+    @Scheduled(cron = "0 7,17,27,37,47,57 * * * *")
     public void testTasks() {
         try {
             StringBuilder sb = new StringBuilder();
