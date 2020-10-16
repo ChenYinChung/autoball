@@ -26,11 +26,16 @@ public class SocketClient {
         try(Socket socket =  new Socket(InetAddress.getByName(endPoint), port);
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());) {
-            output.writeUTF(message);
-            String severMessage = input.readUTF();
-            logger.info("Message from Server: " + severMessage);
 
-            return severMessage;
+            byte[] sendBytes = message.getBytes();
+            output.write(sendBytes);
+
+            byte[] bytes = new byte[1024];
+            input.read(bytes);
+            String inputMessage = new String(bytes);
+            logger.info("Message from Server: " + inputMessage);
+
+            return inputMessage;
         }
         catch(IOException ioException) {
             throw ioException;
