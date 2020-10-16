@@ -29,7 +29,7 @@ public class SocketClient {
 
             byte[] sendBytes = message.getBytes();
             output.write(sendBytes);
-
+            output.flush();
 
             byte[] bytes = new byte[1024];
             input.read(bytes);

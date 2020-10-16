@@ -54,7 +54,10 @@ public class Server {
                 System.out.println("Client Name: " + connection.getInetAddress().getHostName());
                 System.out.println("Date: " + date);
                 inputStream = new DataInputStream(connection.getInputStream());
-                inputMessage = inputStream.readUTF();
+
+                byte[] b = new byte[1024];
+                inputStream.read(b);
+                inputMessage = new String(b);
                 System.out.println("Message from Client: " + inputMessage);
                 outputStream = new DataOutputStream(connection.getOutputStream());
 
@@ -65,7 +68,8 @@ public class Server {
 
                 String json = testData(Integer.parseInt(sp[1]));
 
-                outputStream.writeUTF(json);
+                outputStream.write(json.getBytes());
+                outputStream.flush();
             }
         }
         catch(IOException ioe) {

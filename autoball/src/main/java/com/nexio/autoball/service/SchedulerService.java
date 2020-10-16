@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @EnableAsync
@@ -32,11 +31,15 @@ public class SchedulerService {
     //每隔5秒执行一次
     @Async
 //    @Scheduled(fixedRate = 120000)
-    @Scheduled(cron = "0 7,17,27,37,47,57 * * * *")
+//    @Scheduled(cron = "0 7,17,27,37,47,57 * * * *")
+    @Scheduled(cron = "7,17,27,37,47,57 * * * * *")
     public void testTasks() {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("startGame").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
+            sb.append("startGame7").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
+
+            if (socketClient==null)
+                return;
 
             String json = socketClient.send(sb.toString());
             logger.info("Run in testTasks {}", json);
@@ -50,21 +53,25 @@ public class SchedulerService {
     }
 
     //0,20,40 每20分執行一次
-//    @Async
+    @Async
 //    @Scheduled(cron = "0 0,20,40 * * * *")
-//    public void testTasks2() {
-//        try {
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("startGame").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
-//
-//            String json = socketClient.send(sb.toString());
-//            logger.info("Run in testTasks2 {}", json);
-//
-//            CUR_GAME_NUM++;
-//        } catch (IOException e) {
-//            logger.error("Task error", e);
-//        }
-//    }
+    @Scheduled(cron = "1,11,21,31,41,51 * * * * *")
+    public void testTasks2() {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("startGame1").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
+
+            if (socketClient==null)
+                return;
+
+            String json = socketClient.send(sb.toString());
+            logger.info("Run in testTasks2 {}", json);
+
+            CUR_GAME_NUM++;
+        } catch (IOException e) {
+            logger.error("Task error", e);
+        }
+    }
 
 
     private void showGameInfo(String json) throws JsonProcessingException {
