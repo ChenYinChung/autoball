@@ -343,7 +343,7 @@ public class AutoBallService {
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public String socketStartGame(int nGameCount, int nTimeSpan,int nCurGameNum) throws IOException {
         StringBuilder sb = new StringBuilder();
-        sb.append("startGame:").append(nCurGameNum).append(",").append(nGameCount).append(",").append(nTimeSpan);
+        sb.append("startGame").append(",").append(nCurGameNum).append(",").append(nGameCount).append(",").append(nTimeSpan);
 
 
         return socketClient.send(sb.toString());

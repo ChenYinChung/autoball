@@ -1,9 +1,11 @@
-#for windows
-#lib : AutoBallDll
+lib : AutoBallDll
 
-#for mac
-lib : /Users/sammy/git/survey/autoball/go/AutoBall.so
-
+#呼叫VC++ socket使用
 socket :
     endpoint : localhost
     port : 5566
+
+#回傳球號給SLE CMS Server API
+callback :
+    endpoint : localhost
+    port : 8008

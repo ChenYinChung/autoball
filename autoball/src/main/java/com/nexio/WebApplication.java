@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class},scanBasePackages = {"com.nexio.autoball"})
@@ -14,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 //@SpringBootApplication(scanBasePackages = {"com.nexio.autoball"})
 @EnableAsync
 @EnableRetry
+@EnableScheduling
 //@Import({PersistenceConfig.class, RestTemplateConfig.class})
 @PropertySource({"application.properties", "undertow.properties"})
 @PropertySource(factory = YamlPropertySourceFactory.class, value = {"classpath:autoball.yaml",})
