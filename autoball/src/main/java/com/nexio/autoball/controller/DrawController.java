@@ -17,10 +17,10 @@ public class DrawController {
     @Autowired
     DrawService drawService;
 
-    @PostMapping(path = "/draw", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/drawResult", consumes = "application/json", produces = "application/json")
     public String draw(@RequestParam(value = "gameNum") String gameNum,
-                                  @RequestParam(value = "drawNum") String drawNum) {
-        drawService.draw(gameNum,drawNum);
+                                  @RequestParam(value = "drawResult") String drawResult) {
+        drawService.draw(gameNum,drawResult);
 
         return "OK";
 

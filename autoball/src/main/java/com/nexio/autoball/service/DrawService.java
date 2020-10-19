@@ -10,9 +10,9 @@ import java.io.IOException;
 public class DrawService {
     private static final Logger logger = LoggerFactory.getLogger(DrawService.class);
 
-    public String draw(String gameNum, String drawNums) {
+    public String draw(String gameNum, String drawResult) {
 
-        logger.info("GameNum[{}] drawNums[{}]",gameNum,drawNums);
+        logger.info("GameNum[{}] drawNums[{}]",gameNum,drawResult);
         return "";
     }
 

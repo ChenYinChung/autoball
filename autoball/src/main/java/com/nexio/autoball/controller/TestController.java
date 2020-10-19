@@ -163,11 +163,11 @@ public class TestController {
         return isError;
     }
 
-    @PostMapping(path = "/socketStartGame", consumes = "application/json", produces = "application/json")
-    public String socketStartGame(@RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount,
+    @PostMapping(path = "/socket", consumes = "application/json", produces = "application/json")
+    public String socketStartGame(@RequestParam(value = "nCurGameNum", defaultValue = "1") int nCurGameNum,
                              @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan,
-                             @RequestParam(value = "nCurGameNum", defaultValue = "1") int nCurGameNum) throws IOException {
-        String ret = autoBallService.socketStartGame(nGameCount,nTimeSpan,nCurGameNum);
+                             @RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount) throws IOException {
+        String ret = autoBallService.socketStartGame(nCurGameNum,nTimeSpan,nGameCount);
         return ret;
     }
 

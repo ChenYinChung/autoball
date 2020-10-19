@@ -53,25 +53,25 @@ public class SchedulerService {
 //    }
 
     //0,20,40 每20分執行一次
-    @Async
+//    @Async
 //    @Scheduled(cron = "0 0,20,40 * * * *")
-    @Scheduled(cron = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *")
-    public void testTasks2() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append("startGame1").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
-
-            if (socketClient==null)
-                return;
-
-            String json = socketClient.send(sb.toString());
-            logger.info("Run in testTasks2 {}", json);
-
-            CUR_GAME_NUM++;
-        } catch (IOException e) {
-            logger.error("Task error", e);
-        }
-    }
+//    @Scheduled(cron = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *")
+//    public void testTasks2() {
+//        try {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("startGame1").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
+//
+//            if (socketClient==null)
+//                return;
+//
+//            String json = socketClient.send(sb.toString());
+//            logger.info("Run in testTasks2 {}", json);
+//
+//            CUR_GAME_NUM++;
+//        } catch (IOException e) {
+//            logger.error("Task error", e);
+//        }
+//    }
 
 
     private void showGameInfo(String json) throws JsonProcessingException {
