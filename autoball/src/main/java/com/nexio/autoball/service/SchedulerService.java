@@ -29,33 +29,33 @@ public class SchedulerService {
     SocketClient socketClient;
 
     //每隔5秒执行一次
-    @Async
+//    @Async
 //    @Scheduled(fixedRate = 120000)
 //    @Scheduled(cron = "0 7,17,27,37,47,57 * * * *")
-    @Scheduled(cron = "7,17,27,37,47,57 * * * * *")
-    public void testTasks() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append("startGame7").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
-
-            if (socketClient==null)
-                return;
-
-            String json = socketClient.send(sb.toString());
-            logger.info("Run in testTasks {}", json);
-//            showGameInfo(json);
-
-            CUR_GAME_NUM++;
-        } catch (IOException e) {
-            logger.error("Task error", e);
-        }
-
-    }
+//    @Scheduled(cron = "7,17,27,37,47,57 * * * * *")
+//    public void testTasks() {
+//        try {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("startGame7").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
+//
+//            if (socketClient==null)
+//                return;
+//
+//            String json = socketClient.send(sb.toString());
+//            logger.info("Run in testTasks {}", json);
+////            showGameInfo(json);
+//
+//            CUR_GAME_NUM++;
+//        } catch (IOException e) {
+//            logger.error("Task error", e);
+//        }
+//
+//    }
 
     //0,20,40 每20分執行一次
     @Async
 //    @Scheduled(cron = "0 0,20,40 * * * *")
-    @Scheduled(cron = "1,11,21,31,41,51 * * * * *")
+    @Scheduled(cron = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *")
     public void testTasks2() {
         try {
             StringBuilder sb = new StringBuilder();
