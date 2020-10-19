@@ -18,12 +18,9 @@ public class DrawController {
     DrawService drawService;
 
     @PostMapping(path = "/drawResult", consumes = "application/x-www-form-urlencoded", produces = "application/json")
-    public String draw(@RequestParam(value = "gameNum") String gameNum,
+    public void draw(@RequestParam(value = "gameNum") String gameNum,
                                   @RequestParam(value = "drawResult") String drawResult) {
         drawService.draw(gameNum,drawResult);
-
-        return "OK";
-
     }
 
 }

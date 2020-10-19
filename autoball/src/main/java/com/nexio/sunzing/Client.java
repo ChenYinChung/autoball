@@ -27,6 +27,6 @@ public class Client {
     }
     public static void main(String args[]) {
         new Client("startGame,101,1,0");
-        new Client("startGame,202,1,0");
+        new Client("ant,1,1,1,1,1,1,1");
     }
 }
