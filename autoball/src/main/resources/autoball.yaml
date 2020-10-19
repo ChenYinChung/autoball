@@ -9,3 +9,8 @@ socket :
 callback :
     endpoint : localhost
     port : 8008
+
+
+draw:
+    path: /Users/sammy/git/survey/autoball/
+#    path: C:/Ray/
