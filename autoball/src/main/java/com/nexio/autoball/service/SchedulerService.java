@@ -6,6 +6,7 @@ import com.nexio.autoball.component.SocketClient;
 import com.nexio.autoball.model.BallCode;
 import com.nexio.autoball.model.BsArray;
 import com.nexio.autoball.model.GameInfo;
+import com.nexio.sunzing.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,64 +16,66 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Component
 @EnableAsync
 public class SchedulerService {
     private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
-    static int CUR_GAME_NUM = 100;
-    static final int GAME_COUNT = 1;
-    static final int TIME_SPAM = 0;
     @Autowired
     SocketClient socketClient;
 
-    //每隔5秒执行一次
-//    @Async
-//    @Scheduled(fixedRate = 120000)
-//    @Scheduled(cron = "0 7,17,27,37,47,57 * * * *")
-//    @Scheduled(cron = "7,17,27,37,47,57 * * * * *")
-//    public void testTasks() {
-//        try {
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("startGame7").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
-//
-//            if (socketClient==null)
-//                return;
-//
-//            String json = socketClient.send(sb.toString());
-//            logger.info("Run in testTasks {}", json);
-////            showGameInfo(json);
-//
-//            CUR_GAME_NUM++;
-//        } catch (IOException e) {
-//            logger.error("Task error", e);
-//        }
-//
-//    }
+    /**
+     * 只開前五個管
+     */
+    @Async
+    @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
+    public void draw5Balls() {
+        try {
+            String requset = "ant,1,1,1,1,1,0";
+            String json = socketClient.send(requset);
+            Thread.sleep(5000);
 
-    //0,20,40 每20分執行一次
-//    @Async
-//    @Scheduled(cron = "0 0,20,40 * * * *")
-//    @Scheduled(cron = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *")
-//    public void testTasks2() {
-//        try {
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("startGame1").append(",").append(CUR_GAME_NUM).append(",").append(GAME_COUNT).append(",").append(TIME_SPAM);
-//
-//            if (socketClient==null)
-//                return;
-//
-//            String json = socketClient.send(sb.toString());
-//            logger.info("Run in testTasks2 {}", json);
-//
-//            CUR_GAME_NUM++;
-//        } catch (IOException e) {
-//            logger.error("Task error", e);
-//        }
-//    }
+            requset = "startGame,"+getDataIssue()+",1,0";
+            json = socketClient.send(requset);
 
+            logger.info("Run in draw5Balls {}", json);
+        } catch (Exception e) {
+            logger.error("Task error", e);
+        }
+
+    }
+
+    /**
+     * 只開最後一管
+     */
+    @Async
+    @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
+    public void drawSingleBalls() {
+        try {
+            String requset = "ant,0,0,0,0,0,1";
+            String json = socketClient.send(requset);
+            Thread.sleep(5000);
+
+            requset = "startGame,"+getDataIssue()+",1,0";
+            json = socketClient.send(requset);
+
+            logger.info("Run in drawSingleBalls {}", json);
+        } catch (Exception e) {
+            logger.error("Task error", e);
+        }
+
+    }
+
+    private String getDataIssue(){
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyMMddHHmm");
+        Date current = new Date();
+        String fmt = sdFormat.format(current);
+        return fmt;
+    }
 
     private void showGameInfo(String json) throws JsonProcessingException {
         ObjectMapper objectMapper =  new ObjectMapper();

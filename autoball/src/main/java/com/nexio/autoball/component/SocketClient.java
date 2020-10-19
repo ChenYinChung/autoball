@@ -34,7 +34,6 @@ public class SocketClient {
             byte[] bytes = new byte[1024];
             input.read(bytes);
             String inputMessage = new String(bytes);
-            System.out.println("Message from Server: " + inputMessage);
             return inputMessage;
         }
         catch(IOException ioException) {

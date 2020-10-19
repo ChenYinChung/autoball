@@ -1,5 +1,8 @@
 package com.nexio.autoball.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexio.autoball.model.BallCode;
 import com.nexio.autoball.model.BsArray;
 import com.nexio.autoball.model.GameInfo;
 import org.slf4j.Logger;
@@ -15,8 +18,26 @@ public class DrawService {
     private static final Logger logger = LoggerFactory.getLogger(DrawService.class);
 
     public void draw(String gameNum, String drawResult) {
+        GameInfo gameInfo = parse(gameNum,drawResult);
 
-        logger.info("GameNum[{}] drawNums[{}]",gameNum,drawResult);
+        logger.info("gameNum src[{}]",gameNum);
+        logger.info("drawResult src[{}]",drawResult);
+
+        ObjectMapper objectMapper =  new ObjectMapper();
+        String json = null;
+        try {
+            json = objectMapper.writeValueAsString(gameInfo);
+        } catch (JsonProcessingException e) {
+            logger.error("gameInfo error[{}]",e);
+        }
+
+        logger.info("gameInfo json[{}]",json);
+
+    }
+
+    private GameInfo parse(String gameNum, String drawResult){
+
+        logger.info("GameNum[{}] drawNums[{}]", gameNum, drawResult);
         //開獎的桶號有幾個,以及號碼==> 1,2,6_1,2,3;2,3,4;1,5,6
 
 
@@ -33,17 +54,31 @@ public class DrawService {
 
         List<BsArray> bsArrayList = new ArrayList<>();
 
-        for(int i=0 ; i< bsArraySrc.length;i++){
+        for (int i = 0; i < bsArraySrc.length; i++) {
             BsArray bsArray = new BsArray();
             bsArrayList.add(bsArray);
+
+            String[] bcArrays = bsArraySrc[i].split(",");
+
+            List<String> balls = new ArrayList<>();
+            for (int j= 0 ; j < bcArrays.length;j++){
+                balls.add(bcArrays[j]);
+            }
+            BallCode ballCode = new BallCode();
+            ballCode.code = balls;
+
+            List<BallCode> bcArrayList = new ArrayList<>();
+            bcArrayList.add(ballCode);
+            bsArray.nBallCount = bcArrayList.size();
+            bsArray.ballCode = bcArrayList;
         }
         gameInfo.bsArray = bsArrayList;
 
+        return gameInfo;
     }
 
-
-    public static void main(String[] arg){
+    public static void main(String[] arg) {
         DrawService drawService = new DrawService();
-        drawService.draw("201019001","1,2,6_1,2,3;2,3,4;1,5,6");
+        drawService.draw("201019001", "1,2,6_1,2,3;2,3,4;1,5,6");
     }
 }
