@@ -14,4 +14,4 @@ AutoBall 搖彩機API串接測試
 
  curl http://localhost:8008/getAntennaPara -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
  
-  curl http://localhost:8008/socketStartGame?nCurGameNum=20201019110&nGameCount=1&nTimeSpan=0 -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
+ curl http://localhost:8008/socket?nCurGameNum=20201019110&nGameCount=1&nTimeSpan=0 -X POST -i -H "Content-Type:application/json"

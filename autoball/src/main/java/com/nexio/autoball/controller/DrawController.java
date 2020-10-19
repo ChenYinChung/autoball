@@ -17,7 +17,7 @@ public class DrawController {
     @Autowired
     DrawService drawService;
 
-    @PostMapping(path = "/drawResult", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/drawResult", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public String draw(@RequestParam(value = "gameNum") String gameNum,
                                   @RequestParam(value = "drawResult") String drawResult) {
         drawService.draw(gameNum,drawResult);

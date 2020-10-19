@@ -164,10 +164,10 @@ public class TestController {
     }
 
     @PostMapping(path = "/socket", consumes = "application/json", produces = "application/json")
-    public String socketStartGame(@RequestParam(value = "nCurGameNum", defaultValue = "1") int nCurGameNum,
+    public String socket(@RequestParam(value = "nCurGameNum", defaultValue = "2021019110") int nCurGameNum,
                              @RequestParam(value = "nTimeSpan", defaultValue = "0") int nTimeSpan,
                              @RequestParam(value = "nGameCount", defaultValue = "1") int nGameCount) throws IOException {
-        String ret = autoBallService.socketStartGame(nCurGameNum,nTimeSpan,nGameCount);
+        String ret = autoBallService.socket(nCurGameNum,nTimeSpan,nGameCount);
         return ret;
     }
 
