@@ -33,7 +33,7 @@ public class SchedulerService {
     SocketClient socketClient;
 
     @Value("${draw.path}")
-    int drawPath;
+    String drawPath;
 
     /**
      * 只開前五個管
