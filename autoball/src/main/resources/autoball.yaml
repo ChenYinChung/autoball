@@ -12,5 +12,5 @@ callback :
 
 
 draw:
-    path: /Users/sammy/git/survey/autoball/
-#    path: C:/Ray/
+#    path: /Users/sammy/git/survey/autoball/
+    path: C:/Ray/AutoBallController/Data/
