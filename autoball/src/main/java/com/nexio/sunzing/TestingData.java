@@ -1,6 +1,9 @@
 package com.nexio.sunzing;
 
 import autoball.AutoBallLibrary;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexio.autoball.check.CheckGameInfo;
+import com.nexio.autoball.model.GameInfo;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -10,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class TestingData {
     private static final Logger logger = LoggerFactory.getLogger(TestingData.class);
@@ -75,39 +80,48 @@ public class TestingData {
 
     public static void getData() {
         String dir = System.getProperty("user.dir");
-        File test = new File(dir + "/Data/Ball2020101411.dat");
+        File test = new File(dir + "/Data/Ball20201016.txt");
         try {
 
-            byte[] data = FileUtils.readFileToByteArray(test);
-            Pointer pointer = new Memory(data.length + 1);
-            pointer.write(0, data, 0, data.length);
-            pointer.setByte(data.length, (byte) 0);
-
-
-            AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
-            gameInfoStruct.read();
-
-            AutoBallLibrary.GameInfoStruct[] gameInfoStructs = gameInfoStruct.castToArray();
-
-            for (int i = 0; i < gameInfoStruct.bsArray.length; i++) {
-                AutoBallLibrary.BarrelStruct barrelStruct = gameInfoStruct.bsArray[i];
-
-                for (int j = 0; j < barrelStruct.bcArray.length; j++) {
-                    StringBuffer stringBuffer = new StringBuffer();
-                    AutoBallLibrary.BallCode ballCode = barrelStruct.bcArray[j];
-                    for (byte b : ballCode.bCodeByte) {
-                        if (b==0) break;
-                        if (b != 0) {
-                            char c = (char) b;
-                            stringBuffer.append((char) b);
-                        }
-                    }
-
-                    if (stringBuffer.toString().length() > 0)
-                        logger.info("BS {},{} string[{}]", i, j, stringBuffer.toString());
-//                        System.out.println("bs...."+stringBuffer.toString());
-                }
+            List<String> jsons = FileUtils.readLines(test, Charset.forName("UTF-8"));
+            for(String json : jsons){
+                ObjectMapper objectMapper =  new ObjectMapper();
+                CheckGameInfo gameInfo = objectMapper.readValue(json,CheckGameInfo.class);
+                // if check in db status in running ,apply
+                // call DrawService call back to SLE-CMS service
+                logger.info("自動排程－檢核檔案開獎結果 {}", json);
             }
+
+//            byte[] data = FileUtils.readFileToByteArray(test);
+//            Pointer pointer = new Memory(data.length + 1);
+//            pointer.write(0, data, 0, data.length);
+//            pointer.setByte(data.length, (byte) 0);
+//
+//
+//            AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
+//            gameInfoStruct.read();
+//
+//            AutoBallLibrary.GameInfoStruct[] gameInfoStructs = gameInfoStruct.castToArray();
+//
+//            for (int i = 0; i < gameInfoStruct.bsArray.length; i++) {
+//                AutoBallLibrary.BarrelStruct barrelStruct = gameInfoStruct.bsArray[i];
+//
+//                for (int j = 0; j < barrelStruct.bcArray.length; j++) {
+//                    StringBuffer stringBuffer = new StringBuffer();
+//                    AutoBallLibrary.BallCode ballCode = barrelStruct.bcArray[j];
+//                    for (byte b : ballCode.bCodeByte) {
+//                        if (b==0) break;
+//                        if (b != 0) {
+//                            char c = (char) b;
+//                            stringBuffer.append((char) b);
+//                        }
+//                    }
+//
+//                    if (stringBuffer.toString().length() > 0)
+//                        logger.info("BS {},{} string[{}]", i, j, stringBuffer.toString());
+////                        System.out.println("bs...."+stringBuffer.toString());
+//                }
+//            }
 
 
 //            for (AutoBallLibrary.BarrelStruct barrelStruct : gameInfoStruct.bsArray) {
@@ -144,7 +158,7 @@ public class TestingData {
 //
 //            System.out.println(gameInfoStruct.bsArray.length);
 //
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

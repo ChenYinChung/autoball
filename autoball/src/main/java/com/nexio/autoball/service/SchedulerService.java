@@ -2,9 +2,9 @@ package com.nexio.autoball.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexio.autoball.check.CheckGameInfo;
 import com.nexio.autoball.component.SocketClient;
-import com.nexio.autoball.model.BallCode;
-import com.nexio.autoball.model.BsArray;
+
 import com.nexio.autoball.model.GameInfo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -96,14 +96,11 @@ public class SchedulerService {
 
             for(String json : jsons){
                 ObjectMapper objectMapper =  new ObjectMapper();
-                GameInfo gameInfo = objectMapper.readValue(json,GameInfo.class);
+                CheckGameInfo gameInfo = objectMapper.readValue(json, CheckGameInfo.class);
                 // if check in db status in running ,apply
                 // call DrawService call back to SLE-CMS service
                 logger.info("自動排程－檢核檔案開獎結果 {}", json);
             }
-
-
-
         } catch (Exception e) {
             logger.error("Task error", e);
         }
@@ -122,21 +119,21 @@ public class SchedulerService {
         String fmt = sdFormat.format(date);
         return drawPath+"/Ball"+fmt+".txt";
     }
-
-    private void showGameInfo(String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        GameInfo g = objectMapper.readValue(json, GameInfo.class);
-        ArrayList<String> list = new ArrayList<>();
-        for (BsArray bsarry : g.bsArray) {
-            for (BallCode ballCode : bsarry.ballCode) {
-                StringBuilder sb = new StringBuilder();
-                for (String ball : ballCode.code) {
-                    sb.append(ball);
-                }
-                list.add(sb.toString());
-            }
-        }
-        logger.info("ball={}", list);
-
-    }
+//
+//    private void showGameInfo(String json) throws JsonProcessingException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        GameInfo g = objectMapper.readValue(json, GameInfo.class);
+//        ArrayList<String> list = new ArrayList<>();
+//        for (BsArray bsarry : g.bsArray) {
+//            for (BallCode ballCode : bsarry.ballCode) {
+//                StringBuilder sb = new StringBuilder();
+//                for (String ball : ballCode.code) {
+//                    sb.append(ball);
+//                }
+//                list.add(sb.toString());
+//            }
+//        }
+//        logger.info("ball={}", list);
+//
+//    }
 }
