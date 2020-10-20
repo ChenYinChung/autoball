@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 /**
- * 接收開獎球號
+ * 接收AutoBall開獎球號
  */
 @RestController
 public class DrawController {

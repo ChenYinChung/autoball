@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 由AutoBall
+ */
 @Service
 public class DrawService {
     private static final Logger logger = LoggerFactory.getLogger(DrawService.class);
@@ -20,8 +23,8 @@ public class DrawService {
     public void draw(String gameNum, String drawResult) {
         GameInfo gameInfo = parse(gameNum,drawResult);
 
-        logger.info("gameNum src[{}]",gameNum);
-        logger.info("drawResult src[{}]",drawResult);
+        logger.info("開獎期號　gameNum src[{}]",gameNum);
+        logger.info("開獎結果　drawResult src[{}]",drawResult);
 
         ObjectMapper objectMapper =  new ObjectMapper();
         String json = null;
@@ -30,9 +33,7 @@ public class DrawService {
         } catch (JsonProcessingException e) {
             logger.error("gameInfo error[{}]",e);
         }
-
         logger.info("gameInfo json[{}]",json);
-
     }
 
     private GameInfo parse(String gameNum, String drawResult){

@@ -6,8 +6,6 @@ import com.nexio.autoball.component.SocketClient;
 import com.nexio.autoball.model.BallCode;
 import com.nexio.autoball.model.BsArray;
 import com.nexio.autoball.model.GameInfo;
-import com.sun.jna.Memory;
-import com.sun.jna.Pointer;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +37,7 @@ public class SchedulerService {
 
     /**
      * 只開前五個管
+     * 每十分鐘一次
      */
     @Async
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
@@ -46,20 +45,22 @@ public class SchedulerService {
         try {
             String requset = "ant,1,1,1,1,1,0";
             String json = socketClient.send(requset);
+            logger.info("自動排程－設定前五管{}", json);
             Thread.sleep(5000);
 
-            requset = "startGame," + getDataIssue() + ",1,0";
+            requset = "startGame," + getIssue() + ",1,0";
             json = socketClient.send(requset);
+            logger.info("自動排程－前五管開始啟動{}", json);
 
             logger.info("Run in draw5Balls {}", json);
         } catch (Exception e) {
             logger.error("Task error", e);
         }
-
     }
 
     /**
      * 只開最後一管
+     * 每五分鐘一次
      */
     @Async
     @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
@@ -67,11 +68,12 @@ public class SchedulerService {
         try {
             String requset = "ant,0,0,0,0,0,1";
             String json = socketClient.send(requset);
+            logger.info("自動排程－設定第六管{}", json);
             Thread.sleep(5000);
 
-            requset = "startGame," + getDataIssue() + ",1,0";
+            requset = "startGame," + getIssue() + ",1,0";
             json = socketClient.send(requset);
-
+            logger.info("自動排程－第六管開始啟動{}", json);
             logger.info("Run in drawSingleBalls {}", json);
         } catch (Exception e) {
             logger.error("Task error", e);
@@ -79,7 +81,7 @@ public class SchedulerService {
     }
 
     /**
-     * 只開最後一管
+     * 檢核DB&檔案結果
      */
     @Async
     @Scheduled(cron = "0 2,7,12,17,22,27,32,37,42,47,52,57 * * * *")
@@ -87,11 +89,9 @@ public class SchedulerService {
         try {
 
             Date rightNow = new Date();   //當前時間
-            Date dBefore = new Date();
-
             Calendar calendar = Calendar.getInstance(); //得到日曆
             calendar.setTime(rightNow);//把當前時間賦給日曆
-            File test = new File(getCheckIssue(rightNow));
+            File test = new File(checkIssue(rightNow));
             List<String> jsons = FileUtils.readLines(test, Charset.forName("UTF-8"));
 
             for(String json : jsons){
@@ -99,7 +99,7 @@ public class SchedulerService {
                 GameInfo gameInfo = objectMapper.readValue(json,GameInfo.class);
                 // if check in db status in running ,apply
                 // call DrawService call back to SLE-CMS service
-
+                logger.info("自動排程－檢核檔案開獎結果 {}", json);
             }
 
 
@@ -111,13 +111,13 @@ public class SchedulerService {
     }
 
 
-    private String getDataIssue() {
+    private String getIssue() {
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyMMddHHmm");
         Date current = new Date();
         String fmt = sdFormat.format(current);
         return fmt;
     }
-    private String getCheckIssue(Date date) {
+    private String checkIssue(Date date) {
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMdd");
         String fmt = sdFormat.format(date);
         return drawPath+"/Ball"+fmt+".txt";

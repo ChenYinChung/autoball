@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+/**
+ * 配合DLL操作API
+ * 可以不用了，32bits的電腦操作
+ */
 @Service
 @EnableRetry
 public class AutoBallService {
