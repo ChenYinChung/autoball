@@ -106,7 +106,16 @@ public class SchedulerService {
                 CheckGameInfo gameInfo = objectMapper.readValue(json, CheckGameInfo.class);
                 // if check in db status in running ,apply
                 // call DrawService call back to SLE-CMS service
-                logger.info("自動排程－檢核檔案開獎結果 {}", json);
+                //logger.info("自動排程－檢核檔案開獎結果 {}", json);
+
+                Draw draw = drawRepo.findByGameNum(""+gameInfo.nGameNum);
+
+                if(draw==null){
+                    logger.error("Draw game num not found[{}]",gameInfo.nGameNum);
+                }else{
+                    logger.error("Draw game num json[{}]",draw.getDrawResult());
+                }
+
             }
         } catch (Exception e) {
             logger.error("Task error", e);
