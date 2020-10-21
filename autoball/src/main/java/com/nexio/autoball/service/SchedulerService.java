@@ -131,7 +131,7 @@ public class SchedulerService {
         Draw draw = new Draw();
         draw.setGameNum(issue);
         draw.setDrawStatus(0);
-        drawRepo.insertDraw(draw);
+        drawRepo.insert(draw);
     }
 
 //

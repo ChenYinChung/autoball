@@ -26,8 +26,14 @@ public class DrawRepo {
     @Value("${DRAW_UPDATE_BY_GAME_NUM}")
     private String updateByGameNum;
 
-    public void insertDraw(Draw draw){
+    public void insert(Draw draw){
         jdbi.withHandle(handle -> handle.createUpdate(drawInsert).bindBean(draw).execute());
+    }
+
+    public void update(Draw draw){
+        jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
+                .bind("gameNum", draw.getGameNum())
+                .bind("drawResult",draw.getDrawResult()).execute());
     }
 
     public Draw findByGameNum(String gameNum){
