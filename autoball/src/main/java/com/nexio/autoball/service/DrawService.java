@@ -44,7 +44,7 @@ public class DrawService {
 
         Draw draw =  drawRepo.findByGameNum(gameNum);
 
-        drawRepo.update(draw);
+        drawRepo.update(gameNum,gameInfo);
     }
 
     private GameInfo parse(String gameNum, String drawResult){

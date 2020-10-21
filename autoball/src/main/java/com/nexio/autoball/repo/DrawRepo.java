@@ -1,6 +1,7 @@
 package com.nexio.autoball.repo;
 
 import com.nexio.autoball.entity.Draw;
+import com.nexio.autoball.model.GameInfo;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,10 +31,10 @@ public class DrawRepo {
         jdbi.withHandle(handle -> handle.createUpdate(drawInsert).bindBean(draw).execute());
     }
 
-    public void update(Draw draw){
+    public void update(String gameNum ,GameInfo gameInfo){
         jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
-                .bind("gameNum", draw.getGameNum())
-                .bind("drawResult",draw.getDrawResult()).execute());
+                .bind("gameNum", gameNum)
+                .bind("drawResult",gameInfo).execute());
     }
 
     public Draw findByGameNum(String gameNum){
