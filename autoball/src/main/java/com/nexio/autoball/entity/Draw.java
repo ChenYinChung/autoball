@@ -1,9 +1,11 @@
 package com.nexio.autoball.entity;
 
 import com.nexio.autoball.model.GameInfo;
+import org.jdbi.v3.json.Json;
 
 public class Draw {
     String gameNum;
+    @Json
     GameInfo drawResult;
     int drawStatus;
 
