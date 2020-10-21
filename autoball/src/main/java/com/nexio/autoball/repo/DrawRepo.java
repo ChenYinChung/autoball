@@ -31,10 +31,8 @@ public class DrawRepo {
         jdbi.withHandle(handle -> handle.createUpdate(drawInsert).bindBean(draw).execute());
     }
 
-    public void update(String gameNum ,GameInfo gameInfo){
-        jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
-                .bind("gameNum", gameNum)
-                .bind("drawResult",gameInfo).execute());
+    public void update(Draw draw){
+        jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum).bindBean(draw).execute());
     }
 
     public Draw findByGameNum(String gameNum){
