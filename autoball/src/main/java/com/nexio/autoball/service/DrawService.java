@@ -2,7 +2,7 @@ package com.nexio.autoball.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nexio.autoball.entity.Draw;
+import com.nexio.autoball.model.Draw;
 import com.nexio.autoball.model.BallCode;
 import com.nexio.autoball.model.BsArray;
 import com.nexio.autoball.model.GameInfo;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

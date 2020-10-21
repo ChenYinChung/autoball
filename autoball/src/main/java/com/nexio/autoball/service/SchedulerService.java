@@ -3,7 +3,7 @@ package com.nexio.autoball.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexio.autoball.check.CheckGameInfo;
 import com.nexio.autoball.component.SocketClient;
-import com.nexio.autoball.entity.Draw;
+import com.nexio.autoball.model.Draw;
 import com.nexio.autoball.repo.DrawRepo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

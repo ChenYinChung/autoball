@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class PersistenceConfig {
     private static Logger logger = LoggerFactory.getLogger(PersistenceConfig.class);
 
-    private static final String ENTITY_BASE_PACKAGE = "com.nexio.autoball.entity";
+    private static final String ENTITY_BASE_PACKAGE = "com.nexio.autoball.model";
 
     /**
      * JDBI wants to control the Connection wrap the datasource in a proxy

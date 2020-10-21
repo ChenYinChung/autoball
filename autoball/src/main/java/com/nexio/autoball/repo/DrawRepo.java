@@ -1,7 +1,6 @@
 package com.nexio.autoball.repo;
 
-import com.nexio.autoball.entity.Draw;
-import com.nexio.autoball.model.GameInfo;
+import com.nexio.autoball.model.Draw;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

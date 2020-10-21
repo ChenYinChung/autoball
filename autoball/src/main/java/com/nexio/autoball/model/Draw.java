@@ -1,4 +1,4 @@
-package com.nexio.autoball.entity;
+package com.nexio.autoball.model;
 
 import com.nexio.autoball.model.GameInfo;
 import org.jdbi.v3.json.Json;
