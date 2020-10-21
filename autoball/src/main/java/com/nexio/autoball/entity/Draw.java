@@ -1,8 +1,10 @@
 package com.nexio.autoball.entity;
 
+import com.nexio.autoball.model.GameInfo;
+
 public class Draw {
     String gameNum;
-    String drawResult;
+    GameInfo drawResult;
     int drawStatus;
 
     public String getGameNum() {
@@ -13,11 +15,11 @@ public class Draw {
         this.gameNum = gameNum;
     }
 
-    public String getDrawResult() {
+    public GameInfo getDrawResult() {
         return drawResult;
     }
 
-    public void setDrawResult(String drawResult) {
+    public void setDrawResult(GameInfo drawResult) {
         this.drawResult = drawResult;
     }
 

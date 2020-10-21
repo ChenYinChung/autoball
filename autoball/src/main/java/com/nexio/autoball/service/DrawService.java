@@ -2,11 +2,14 @@ package com.nexio.autoball.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexio.autoball.entity.Draw;
 import com.nexio.autoball.model.BallCode;
 import com.nexio.autoball.model.BsArray;
 import com.nexio.autoball.model.GameInfo;
+import com.nexio.autoball.repo.DrawRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +22,9 @@ import java.util.List;
 @Service
 public class DrawService {
     private static final Logger logger = LoggerFactory.getLogger(DrawService.class);
+
+    @Autowired
+    DrawRepo drawRepo;
 
     public void draw(String gameNum, String drawResult) {
         GameInfo gameInfo = parse(gameNum,drawResult);
@@ -34,6 +40,11 @@ public class DrawService {
             logger.error("gameInfo error[{}]",e);
         }
         logger.info("gameInfo json[{}]",json);
+
+
+        Draw draw =  drawRepo.findByGameNum(gameNum);
+
+        drawRepo.insertDraw(draw);
     }
 
     private GameInfo parse(String gameNum, String drawResult){
@@ -80,6 +91,7 @@ public class DrawService {
 
     public static void main(String[] arg) {
         DrawService drawService = new DrawService();
-        drawService.draw("201019001", "1,2,6_1,2,3;2,3,4;1,5,6");
+//        drawService.draw("201019001", "1,2,6_1,2,3;2,3,4;1,5,6");
+        drawService.draw("2010211445", "1,2,3,4,5_8;0;ABCD;4;Q");
     }
 }

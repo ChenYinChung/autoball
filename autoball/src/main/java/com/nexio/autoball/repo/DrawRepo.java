@@ -23,8 +23,8 @@ public class DrawRepo {
     @Value("${DRAW_QUERY_BY_GAME_STATUS}")
     private String queryByGameStatus;
 
-
-
+    @Value("${DRAW_UPDATE_BY_GAME_NUM}")
+    private String updateByGameNum;
 
     public void insertDraw(Draw draw){
         jdbi.withHandle(handle -> handle.createUpdate(drawInsert).bindBean(draw).execute());
@@ -35,6 +35,7 @@ public class DrawRepo {
                 bind("gameNum", gameNum).mapTo(Draw.class).findFirst());
         return optional.isEmpty() ? null : optional.get();
     }
+
 
     public List<Draw> findByStatus(int gameStatus){
         List<Draw> list = jdbi.withHandle(handle -> handle.createQuery(queryByGameStatus).
