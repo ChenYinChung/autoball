@@ -43,7 +43,8 @@ public class DrawService {
 
 
         Draw draw =  drawRepo.findByGameNum(gameNum);
-
+        draw.setDrawResult(gameInfo);
+        draw.setDrawStatus(1);
         drawRepo.update(draw);
     }
 
