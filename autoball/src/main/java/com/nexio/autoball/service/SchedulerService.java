@@ -43,7 +43,7 @@ public class SchedulerService {
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     public void draw5Balls() {
         try {
-            String requset = "ant,1,1,1,1,1,0";
+            String requset = "ant,1,1,1,1,1,1";
             String json = socketClient.send(requset);
             logger.info("自動排程－設定前五管{}", json);
             Thread.sleep(5000);
@@ -66,7 +66,7 @@ public class SchedulerService {
     @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
     public void drawSingleBalls() {
         try {
-            String requset = "ant,0,0,0,0,0,1";
+            String requset = "ant,1,1,1,1,1,0";
             String json = socketClient.send(requset);
             logger.info("自動排程－設定第六管{}", json);
             Thread.sleep(5000);

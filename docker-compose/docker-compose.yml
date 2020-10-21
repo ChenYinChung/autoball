@@ -1,12 +1,11 @@
-version: '3'
+version: '2'
 
 services:
-  postgresql-11M:
-    container_name: postgresql-11M
-    image: docker.pf/devops/postgres:latest
+  postgresql:
+    image: 'docker.io/bitnami/postgresql:11-debian-10'
     ports:
-      - 5432:5432
-    privileged: true
+      - '5432:5432'
     environment:
-      - initdb=true
-      - postgrepasswd=admin
+    - POSTGRESQL_USERNAME=autoball
+    - POSTGRESQL_PASSWORD=autoball123
+    - POSTGRESQL_DATABASE=autoball
