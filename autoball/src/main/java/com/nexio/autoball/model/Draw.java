@@ -6,7 +6,7 @@ import org.jdbi.v3.json.Json;
 public class Draw {
     String gameNum;
     @Json
-    GameInfo drawResult;
+    String drawResult;
     int drawStatus;
 
     public String getGameNum() {
@@ -17,11 +17,11 @@ public class Draw {
         this.gameNum = gameNum;
     }
 
-    public GameInfo getDrawResult() {
+    public String getDrawResult() {
         return drawResult;
     }
 
-    public void setDrawResult(GameInfo drawResult) {
+    public void setDrawResult(String drawResult) {
         this.drawResult = drawResult;
     }
 
