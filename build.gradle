@@ -32,10 +32,10 @@ subprojects {
 apply from: file("${rootDir}/gradle/project.gradle")
 //apply from: file("${rootDir}/gradle/check.gradle")
 
-//// only flyway project setting db migration
-//configure(subprojects.findAll { it.name.endsWith('-flyway') }) {
-//    apply from: file("${rootDir}/gradle/db-migration.gradle")
-//}
+// only flyway project setting db migration
+configure(subprojects.findAll { it.name.endsWith('-flyway') }) {
+    apply from: file("${rootDir}/gradle/db-migration.gradle")
+}
 
 // only flyway project setting db migration
 configure(subprojects.findAll { it.name.equals('autoball') }) {
@@ -62,7 +62,8 @@ project("autoball"){
         implementation "org.springframework.boot:spring-boot-starter-undertow:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-log4j2:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-data-rest:${SpringBootStarterVersion}"
-//        implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa:${SpringBootStarterVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
 
         /**
          * db libs
@@ -90,17 +91,29 @@ project("autoball"){
         implementation "com.nativelibs4java:jnaerator:0.12"
         implementation "net.java.dev.jna:jna-platform:5.6.0"
 
+        /**
+         * db libs
+         */
+        api "org.jdbi:jdbi3-core:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-postgres:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-json:${jdbiJdbi3Version}"
+        api "org.jdbi:jdbi3-jackson2:${jdbiJdbi3Version}"
+        /**
+         *  postreesql libs
+         */
+        api "org.postgresql:postgresql:42.2.5"
+
 
     }
 
 }
 
-//project("autoball-flyway") {
-//    bootJar {
-//        enabled = false
-//    }
-//
-//    dependencies{
-//        implementation "org.postgresql:postgresql:42.2.5"
-//    }
-//}
+project("autoball-flyway") {
+    bootJar {
+        enabled = false
+    }
+
+    dependencies{
+        implementation "org.postgresql:postgresql:42.2.5"
+    }
+}

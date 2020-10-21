@@ -2,6 +2,7 @@ version: '2'
 
 services:
   postgresql:
+    container_name: 'autoball'
     image: 'docker.io/bitnami/postgresql:11-debian-10'
     ports:
       - '5432:5432'

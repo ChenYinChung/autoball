@@ -1,11 +1,10 @@
 package com.nexio.autoball.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexio.autoball.check.CheckGameInfo;
 import com.nexio.autoball.component.SocketClient;
-
-import com.nexio.autoball.model.GameInfo;
+import com.nexio.autoball.entity.Draw;
+import com.nexio.autoball.repo.DrawRepo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +33,9 @@ public class SchedulerService {
     @Value("${draw.path}")
     String drawPath;
 
+    @Autowired
+    DrawRepo drawRepo;
+
     /**
      * 只開前五個管
      * 每十分鐘一次
@@ -48,9 +49,12 @@ public class SchedulerService {
             logger.info("自動排程－設定前五管{}", json);
             Thread.sleep(5000);
 
-            requset = "startGame," + getIssue() + ",1,0";
+            String issue = getIssue();
+            requset = "startGame," + issue + ",1,0";
             json = socketClient.send(requset);
             logger.info("自動排程－前五管開始啟動{}", json);
+
+            insertDraw(issue);
 
             logger.info("Run in draw5Balls {}", json);
         } catch (Exception e) {
@@ -70,11 +74,14 @@ public class SchedulerService {
             String json = socketClient.send(requset);
             logger.info("自動排程－設定第六管{}", json);
             Thread.sleep(5000);
+            String issue = getIssue();
 
-            requset = "startGame," + getIssue() + ",1,0";
+            requset = "startGame," + issue + ",1,0";
             json = socketClient.send(requset);
+            insertDraw(issue);
             logger.info("自動排程－第六管開始啟動{}", json);
             logger.info("Run in drawSingleBalls {}", json);
+
         } catch (Exception e) {
             logger.error("Task error", e);
         }
@@ -119,6 +126,14 @@ public class SchedulerService {
         String fmt = sdFormat.format(date);
         return drawPath+"/Ball"+fmt+".txt";
     }
+
+    private void insertDraw(String issue){
+        Draw draw = new Draw();
+        draw.setGameNum(issue);
+        draw.setDrawStatus(0);
+        drawRepo.insertDraw(draw);
+    }
+
 //
 //    private void showGameInfo(String json) throws JsonProcessingException {
 //        ObjectMapper objectMapper = new ObjectMapper();
