@@ -1,0 +1,15 @@
+lib : AutoBallDll
+
+#呼叫VC++ socket使用
+socket :
+    endpoint : localhost
+    port : 5566
+
+#回傳球號給SLE CMS Server API
+callback :
+    endpoint : https://crawler.y688.net/crawler/api/v2/third-party/result/AutoBall
+    skey : 0e1d43f3f32ca6c376a982de1af23d96
+
+#AutoBall log實際位置
+draw:
+    path: C:/Ray/AutoBallController/Data/
