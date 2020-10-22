@@ -39,19 +39,6 @@ public class AutoBallService {
     @Autowired
     CmsClient cmsClient;
 
-
-    /**
-     * 送Request 至 AutoballController socket
-     * @param request
-     * @return
-     * @throws IOException
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public String sendRequestToSocket(String request) throws IOException {
-        String ret = socketClient.send(request);
-        return ret;
-    }
-
     /**
      * 初始化開獎期號
      * @param issue
@@ -98,7 +85,7 @@ public class AutoBallService {
     public void percent(){
         logger.info("自動排程－設定第6管");
         String gameNum = DateUtils.getIssue();
-        autoball(ANT_PERCENT_BALL,gameNum,DrawType.SMALLJACKPOT);
+        drawAutoBall(ANT_PERCENT_BALL,gameNum,DrawType.SMALLJACKPOT);
     }
 
     public void yeekee(){
@@ -108,16 +95,18 @@ public class AutoBallService {
 
     public void fiveBalls(String gameNum,DrawType drawType){
         logger.info("自動排程－設定第1-5管");
-        autoball(ANT_FIVE_BALLS,gameNum,drawType);
+        drawAutoBall(ANT_FIVE_BALLS,gameNum,drawType);
     }
 
 
-    void autoball(String requset,String gameNum, DrawType drawType){
+    void drawAutoBall(String requset,String gameNum, DrawType drawType){
         try {
-            String json = sendRequestToSocket(requset);
+            //控制開球筒
+            String json = socketClient.send(requset);
             Thread.sleep(5000);
+            //開始啟動開球
             requset = "startGame," + gameNum + ",1,0";
-            json = sendRequestToSocket(requset);
+            json = socketClient.send(requset);
             insertDraw(gameNum,drawType);
         } catch (Exception e) {
             logger.error("Task error", e);
