@@ -7,7 +7,7 @@ socket :
 
 #回傳球號給SLE CMS Server API
 callback :
-    endpoint : localhost
+    endpoint : localhost/autoball
     port : 8008
 
 

@@ -1,6 +1,8 @@
 package com.nexio.autoball.controller;
 
 import com.nexio.autoball.service.AutoBallService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AutoBallController {
+    private static final Logger logger = LoggerFactory.getLogger(AutoBallController.class);
+
     @Autowired
     AutoBallService autoBallService;
 
@@ -21,11 +25,19 @@ public class AutoBallController {
     public void draw(@RequestParam(value = "gameNum") String gameNum,
                      @RequestParam(value = "drawResult") String drawResult) {
         autoBallService.draw(gameNum,drawResult);
-        autoBallService.sendDrawResultToCMS(gameNum,drawResult);
+        autoBallService.sendDrawResultToSLE(gameNum,drawResult);
     }
 
     @PostMapping(path = "/find", consumes = "application/json", produces = "application/json")
     public void find(@RequestParam(value = "gameNum") String gameNum) {
+    }
+
+    @PostMapping(path = "/autoball", consumes = "application/json", produces = "application/json")
+    public Boolean autoball(@RequestParam(value = "gameNum") String gameNum,
+                         @RequestParam(value = "drawResult") String drawResult) {
+        logger.info("gameNum[{}]",gameNum);
+        logger.info("drawResult[{}]",drawResult);
+        return true;
     }
 
 }
