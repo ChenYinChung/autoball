@@ -18,6 +18,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 配合DLL操作API
@@ -48,6 +49,7 @@ public class AutoBallService {
     public void insertDraw(String issue, DrawType drawType) throws JsonProcessingException {
         Draw draw = new Draw();
         draw.setGameNum(issue);
+        draw.setBalls(new TreeMap<>());
         draw.setGameId(drawType);
         drawRepo.insert(draw);
     }
