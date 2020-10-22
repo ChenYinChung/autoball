@@ -1,7 +1,13 @@
 package com.nexio.autoball.service;
 
-import autoball.AutoBallLibrary;
+import com.nexio.autoball.component.SleClient;
 import com.nexio.autoball.component.SocketClient;
+import com.nexio.autoball.model.BallCode;
+import com.nexio.autoball.model.BsArray;
+import com.nexio.autoball.model.Draw;
+import com.nexio.autoball.model.GameInfo;
+import com.nexio.autoball.repo.DrawRepo;
+import com.nexio.autoball.utils.GameInfoUtils;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
@@ -18,6 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 配合DLL操作API
@@ -29,340 +39,76 @@ public class AutoBallService {
     private static final Logger logger = LoggerFactory.getLogger(AutoBallService.class);
 
     @Autowired
-    AutoBallLibrary autoBallLibrary;
-
-    @Autowired
     SocketClient socketClient;
 
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public Boolean init(){
-        boolean isError = autoBallLibrary.ABDll_Init();
-        logger.info("init dll.........");
+    @Autowired
+    DrawRepo drawRepo;
 
-        return isError;
-    }
-
-    public String gameStr(){
-        byte[] bytes = new byte[4096];
-        boolean  s = autoBallLibrary.GetGameInfoStr(bytes);
-        logger.info("s....{}",s);
-        logger.info("string....{}",new String(bytes));
-
-        return new String(bytes);
-    }
-
+    @Autowired
+    SleClient sleClient;
 
 
     /**
-     * @param nGameCount
-     * @param nTimeSpan
+     * 送Request 至 AutoballController socket
+     * @param request
      * @return
-     * @throws Exception
+     * @throws IOException
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public Boolean startGame(int nGameCount, int nTimeSpan,int nCurGameNum){
-        boolean isError = autoBallLibrary.StartGame(nGameCount,nTimeSpan,nCurGameNum);
-        logger.info("startGame...{}",isError);
-        return isError;
+    public String sendRequestToSocket(String request) throws IOException {
+        String ret = socketClient.send(request);
+        return ret;
     }
 
     /**
-     *
-     * @return
-     * @throws Exception
+     * 初始化開獎期號
+     * @param issue
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean hasGamePlayed() {
-        //HasGamePlayed
-        boolean isGamePlayed = autoBallLibrary.HasGamePlayed();
-        logger.info("isGamePlayed={}",isGamePlayed);
-        return isGamePlayed;
+    public void insertDraw(String issue){
+        Draw draw = new Draw();
+        draw.setGameNum(issue);
+        draw.setDrawStatus(0);
+        drawRepo.insert(draw);
     }
 
     /**
-     *
-     * @return
-     * @throws Exception
+     * 接收開出內容並更新DB GameInfo ,　status
+     * @param gameNum
+     * @param drawResult
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public AutoBallLibrary.GameInfoStruct  getGameInfo() {
-        //GetGameInfo(GameInfoStruct &GameInfo)
+    public void draw(String gameNum, String drawResult) {
+        GameInfo gameInfo = GameInfoUtils.parse(gameNum,drawResult);
 
-        byte[] bytes = new byte[4096];
-        boolean isError = autoBallLibrary.GetGameInfo(bytes);
-        Pointer pointer = asPointer(bytes);
-        AutoBallLibrary.GameInfoStruct gameInfoStruct = new AutoBallLibrary.GameInfoStruct(pointer);
-        gameInfoStruct.read();
+        logger.info("開獎期號　gameNum src[{}]",gameNum);
+        logger.info("開獎結果　drawResult src[{}]",drawResult);
 
-        logger.info("isError={}",isError);
-        logger.info("getGameInfo={}",gameInfoStruct);
-        return gameInfoStruct;
+        Draw draw =  drawRepo.findByGameNum(gameNum);
+        draw.setGameInfo(gameInfo);
+        draw.setDrawStatus(1);
+        drawRepo.update(draw);
     }
 
     /**
-     *
-     * @return
-     * @throws Exception
+     * 還沒確定送出資訊
+     * @param gameNum
+     * @param drawResult
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public int terminateGame() {
-        //TerminateGame
-        int isTerrmateGame = autoBallLibrary.TerminateGame();
-        logger.info("terminateGame={}",isTerrmateGame);
-        return isTerrmateGame;
-    }
-
-    /**
-     * SuspendGame
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public int suspendGame() {
-        //SuspendGame
-        int isSuspendGame = autoBallLibrary.SuspendGame();
-        logger.info("suspendGame={}",isSuspendGame);
-        return isSuspendGame;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public int resumeGame() {
-        //ResumeGame
-        int isResumeGame = autoBallLibrary.ResumeGame();
-        logger.info("ResumeGame={}",isResumeGame);
-        return isResumeGame;
-    }
-
-    /**
-     *
-     * @param nCommNum
-     * @param laudrate
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean connectReader(int nCommNum, long laudrate) {
-        //ConnectReader(int nCommNum, long l audrate);
-        NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectReader(nCommNum,nativeLong);
-        logger.info("ConnectReader={}",isError);
-        if(!isError){
-            getLastError();
-        }
-        return isError;
-    }
-
-    /**
-     *
-     * @param nCommNum
-     * @param laudrate
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean connectRD1(int nCommNum, long laudrate) {
-        //ConnectRD1(int nCommNum, long l audrate);
-        NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectRD1(nCommNum,nativeLong);
-        logger.info("ConnectRD1={}",isError);
-        if(!isError){
-            getLastError();
-        }
-        return isError;
-    }
-
-    /**
-     *
-     * @param nCommNum
-     * @param laudrate
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean connectRD2(int nCommNum, long laudrate) {
-        //ConnectRD2(int nCommNum, long l audrate);
-        NativeLong nativeLong =  new NativeLong(laudrate);
-        boolean isError = autoBallLibrary.ConnectRD2(nCommNum,nativeLong);
-        logger.info("ConnectRD2={}",isError);
-        if(!isError){
-            getLastError();
-        }
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean disconnectReader() {
-        //DisconnectReader (void);
-        boolean isError = autoBallLibrary.DisconnectReader();
-        logger.info("DisconnectReader={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean disconnectRD1() {
-        //DisconnectRD1 (void);
-        boolean isError = autoBallLibrary.DisconnectRD1();
-        logger.info("DisconnectRD1={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean disconnectRD2() {
-        //DisconnectRD2 (void);
-        boolean isError = autoBallLibrary.DisconnectRD2();
-        logger.info("DisconnectRD2={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public int getLastError() {
-        //GetLastError(LPSTR strErrorMessage);
-
-        WTypes.LPSTR lpstr = new WTypes.LPSTR(new Pointer(4096));
-
-
-        byte[] bytes = new byte[4096];
-        int isError =  autoBallLibrary.AB_GetLastError(bytes);
-        logger.info("GetLastError={}",isError);
-
-        String ms950 = new String(bytes, Charset.forName("x-windows-950"));
-        logger.info("GetLastError MSG {}",ms950);
-        logger.info("GetLastError MSG {}",new String(ms950.getBytes(Charset.forName("UTF-8"))));
-
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean getAntennaPara() {
-        //GetAntennaPara(LPSTR strErrorMessage);
-
-        byte[] bytes = new byte[4096];
-        boolean isError =  autoBallLibrary.GetAntennaPara(bytes);
-        Pointer pointer = asPointer(bytes);
-        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet(pointer);
-        antennaSet.read();
-
-        logger.info("GetAntennaPara isError ={}",isError);
-        logger.info("GetAntennaPara={}",antennaSet.aiAntennaItem);
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean setAntennaPara() {
-        //SetAntennaPara(LPSTR strAntennaPara);
-        AutoBallLibrary.AntennaSet antennaSet = new AutoBallLibrary.AntennaSet.ByReference();
-        byte[] bytes = new byte[4096];
-
-        boolean isError =  autoBallLibrary.SetAntennaPara(bytes);
-        logger.info("SetAntennaPara={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean getControlProcess() {
-        //GetControlProcess(LPSTR strContorlProcess);
-
-        byte[] bytes = new byte[4096];
-        boolean isError =  autoBallLibrary.GetControlProcess(bytes);
-        Pointer pointer = asPointer(bytes);
-        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow(pointer);
-        processFlow.read();
-
-        logger.info("getControlProcess isError ={}",isError);
-        logger.info("getControlProcess={}",processFlow.pfItem);
-
-        logger.info("GetControlProcess={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean setControlProcess() {
-        //SetControlProcess(LPSTR strContorlProcess);
-
-        AutoBallLibrary.ProcessFlow processFlow = new AutoBallLibrary.ProcessFlow();
-        byte[] bytes = new byte[4096];
-
-        boolean isError =  autoBallLibrary.SetControlProcess(bytes);
-        logger.info("SetControlProcess={}",isError);
-        return isError;
-    }
-
-    /**
-     *
-     * @return
-     * @throws Exception
-     */
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public boolean setControlStyle(int nControlStyle) {
-        byte isError =  autoBallLibrary.SetControlStyle(nControlStyle);
-        logger.info("SetControlStyle={}",isError);
-
-        return isError == 1 ? true:false;
-    }
-
-    @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public String socket(int nGameCount, int nTimeSpan,int nCurGameNum) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append("startGame").append(",").append(nCurGameNum).append(",").append(nGameCount).append(",").append(nTimeSpan);
-
-
-        return socketClient.send(sb.toString());
+    public void sendDrawResultToSLE(String gameNum, String drawResult){
+        Map<String,String> map = new TreeMap<>();
+        map.put("gameNum",gameNum);
+        map.put("drawResult",drawResult);
+        String message = sleClient.send(map);
+        logger.info("SLE message[{}]",message);
     }
 
 
-    private Pointer asPointer(String charArray) {
-        byte[] data = Native.toByteArray(charArray);
-        return asPointer(data);
-    }
 
-    private Pointer asPointer(byte[] bytesArray) {
-        Pointer pointer = new Memory(bytesArray.length + 1);
-        pointer.write(0, bytesArray, 0, bytesArray.length);
-        pointer.setByte(bytesArray.length, (byte) 0);
-        return pointer;
-    }
 
+    public static void main(String[] arg) {
+//        drawService.draw("201019001", "1,2,6_1,2,3;2,3,4;1,5,6");
+//        drawService.draw("2010211445", "1,2,3,4,5_8;0;ABCD;4;Q");
+    }
 }

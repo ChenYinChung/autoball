@@ -5,6 +5,7 @@ import com.nexio.autoball.check.CheckGameInfo;
 import com.nexio.autoball.component.SocketClient;
 import com.nexio.autoball.model.Draw;
 import com.nexio.autoball.repo.DrawRepo;
+import com.nexio.autoball.utils.DateUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class SchedulerService {
     private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
     @Autowired
-    SocketClient socketClient;
+    AutoBallService autoBallService;
 
     @Value("${draw.path}")
     String drawPath;
@@ -45,16 +46,16 @@ public class SchedulerService {
     public void draw5Balls() {
         try {
             String requset = "ant,1,1,1,1,1,1";
-            String json = socketClient.send(requset);
+            String json = autoBallService.sendRequestToSocket(requset);
             logger.info("自動排程－設定前五管{}", json);
             Thread.sleep(5000);
 
-            String issue = getIssue();
+            String issue = DateUtils.getIssue();
             requset = "startGame," + issue + ",1,0";
-            json = socketClient.send(requset);
+            json = autoBallService.sendRequestToSocket(requset);
             logger.info("自動排程－前五管開始啟動{}", json);
 
-            insertDraw(issue);
+            autoBallService.insertDraw(issue);
 
             logger.info("Run in draw5Balls {}", json);
         } catch (Exception e) {
@@ -71,14 +72,14 @@ public class SchedulerService {
     public void drawSingleBalls() {
         try {
             String requset = "ant,1,1,1,1,1,0";
-            String json = socketClient.send(requset);
+            String json = autoBallService.sendRequestToSocket(requset);
             logger.info("自動排程－設定第六管{}", json);
             Thread.sleep(5000);
-            String issue = getIssue();
+            String issue = DateUtils.getIssue();
 
             requset = "startGame," + issue + ",1,0";
-            json = socketClient.send(requset);
-            insertDraw(issue);
+            json = autoBallService.sendRequestToSocket(requset);
+            autoBallService.insertDraw(issue);
             logger.info("自動排程－第六管開始啟動{}", json);
             logger.info("Run in drawSingleBalls {}", json);
 
@@ -98,7 +99,7 @@ public class SchedulerService {
             Date rightNow = new Date();   //當前時間
             Calendar calendar = Calendar.getInstance(); //得到日曆
             calendar.setTime(rightNow);//把當前時間賦給日曆
-            File test = new File(checkIssue(rightNow));
+            File test = new File(DateUtils.checkIssue(drawPath,rightNow));
             List<String> jsons = FileUtils.readLines(test, Charset.forName("UTF-8"));
 
             for(String json : jsons){
@@ -122,42 +123,4 @@ public class SchedulerService {
         }
 
     }
-
-
-    private String getIssue() {
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyMMddHHmm");
-        Date current = new Date();
-        String fmt = sdFormat.format(current);
-        return fmt;
-    }
-    private String checkIssue(Date date) {
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMdd");
-        String fmt = sdFormat.format(date);
-        return drawPath+"/Ball"+fmt+".txt";
-    }
-
-    private void insertDraw(String issue){
-        Draw draw = new Draw();
-        draw.setGameNum(issue);
-        draw.setDrawStatus(0);
-        drawRepo.insert(draw);
-    }
-
-//
-//    private void showGameInfo(String json) throws JsonProcessingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        GameInfo g = objectMapper.readValue(json, GameInfo.class);
-//        ArrayList<String> list = new ArrayList<>();
-//        for (BsArray bsarry : g.bsArray) {
-//            for (BallCode ballCode : bsarry.ballCode) {
-//                StringBuilder sb = new StringBuilder();
-//                for (String ball : ballCode.code) {
-//                    sb.append(ball);
-//                }
-//                list.add(sb.toString());
-//            }
-//        }
-//        logger.info("ball={}", list);
-//
-//    }
 }
