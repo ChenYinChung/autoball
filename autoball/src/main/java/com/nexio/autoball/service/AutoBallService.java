@@ -17,7 +17,6 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -42,6 +41,7 @@ public class AutoBallService {
 
     /**
      * 初始化開獎期號
+     *
      * @param issue
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
@@ -54,6 +54,7 @@ public class AutoBallService {
 
     /**
      * 接收開出內容並更新DB GameInfo ,　status
+     *
      * @param gameNum
      * @param drawResult
      */
@@ -61,12 +62,12 @@ public class AutoBallService {
     public void drawResult(String gameNum, String drawResult) throws Exception {
 
 
-        logger.info("開獎期號　gameNum src[{}]",gameNum);
-        logger.info("開獎結果　drawResult src[{}]",drawResult);
-        Map<String,String> balls = BallUtils.parse(drawResult);
+        logger.info("開獎期號　gameNum src[{}]", gameNum);
+        logger.info("開獎結果　drawResult src[{}]", drawResult);
+        Map<String, String> balls = BallUtils.parse(drawResult);
 
-        Draw draw =  drawRepo.findByGameNum(gameNum);
-        if(draw.getBalls()!=null) {
+        Draw draw = drawRepo.findByGameNum(gameNum);
+        if (draw.getBalls() != null) {
             balls.putAll(draw.getBalls());
         }
         draw.setBalls(balls);
@@ -75,34 +76,44 @@ public class AutoBallService {
         //如果只有一個號碼6，則要呼叫jackpot
         //如果是五個號碼，更新DB後，call back cms
 
-        if(balls.size()==1 && balls.containsKey("6")){ //這是jp的百分比位置，還要呼叫2d,3d
-            fiveBalls(gameNum,draw.getGameId());
-        }else{
+        if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
+            fiveBalls(gameNum);
+        } else {
             String message = cmsClient.send(draw);
-            logger.info("SLE message[{}]",message);
+            logger.info("SLE message[{}]", message);
         }
     }
 
-    public void percent(){
-        logger.info("自動排程－設定第6管");
-        String gameNum = DateUtils.getIssue();
-        drawAutoBall(ANT_PERCENT_BALL,gameNum,DrawType.SMALLJACKPOT);
-    }
-
-    public void yeekee(){
-        String gameNum = DateUtils.getIssue();
-        fiveBalls(gameNum,DrawType.YEEKEE);
-    }
-
-    public void fiveBalls(String gameNum,DrawType drawType){
-        logger.info("自動排程－設定第1-5管");
-        drawAutoBall(ANT_FIVE_BALLS,gameNum,drawType);
-    }
-
-
-    void drawAutoBall(String requset,String gameNum, DrawType drawType){
+    public void percent() {
         try {
-            insertDraw(gameNum,drawType);
+            logger.info("自動排程－設定第6管");
+            String gameNum = DateUtils.getIssue();
+            insertDraw(gameNum, DrawType.SMALLJACKPOT);
+            drawAutoBall(ANT_PERCENT_BALL, gameNum);
+        } catch (JsonProcessingException e) {
+            logger.error("percent error", e);
+        }
+    }
+
+    public void yeekee() {
+        try {
+            String gameNum = DateUtils.getIssue();
+            insertDraw(gameNum, DrawType.YEEKEE);
+            fiveBalls(gameNum);
+
+        } catch (JsonProcessingException e) {
+            logger.error("Yeekee error", e);
+        }
+    }
+
+    public void fiveBalls(String gameNum) {
+        logger.info("自動排程－設定第1-5管");
+        drawAutoBall(ANT_FIVE_BALLS, gameNum);
+    }
+
+
+    void drawAutoBall(String requset, String gameNum) {
+        try {
             //控制開球筒
             String json = socketClient.send(requset);
             Thread.sleep(5000);
