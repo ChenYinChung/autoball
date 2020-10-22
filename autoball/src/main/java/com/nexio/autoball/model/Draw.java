@@ -1,12 +1,11 @@
 package com.nexio.autoball.model;
 
-import com.nexio.autoball.model.GameInfo;
 import org.jdbi.v3.json.Json;
 
 public class Draw {
     String gameNum;
     @Json
-    String drawResult;
+    GameInfo gameInfo;
     int drawStatus;
 
     public String getGameNum() {
@@ -17,12 +16,12 @@ public class Draw {
         this.gameNum = gameNum;
     }
 
-    public String getDrawResult() {
-        return drawResult;
+    public GameInfo getGameInfo() {
+        return gameInfo;
     }
 
-    public void setDrawResult(String drawResult) {
-        this.drawResult = drawResult;
+    public void setGameInfo(GameInfo gameInfo) {
+        this.gameInfo = gameInfo;
     }
 
     public int getDrawStatus() {

@@ -31,18 +31,8 @@ public class DrawService {
         logger.info("開獎期號　gameNum src[{}]",gameNum);
         logger.info("開獎結果　drawResult src[{}]",drawResult);
 
-        ObjectMapper objectMapper =  new ObjectMapper();
-        String json = null;
-        try {
-            json = objectMapper.writeValueAsString(gameInfo);
-        } catch (JsonProcessingException e) {
-            logger.error("gameInfo error[{}]",e);
-        }
-        logger.info("gameInfo json[{}]",json);
-
-
         Draw draw =  drawRepo.findByGameNum(gameNum);
-        draw.setDrawResult(json);
+        draw.setGameInfo(gameInfo);
         draw.setDrawStatus(1);
         drawRepo.update(draw);
     }

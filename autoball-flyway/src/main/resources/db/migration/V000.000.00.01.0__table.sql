@@ -5,7 +5,7 @@
 
 CREATE TABLE public.draw (
     game_num character varying(20) NOT NULL,
-    draw_result TEXT,
+    game_info jsonb,
     draw_status int NOT NULL,
     PRIMARY KEY	(game_num)
 );

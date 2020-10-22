@@ -113,7 +113,7 @@ public class SchedulerService {
                 if(draw==null){
                     logger.error("Draw game num not found[{}]",gameInfo.nGameNum);
                 }else{
-                    logger.error("Draw game num json[{}]",draw.getDrawResult());
+                    logger.error("Draw game num json[{}]",draw.getGameInfo());
                 }
 
             }

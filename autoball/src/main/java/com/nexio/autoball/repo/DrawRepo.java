@@ -1,5 +1,7 @@
 package com.nexio.autoball.repo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexio.autoball.model.Draw;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,17 @@ public class DrawRepo {
     }
 
     public void update(Draw draw){
-        jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum).bindBean(draw).execute());
+        try {
+            ObjectMapper objectMapper =  new ObjectMapper();
+
+            String json = objectMapper.writeValueAsString(draw.getGameInfo());
+            jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
+                    .bind("gameNum",draw.getGameNum())
+                    .bind("drawStatus",draw.getDrawStatus())
+                    .bind("gameInfo",json).execute());
+        } catch (JsonProcessingException e) {
+        }
+
     }
 
     public Draw findByGameNum(String gameNum){
@@ -39,7 +51,6 @@ public class DrawRepo {
                 bind("gameNum", gameNum).mapTo(Draw.class).findFirst());
         return optional.isEmpty() ? null : optional.get();
     }
-
 
     public List<Draw> findByStatus(int gameStatus){
         List<Draw> list = jdbi.withHandle(handle -> handle.createQuery(queryByGameStatus).
