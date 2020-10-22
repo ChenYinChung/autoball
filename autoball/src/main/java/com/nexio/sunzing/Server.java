@@ -1,7 +1,6 @@
 package com.nexio.sunzing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nexio.autoball.model.GameInfo;
 
 import java.net.*;
 import java.io.*;
@@ -61,34 +60,13 @@ public class Server {
                 System.out.println("Message from Client: " + inputMessage);
                 outputStream = new DataOutputStream(connection.getOutputStream());
 
-                StringBuilder sb = new StringBuilder();
-                sb.append("Hello").append("\r\n").append("Weclome :").append(inputMessage);
-
-                String[] sp = inputMessage.split(",");
-
-                String json = testData(Integer.parseInt(sp[1]));
-
-                outputStream.write(json.getBytes());
+                outputStream.write(b);
                 outputStream.flush();
             }
         }
         catch(IOException ioe) {
             ioe.printStackTrace();
         }
-    }
-
-    public static String testData(int nGameNum) throws JsonProcessingException {
-        Random random = new Random();
-        int mod = random.nextInt(10);
-        String src = list.get(mod);
-
-        ObjectMapper objectMapper =  new ObjectMapper();
-
-        GameInfo g = objectMapper.readValue(src,GameInfo.class);
-        g.nGameNum = nGameNum;
-
-        String json = objectMapper.writeValueAsString(g);
-        return json;
     }
 
     public static void main(String args[]) throws JsonProcessingException {

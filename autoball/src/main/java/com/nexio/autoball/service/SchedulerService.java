@@ -38,55 +38,50 @@ public class SchedulerService {
     DrawRepo drawRepo;
 
     /**
-     * 只開前五個管
-     * 每十分鐘一次
+     *
+     *  “0 0 07-04 * * *”     表示每天，07點到04點的0分0秒執行
      */
     @Async
-    @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
-    public void draw5Balls() {
-        try {
-            String requset = "ant,1,1,1,1,1,1";
-            String json = autoBallService.sendRequestToSocket(requset);
-            logger.info("自動排程－設定前五管{}", json);
-            Thread.sleep(5000);
-
-            String issue = DateUtils.getIssue();
-            requset = "startGame," + issue + ",1,0";
-            json = autoBallService.sendRequestToSocket(requset);
-            logger.info("自動排程－前五管開始啟動{}", json);
-
-            autoBallService.insertDraw(issue);
-
-            logger.info("Run in draw5Balls {}", json);
-        } catch (Exception e) {
-            logger.error("Task error", e);
-        }
+//    @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
+    @Scheduled(cron = "0 0 07-23 * * *")
+    public void scheduleOneSmallJackPot() {
+        autoBallService.jackpotPercentage();
     }
 
     /**
-     * 只開最後一管
-     * 每五分鐘一次
+     *
+     *  “0 0 07-04 * * *”     表示每天，07點到04點的0分0秒執行
      */
     @Async
-    @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
-    public void drawSingleBalls() {
-        try {
-            String requset = "ant,1,1,1,1,1,0";
-            String json = autoBallService.sendRequestToSocket(requset);
-            logger.info("自動排程－設定第六管{}", json);
-            Thread.sleep(5000);
-            String issue = DateUtils.getIssue();
-
-            requset = "startGame," + issue + ",1,0";
-            json = autoBallService.sendRequestToSocket(requset);
-            autoBallService.insertDraw(issue);
-            logger.info("自動排程－第六管開始啟動{}", json);
-            logger.info("Run in drawSingleBalls {}", json);
-
-        } catch (Exception e) {
-            logger.error("Task error", e);
-        }
+    @Scheduled(cron = "0 0 00-04 * * *")
+    public void scheduleTowSmallJackPot() {
+        autoBallService.jackpotPercentage();
     }
+
+//    /**
+//     * 只開最後一管
+//     * 每五分鐘一次
+//     */
+//    @Async
+//    @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
+//    public void drawSingleBalls() {
+//        try {
+//            String requset = "ant,1,1,1,1,1,0";
+//            String json = autoBallService.sendRequestToSocket(requset);
+//            logger.info("自動排程－設定第五管{}", json);
+//            Thread.sleep(5000);
+//            String issue = DateUtils.getIssue();
+//
+//            requset = "startGame," + issue + ",1,0";
+//            json = autoBallService.sendRequestToSocket(requset);
+//            autoBallService.insertDraw(issue);
+//            logger.info("自動排程－第五管開始啟動{}", json);
+//            logger.info("Run in 第五管 {}", json);
+//
+//        } catch (Exception e) {
+//            logger.error("Task error", e);
+//        }
+//    }
 
     /**
      * 檢核DB&檔案結果
@@ -114,7 +109,7 @@ public class SchedulerService {
                 if(draw==null){
                     logger.error("Draw game num not found[{}]",gameInfo.nGameNum);
                 }else{
-                    logger.error("Draw game num json[{}]",draw.getGameInfo());
+                    logger.error("Draw game num json[{}]",draw);
                 }
 
             }

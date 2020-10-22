@@ -2,6 +2,7 @@ package com.nexio.autoball.component;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexio.autoball.model.Draw;
 import com.nexio.autoball.utils.CryptoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class SleClient {
+public class CmsClient {
     private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
-    @Value("${callback.endpoint}")
+    @Value("${cms.endpoint}")
     String endPoint;
 
-    @Value("${callback.skey}")
+    @Value("${cms.skey}")
     String skey;
 
     @Autowired
@@ -32,7 +33,7 @@ public class SleClient {
     @Autowired
     ObjectMapper objectMapper;
 
-    public String send(Map<String,String> request) throws Exception {
+    public String send(Draw draw) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -41,7 +42,7 @@ public class SleClient {
         SecureRandom prng = new SecureRandom();
         prng.nextBytes(iv);
 
-        byte[] encryptedData = CryptoUtils.aesEncrypt(skeySpec, iv, objectMapper.writeValueAsString(request));
+        byte[] encryptedData = CryptoUtils.aesEncrypt(skeySpec, iv, objectMapper.writeValueAsString(draw));
         Map<String, Object> map = new HashMap<>();
         map.put("iv", iv);
         map.put("value", encryptedData);

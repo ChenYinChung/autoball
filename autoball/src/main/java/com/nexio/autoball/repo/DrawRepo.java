@@ -33,16 +33,16 @@ public class DrawRepo {
     }
 
     public void update(Draw draw){
-        try {
-            ObjectMapper objectMapper =  new ObjectMapper();
-
-            String json = objectMapper.writeValueAsString(draw.getGameInfo());
-            jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
-                    .bind("gameNum",draw.getGameNum())
-                    .bind("drawStatus",draw.getDrawStatus())
-                    .bind("gameInfo",json).execute());
-        } catch (JsonProcessingException e) {
-        }
+//        try {
+//            ObjectMapper objectMapper =  new ObjectMapper();
+//
+//            String json = objectMapper.writeValueAsString(draw.getGameInfo());
+//            jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
+//                    .bind("gameNum",draw.getGameNum())
+//                    .bind("drawStatus",draw.getDrawStatus())
+//                    .bind("gameInfo",json).execute());
+//        } catch (JsonProcessingException e) {
+//        }
 
     }
 

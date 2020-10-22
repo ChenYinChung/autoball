@@ -24,8 +24,8 @@ public class AutoBallController {
     @PostMapping(path = "/drawResult", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public void draw(@RequestParam(value = "gameNum") String gameNum,
                      @RequestParam(value = "drawResult") String drawResult) throws Exception {
-        autoBallService.draw(gameNum,drawResult);
-        autoBallService.sendDrawResultToSLE(gameNum,drawResult);
+        autoBallService.drawResult(gameNum,drawResult);
+
     }
 
     @PostMapping(path = "/find", consumes = "application/json", produces = "application/json")

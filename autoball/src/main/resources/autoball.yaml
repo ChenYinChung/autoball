@@ -6,7 +6,7 @@ socket :
     port : 5566
 
 #回傳球號給SLE CMS Server API
-callback :
+cms :
     endpoint : http://localhost:8008/autoball
     skey : 0e1d43f3f32ca6c376a982de1af23d96
 
