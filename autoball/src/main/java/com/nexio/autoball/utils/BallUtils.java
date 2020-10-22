@@ -21,8 +21,15 @@ public class BallUtils {
     }
 
     public static void main(String[] arg) {
-        Map<String,String> map = parse("1,2,6_1,2,3;2,3,4;1,5,6");
-        map = parse("1,2,3,4,5_8;0;ABCD;4;Q");
+        Map<String,String> map = parse("6_10");
+        Map<String,String> map1 = parse("1,2,3,4,5_0;9;8;7;6");
+
+        Map<String,String> map2 = null;
+
+        map.putAll(map1);
+
+        map.putAll(map2);
+        System.out.println(map);
     }
 
 }

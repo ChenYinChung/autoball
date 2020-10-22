@@ -26,7 +26,7 @@ tasks.withType(org.flywaydb.gradle.task.AbstractFlywayTask.class) { task ->
             }
 
             if(env == "local"){
-                locations = ["filesystem:autoball-flyway/src/main/resources/db/migration"]
+                locations = ["filesystem:../autoball-flyway/src/main/resources/db/migration"]
             }else{
                 locations = ["filesystem:autoball-flyway/src/main/resources/db/migration"]
             }

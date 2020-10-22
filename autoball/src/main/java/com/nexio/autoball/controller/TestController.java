@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class TestController {
     private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    @Value("${callback.skey}")
+    @Value("${cms.skey}")
     String skey;
 
     /**

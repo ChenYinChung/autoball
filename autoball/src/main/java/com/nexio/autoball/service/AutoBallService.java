@@ -78,7 +78,9 @@ public class AutoBallService {
         Map<String,String> balls = BallUtils.parse(drawResult);
 
         Draw draw =  drawRepo.findByGameNum(gameNum);
-        balls.putAll(draw.getBalls());
+        if(draw.getBalls()!=null) {
+            balls.putAll(draw.getBalls());
+        }
         draw.setBalls(balls);
         drawRepo.update(draw);
 

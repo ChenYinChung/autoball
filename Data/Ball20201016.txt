@@ -1,4 +1,0 @@
-{"nGameNum":2010201050,"dwGameTime":1603162205,"bsArray":[{"nBallCount":1,"BallCode":["J"]},{"nBallCount":1,"BallCode":["Q"]},{"nBallCount":1,"BallCode":["Q"]},{"nBallCount":1,"BallCode":["00"]},{"nBallCount":1,"BallCode":["Q"]}]}
-{"nGameNum":2010201055,"dwGameTime":1603162508,"bsArray":[{"nBallCount":1,"BallCode":["ABCD"]}]}
-{"nGameNum":2010201100,"dwGameTime":1603162805,"bsArray":[{"nBallCount":1,"BallCode":["9WX"]},{"nBallCount":1,"BallCode":["7"]},{"nBallCount":1,"BallCode":["ABCD"]},{"nBallCount":1,"BallCode":["9WX"]},{"nBallCount":1,"BallCode":["Q"]}]}
-{"nGameNum":2010201105,"dwGameTime":1603163108,"bsArray":[{"nBallCount":1,"BallCode":["5"]}]}
