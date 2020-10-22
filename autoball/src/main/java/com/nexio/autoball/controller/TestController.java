@@ -30,6 +30,10 @@ public class TestController {
     public Boolean autoball(@RequestBody String data) throws Exception {
         logger.info("body[{}]",data);
 
+        if(data.endsWith("=")){
+            data = data.substring(0,data.length()-1);
+        }
+
         byte[] ecryptstr = Base64Utils.decodeFromString(data);
         //byte資料轉JSON
         JsonObject decodedData = JsonParser.parseString(new String(ecryptstr, StandardCharsets.UTF_8)).getAsJsonObject();
