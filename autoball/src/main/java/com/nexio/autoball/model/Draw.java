@@ -3,6 +3,8 @@ package com.nexio.autoball.model;
 import org.jdbi.v3.json.Json;
 
 public class Draw {
+    String gameId;
+
     String gameNum;
     @Json
     GameInfo gameInfo;
@@ -18,6 +20,14 @@ public class Draw {
 
     public GameInfo getGameInfo() {
         return gameInfo;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public void setGameInfo(GameInfo gameInfo) {

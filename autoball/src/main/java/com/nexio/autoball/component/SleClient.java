@@ -21,9 +21,6 @@ public class SleClient {
     @Value("${callback.endpoint}")
     String endPoint;
 
-    @Value("${callback.port}")
-    int port;
-
     @Autowired
     RestTemplate restTemplate;
 
@@ -36,7 +33,6 @@ public class SleClient {
         HttpEntity<String> entity = new HttpEntity<String>(json.toJSONString(),headers);
 
         ResponseEntity<String> response = restTemplate.exchange(endPoint, HttpMethod.POST, entity, String.class);
-        System.out.println(response.getBody());
         return response.getBody();
     }
 }
