@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,11 +33,9 @@ public class AutoBallController {
     public void find(@RequestParam(value = "gameNum") String gameNum) {
     }
 
-    @PostMapping(path = "/autoball", consumes = "application/json", produces = "application/json")
-    public Boolean autoball(@RequestParam(value = "gameNum") String gameNum,
-                         @RequestParam(value = "drawResult") String drawResult) {
-        logger.info("gameNum[{}]",gameNum);
-        logger.info("drawResult[{}]",drawResult);
+    @PostMapping(path = "/autoball", consumes = "application/text-plain", produces = "application/json")
+    public Boolean autoball(@RequestBody String body) {
+        logger.info("body[{}]",body);
         return true;
     }
 
