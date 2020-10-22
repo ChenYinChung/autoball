@@ -1,5 +1,6 @@
 package com.nexio.autoball.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nexio.autoball.component.CmsClient;
 import com.nexio.autoball.component.SocketClient;
 import com.nexio.autoball.model.Draw;
@@ -44,7 +45,7 @@ public class AutoBallService {
      * @param issue
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public void insertDraw(String issue, DrawType drawType){
+    public void insertDraw(String issue, DrawType drawType) throws JsonProcessingException {
         Draw draw = new Draw();
         draw.setGameNum(issue);
         draw.setGameId(drawType);

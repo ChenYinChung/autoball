@@ -15,7 +15,7 @@ public class Draw {
     String gameNum;
 
     @Json
-    Map<String,String> balls = new TreeMap<>();
+    Map<String,String> balls;
 
     public DrawType getGameId() {
         return gameId;

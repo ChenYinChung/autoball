@@ -24,24 +24,24 @@ public class DrawRepo {
     @Value("${DRAW_UPDATE_BY_GAME_NUM}")
     private String updateByGameNum;
 
-    public void insert(Draw draw){
-        jdbi.withHandle(handle -> handle.createUpdate(drawInsert).bindBean(draw).execute());
+    public void insert(Draw draw) throws JsonProcessingException {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(draw.getBalls());
+            jdbi.withHandle(handle -> handle.createUpdate(drawInsert)
+                    .bind("gameNum", draw.getGameNum())
+                    .bind("gameId",draw.getGameId())
+                    .bind("balls", json).execute());
     }
 
-    public void update(Draw draw){
-        try {
-            ObjectMapper objectMapper =  new ObjectMapper();
-
+    public void update(Draw draw) throws JsonProcessingException {
+            ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(draw.getBalls());
             jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
-                    .bind("gameNum",draw.getGameNum())
-                    .bind("balls",json).execute());
-        } catch (JsonProcessingException e) {
-        }
-
+                    .bind("gameNum", draw.getGameNum())
+                    .bind("balls", json).execute());
     }
 
-    public Draw findByGameNum(String gameNum){
+    public Draw findByGameNum(String gameNum) {
         Optional<Draw> optional = jdbi.withHandle(handle -> handle.createQuery(queryByGameNum).
                 bind("gameNum", gameNum).mapTo(Draw.class).findFirst());
         return optional.isEmpty() ? null : optional.get();
