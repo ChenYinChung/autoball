@@ -3,6 +3,7 @@ package com.nexio.autoball.model;
 import org.jdbi.v3.json.Json;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Draw {
 
@@ -14,9 +15,7 @@ public class Draw {
     String gameNum;
 
     @Json
-    Map<String,String> balls;
-
-    int percentage;
+    Map<String,String> balls = new TreeMap<>();
 
     public DrawType getGameId() {
         return gameId;
@@ -32,14 +31,6 @@ public class Draw {
 
     public void setGameNum(String gameNum) {
         this.gameNum = gameNum;
-    }
-
-    public int getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(int percentage) {
-        this.percentage = percentage;
     }
 
     public Map<String, String> getBalls() {
