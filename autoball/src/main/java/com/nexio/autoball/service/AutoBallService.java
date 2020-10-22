@@ -101,13 +101,14 @@ public class AutoBallService {
 
     void drawAutoBall(String requset,String gameNum, DrawType drawType){
         try {
+            insertDraw(gameNum,drawType);
             //控制開球筒
             String json = socketClient.send(requset);
             Thread.sleep(5000);
             //開始啟動開球
             requset = "startGame," + gameNum + ",1,0";
             json = socketClient.send(requset);
-            insertDraw(gameNum,drawType);
+
         } catch (Exception e) {
             logger.error("Task error", e);
         }
