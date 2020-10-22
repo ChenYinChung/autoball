@@ -26,7 +26,7 @@ public class TestController {
      * @param data
      * @return
      */
-    @PostMapping(path = "/autoball", consumes = "application/x-www-form-urlencoded", produces = "application/json")
+    @PostMapping(path = "/AutoBall", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public Boolean autoball(@RequestBody String data) throws Exception {
         logger.info("body[{}]",data);
 
