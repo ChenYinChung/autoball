@@ -33,7 +33,7 @@ public class AutoBallController {
     public void find(@RequestParam(value = "gameNum") String gameNum) {
     }
 
-    @PostMapping(path = "/autoball", consumes = "application/text-plain", produces = "application/json")
+    @PostMapping(path = "/autoball", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public Boolean autoball(@RequestBody String body) {
         logger.info("body[{}]",body);
         return true;

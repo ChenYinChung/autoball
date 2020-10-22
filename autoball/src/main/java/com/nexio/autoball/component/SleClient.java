@@ -36,7 +36,7 @@ public class SleClient {
 
     public String send(Map<String,String> request) throws Exception {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         SecretKeySpec skeySpec = CryptoUtils.generateAESKeySpec(skey);
         byte[] iv = new byte[128 / 8];
