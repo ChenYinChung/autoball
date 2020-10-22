@@ -96,7 +96,7 @@ public class AutoBallService {
      * @param drawResult
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
-    public void sendDrawResultToSLE(String gameNum, String drawResult){
+    public void sendDrawResultToSLE(String gameNum, String drawResult) throws Exception {
         Map<String,String> map = new TreeMap<>();
         map.put("gameNum",gameNum);
         map.put("drawResult",drawResult);
