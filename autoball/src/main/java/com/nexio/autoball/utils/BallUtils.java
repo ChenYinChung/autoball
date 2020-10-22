@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class BallUtils {
 
     public static Map<String,String> parse(String drawResult){
-        Map<String,String> balls = new TreeMap();
+        Map<String,String> balls = new TreeMap<>();
         String[] underline = drawResult.split("_");
         String[] ballIndex = underline[0].split(",");
         String[] ballIndexNums = underline[1].split(";");
