@@ -4,8 +4,8 @@
 --
 
 CREATE TABLE public.draw (
+    game_id character varying(20) NOT NULL,
     game_num character varying(20) NOT NULL,
-    game_info jsonb,
-    draw_status int NOT NULL,
+    balls jsonb,
     PRIMARY KEY	(game_num)
 );
