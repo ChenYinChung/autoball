@@ -27,6 +27,8 @@ import java.util.Map;
 @EnableRetry
 public class AutoBallService {
     private static final Logger logger = LoggerFactory.getLogger(AutoBallService.class);
+    static final String ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
+    static final String ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
 
     @Autowired
     SocketClient socketClient;
@@ -84,53 +86,40 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if(balls.size()==1 && balls.containsKey("6")){ //這是jp的百分比位置，還要呼叫2d,3d
-            jackpot2d3d(gameNum);
+            fiveBalls(gameNum,draw.getGameId());
         }else{
             String message = cmsClient.send(draw);
             logger.info("SLE message[{}]",message);
         }
-
-
-
     }
 
-    public void jackpotPercentage(){
-        String requset = "ant,0,0,0,0,0,1";
+    public void percent(){
         logger.info("自動排程－設定第6管");
         String gameNum = DateUtils.getIssue();
-        jackpot(requset,gameNum);
+        autoball(ANT_PERCENT_BALL,gameNum,DrawType.SMALLJACKPOT);
     }
 
-    public void jackpot2d3d(String gameNum){
-        String requset = "ant,1,1,1,1,1,0";
+    public void yeekee(){
+        String gameNum = DateUtils.getIssue();
+        fiveBalls(gameNum,DrawType.YEEKEE);
+    }
+
+    public void fiveBalls(String gameNum,DrawType drawType){
         logger.info("自動排程－設定第1-5管");
-        jackpot(requset,gameNum);
+        autoball(ANT_FIVE_BALLS,gameNum,drawType);
     }
 
-    void jackpot(String requset,String gameNum){
+
+    void autoball(String requset,String gameNum, DrawType drawType){
         try {
             String json = sendRequestToSocket(requset);
             Thread.sleep(5000);
             requset = "startGame," + gameNum + ",1,0";
             json = sendRequestToSocket(requset);
-            insertDraw(gameNum,DrawType.SMALLJACKPOT);
+            insertDraw(gameNum,drawType);
         } catch (Exception e) {
             logger.error("Task error", e);
         }
     }
 
-    void jackpot2D3D(String gameNum){
-        try {
-            String requset = "ant,1,1,1,1,1,0";
-            logger.info("自動排程－設定第1-5管");
-
-            String json = sendRequestToSocket(requset);
-            Thread.sleep(5000);
-            requset = "startGame," + gameNum + ",1,0";
-            json = sendRequestToSocket(requset);
-            insertDraw(gameNum,DrawType.SMALLJACKPOT);
-        } catch (Exception e) {
-            logger.error("Task error", e);
-        }
-    }
 }

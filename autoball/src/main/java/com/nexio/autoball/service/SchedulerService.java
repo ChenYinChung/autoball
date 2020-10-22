@@ -38,84 +38,141 @@ public class SchedulerService {
     DrawRepo drawRepo;
 
     /**
-     *
-     *  “0 0 07-04 * * *”     表示每天，07點到04點的0分0秒執行
+     * JP
+     *  0 0 07-23 * * *     表示每天，07點到23點的0分0秒執行
+     *  第一組
      */
     @Async
-//    @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     @Scheduled(cron = "0 0 07-23 * * *")
-    public void scheduleOneSmallJackPot() {
-        autoBallService.jackpotPercentage();
+    public void scheduleSmallJackPotPartOne() {
+        autoBallService.percent();
     }
 
     /**
-     *
-     *  “0 0 07-04 * * *”     表示每天，07點到04點的0分0秒執行
+     * JP
+     *  0 0 00-04 * * *     表示每天，00點到04點的0分0秒執行
      */
     @Async
     @Scheduled(cron = "0 0 00-04 * * *")
-    public void scheduleTowSmallJackPot() {
-        autoBallService.jackpotPercentage();
+    public void scheduleSmallJackPotPartTwo() {
+        autoBallService.percent();
+    }
+
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 07 07-23 * * *")
+    public void scheduleYeeKee7PartOne() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 07 00-04 * * *")
+    public void scheduleYeeKee7PartTwo() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 22 06-23 * * *")
+    public void scheduleYeeKee22PartOne() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 22 00-03 * * *")
+    public void scheduleYeeKee22PartTwo() {
+        autoBallService.yeekee();
+    }
+
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 37 06-23 * * *")
+    public void scheduleYeeKee37PartOne() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 37 00-03 * * *")
+    public void scheduleYeeKee37PartTwo() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 52 06-23 * * *")
+    public void scheduleYeeKee52PartOne() {
+        autoBallService.yeekee();
+    }
+
+    /**
+     * YEEKEE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 52 00-03 * * *")
+    public void scheduleYeeKee52PartTwo() {
+        autoBallService.yeekee();
     }
 
 //    /**
-//     * 只開最後一管
-//     * 每五分鐘一次
+//     * 檢核DB&檔案結果
 //     */
 //    @Async
-//    @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
-//    public void drawSingleBalls() {
+//    @Scheduled(cron = "0 2,7,12,17,22,27,32,37,42,47,52,57 * * * *")
+//    public void checkBalls() {
 //        try {
-//            String requset = "ant,1,1,1,1,1,0";
-//            String json = autoBallService.sendRequestToSocket(requset);
-//            logger.info("自動排程－設定第五管{}", json);
-//            Thread.sleep(5000);
-//            String issue = DateUtils.getIssue();
 //
-//            requset = "startGame," + issue + ",1,0";
-//            json = autoBallService.sendRequestToSocket(requset);
-//            autoBallService.insertDraw(issue);
-//            logger.info("自動排程－第五管開始啟動{}", json);
-//            logger.info("Run in 第五管 {}", json);
+//            Date rightNow = new Date();   //當前時間
+//            Calendar calendar = Calendar.getInstance(); //得到日曆
+//            calendar.setTime(rightNow);//把當前時間賦給日曆
+//            File test = new File(DateUtils.checkIssue(drawPath,rightNow));
+//            List<String> jsons = FileUtils.readLines(test, Charset.forName("UTF-8"));
 //
+//            for(String json : jsons){
+//                ObjectMapper objectMapper =  new ObjectMapper();
+//                CheckGameInfo gameInfo = objectMapper.readValue(json, CheckGameInfo.class);
+//                // if check in db status in running ,apply
+//                // call DrawService call back to SLE-CMS service
+//                //logger.info("自動排程－檢核檔案開獎結果 {}", json);
+//
+//                Draw draw = drawRepo.findByGameNum(""+gameInfo.nGameNum);
+//
+//                if(draw==null){
+//                    logger.error("Draw game num not found[{}]",gameInfo.nGameNum);
+//                }else{
+//                    logger.error("Draw game num json[{}]",draw);
+//                }
+//
+//            }
 //        } catch (Exception e) {
 //            logger.error("Task error", e);
 //        }
+//
 //    }
-
-    /**
-     * 檢核DB&檔案結果
-     */
-    @Async
-    @Scheduled(cron = "0 2,7,12,17,22,27,32,37,42,47,52,57 * * * *")
-    public void checkBalls() {
-        try {
-
-            Date rightNow = new Date();   //當前時間
-            Calendar calendar = Calendar.getInstance(); //得到日曆
-            calendar.setTime(rightNow);//把當前時間賦給日曆
-            File test = new File(DateUtils.checkIssue(drawPath,rightNow));
-            List<String> jsons = FileUtils.readLines(test, Charset.forName("UTF-8"));
-
-            for(String json : jsons){
-                ObjectMapper objectMapper =  new ObjectMapper();
-                CheckGameInfo gameInfo = objectMapper.readValue(json, CheckGameInfo.class);
-                // if check in db status in running ,apply
-                // call DrawService call back to SLE-CMS service
-                //logger.info("自動排程－檢核檔案開獎結果 {}", json);
-
-                Draw draw = drawRepo.findByGameNum(""+gameInfo.nGameNum);
-
-                if(draw==null){
-                    logger.error("Draw game num not found[{}]",gameInfo.nGameNum);
-                }else{
-                    logger.error("Draw game num json[{}]",draw);
-                }
-
-            }
-        } catch (Exception e) {
-            logger.error("Task error", e);
-        }
-
-    }
 }
