@@ -18,7 +18,7 @@ public class Draw {
     @Json
     Map<String,String> balls;
 
-    Date startDate;
+    Date createtDate;
     Date updateDate;
 
     public DrawType getGameId() {
@@ -45,19 +45,19 @@ public class Draw {
         this.balls = balls;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
     public Date getUpdateDate() {
         return updateDate;
     }
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Date getCreatetDate() {
+        return createtDate;
+    }
+
+    public void setCreatetDate(Date createtDate) {
+        this.createtDate = createtDate;
     }
 }

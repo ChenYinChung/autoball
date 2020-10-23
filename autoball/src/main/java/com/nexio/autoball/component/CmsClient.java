@@ -43,6 +43,9 @@ public class CmsClient {
         prng.nextBytes(iv);
 
         String drawJson = objectMapper.writeValueAsString(draw);
+
+        logger.info("cms json[{}]",drawJson);
+
         byte[] encryptedData = CryptoUtils.aesEncrypt(skeySpec, iv, drawJson);
         Map<String, Object> map = new HashMap<>();
         map.put("iv", iv);
