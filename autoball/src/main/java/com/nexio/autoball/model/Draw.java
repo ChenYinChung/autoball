@@ -21,6 +21,13 @@ public class Draw {
     Date createtDate;
     Date updateDate;
 
+//    @JsonIgnore
+//    boolean retry;
+//    @JsonIgnore
+//    int retryCount;
+//    @JsonIgnore
+//    int status;
+
     public DrawType getGameId() {
         return gameId;
     }
@@ -60,4 +67,28 @@ public class Draw {
     public void setCreatetDate(Date createtDate) {
         this.createtDate = createtDate;
     }
+
+//    public boolean isRetry() {
+//        return retry;
+//    }
+//
+//    public void setRetry(boolean retry) {
+//        this.retry = retry;
+//    }
+//
+//    public int getRetryCount() {
+//        return retryCount;
+//    }
+//
+//    public void setRetryCount(int retryCount) {
+//        this.retryCount = retryCount;
+//    }
+//
+//    public int getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(int status) {
+//        this.status = status;
+//    }
 }

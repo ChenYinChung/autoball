@@ -82,9 +82,10 @@ public class AutoBallService {
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             logger.info("sleep 15sec for draw jackpot next five balls");
-            fiveBalls(gameNum,1000);
+            Thread.sleep(10000);
+            fiveBalls(gameNum);
             Thread.sleep(5000);
-            fiveBalls(gameNum,1000);
+            fiveBalls(gameNum);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
@@ -98,7 +99,7 @@ public class AutoBallService {
             logger.info("自動排程－設定第6管");
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.SMALLJACKPOT);
-            drawAutoBall(ANT_PERCENT_BALL, gameNum,5000);
+            drawAutoBall(ANT_PERCENT_BALL, gameNum);
         } catch (JsonProcessingException e) {
             logger.error("percent error", e);
         }
@@ -114,11 +115,18 @@ public class AutoBallService {
         }
     }
 
+    public void fiveBalls(String gameNum) {
+        fiveBalls(gameNum, 5000);
+    }
+
     public void fiveBalls(String gameNum, long sleep) {
         logger.info("自動排程－設定第1-5管");
         drawAutoBall(ANT_FIVE_BALLS, gameNum, sleep);
     }
 
+    void drawAutoBall(String requset, String gameNum) {
+        drawAutoBall(requset,gameNum,5000);
+    }
 
     void drawAutoBall(String requset, String gameNum , long sleep) {
         try {
