@@ -31,8 +31,8 @@ public class AutoBallService {
     static final String ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
     static final String ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
 
-    @Autowired
-    SocketClient socketClient;
+//    @Autowired
+//    SocketClient socketClient;
 
     @Autowired
     DrawRepo drawRepo;
@@ -121,12 +121,12 @@ public class AutoBallService {
     void drawAutoBall(String requset, String gameNum , long sleep) {
         try {
             //控制開球筒
-            String json = socketClient.send(requset);
+            String json = new SocketClient().send(requset);
             Thread.sleep(sleep);
             //開始啟動開球
             logger.info("自動排程－呼叫API開球");
             requset = "startGame," + gameNum + ",1,0";
-            json = socketClient.send(requset);
+            json = new SocketClient().send(requset);
 
         } catch (Exception e) {
             logger.error("Task error", e);

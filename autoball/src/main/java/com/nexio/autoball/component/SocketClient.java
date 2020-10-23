@@ -11,19 +11,19 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-@Component
+//@Component
 public class SocketClient {
     private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
-    @Value("${socket.endpoint}")
+//    @Value("${socket.endpoint}")
     String endPoint;
 
 
-    @Value("${socket.port}")
+//    @Value("${socket.port}")
     int port;
 
     public String send(String message) throws IOException{
-        try(Socket socket =  new Socket(InetAddress.getByName(endPoint), port);
+        try(Socket socket =  new Socket(InetAddress.getByName("localhost"), 5566);
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());) {
 
