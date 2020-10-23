@@ -18,9 +18,7 @@ public class Draw {
     @Json
     Map<String,String> balls;
 
-    @JsonIgnore
     Date startDate;
-    @JsonIgnore
     Date updateDate;
 
     public DrawType getGameId() {
