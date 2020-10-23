@@ -1,13 +1,17 @@
 package com.nexio.autoball.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
 public class NewSocketClient {
-    public NewSocketClient(String message) {
+    private static final Logger logger = LoggerFactory.getLogger(NewSocketClient.class);
 
+    public NewSocketClient(String message) {
         try(Socket socket =  new Socket(InetAddress.getByName("127.0.0.1"), 5566);
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());) {
@@ -17,7 +21,7 @@ public class NewSocketClient {
             byte[] bytes = new byte[1024];
             input.read(bytes);
             String inputMessage = new String(bytes);
-            System.out.println("Message from Server: " + inputMessage);
+            logger.info("Message from Server: " + inputMessage);
         }
         catch(Throwable e) {
             e.printStackTrace();
