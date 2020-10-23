@@ -82,8 +82,9 @@ public class AutoBallService {
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             logger.info("sleep 15sec for draw jackpot next five balls");
-            fiveBalls(gameNum,5000);
-            fiveBalls(gameNum,5000);
+            fiveBalls(gameNum,1000);
+            Thread.sleep(5000);
+            fiveBalls(gameNum,1000);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
