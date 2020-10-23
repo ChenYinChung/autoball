@@ -82,10 +82,10 @@ public class AutoBallService {
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             logger.info("sleep 15sec for draw jackpot next five balls");
-            Thread.sleep(10000);
+            Thread.sleep(20000);
             fiveBalls(gameNum);
             Thread.sleep(5000);
-            fiveBalls(gameNum);
+            drawAutoBall(gameNum);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
@@ -141,6 +141,15 @@ public class AutoBallService {
         } catch (Exception e) {
             logger.error("Task error", e);
         }
+    }
+
+    void setAntenna(String request){
+        new NewSocketClient(request);
+    }
+
+    void drawAutoBall(String gameNum){
+        String requset = "startGame," + gameNum + ",1,0";
+        new NewSocketClient(requset);
     }
 
 }

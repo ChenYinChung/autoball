@@ -57,7 +57,6 @@ public class PersistenceConfig {
             try {
                 Class<?> clazz = Class.forName(bean.getBeanClassName());
                 jdbi.registerRowMapper(FieldMapper.factory(clazz));
-
                 logger.info("register entity class[{}] into JBDI", clazz.getName());
             } catch (ClassNotFoundException e) {
                 logger.error("Register JDBI failure", e);
