@@ -9,8 +9,8 @@ CREATE TABLE public.draw (
     balls jsonb,
     create_date  timestamp NOT NULL DEFAULT NOW(),
     update_date  timestamp,
-    retry boolean default false,
-    retry_count int default 0,
-    status int default 0,
+--     retry boolean default false,
+--     retry_count int default 0,
+--     status int default 0,
     PRIMARY KEY	(game_num)
 );

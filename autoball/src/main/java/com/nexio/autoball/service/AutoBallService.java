@@ -75,20 +75,19 @@ public class AutoBallService {
         balls.putAll(draw.getBalls());
         draw.setBalls(balls);
         drawRepo.update(draw);
-        draw = drawRepo.findByGameNum(gameNum);
 
         //如果只有一個號碼6，則要呼叫jackpot
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             logger.info("sleep 20sec for draw jackpot next five balls");
-            Thread.sleep(20000);
+            setAntenna(ANT_FIVE_BALLS);
+            Thread.sleep(60000);
             fiveBalls(gameNum);
-//            Thread.sleep(5000);
-//            drawAutoBall(gameNum);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
+            draw = drawRepo.findByGameNum(gameNum);
             String message = cmsClient.send(draw);
             logger.info("SLE message[{}]", message);
         }
@@ -146,10 +145,4 @@ public class AutoBallService {
     void setAntenna(String request){
         new NewSocketClient(request);
     }
-
-    void drawAutoBall(String gameNum){
-        String requset = "startGame," + gameNum + ",1,0";
-        new NewSocketClient(requset);
-    }
-
 }
