@@ -2,6 +2,7 @@ package com.nexio.autoball.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nexio.autoball.component.CmsClient;
+import com.nexio.autoball.component.NewSocketClient;
 import com.nexio.autoball.component.SocketClient;
 import com.nexio.autoball.model.Draw;
 import com.nexio.autoball.model.DrawType;
@@ -82,7 +83,7 @@ public class AutoBallService {
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             Thread.sleep(5000);
             logger.info("sleep 15sec for draw jackpot next five balls");
-            fiveBalls(gameNum,15000);
+            fiveBalls(gameNum,5000);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
@@ -121,12 +122,12 @@ public class AutoBallService {
     void drawAutoBall(String requset, String gameNum , long sleep) {
         try {
             //控制開球筒
-            String json = new SocketClient().send(requset);
+            new NewSocketClient(requset);
             Thread.sleep(sleep);
             //開始啟動開球
             logger.info("自動排程－呼叫API開球");
             requset = "startGame," + gameNum + ",1,0";
-            json = new SocketClient().send(requset);
+            new NewSocketClient(requset);
 
         } catch (Exception e) {
             logger.error("Task error", e);
