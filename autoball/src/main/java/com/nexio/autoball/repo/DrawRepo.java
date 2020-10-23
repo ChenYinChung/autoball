@@ -41,16 +41,7 @@ public class DrawRepo {
             String json = objectMapper.writeValueAsString(draw.getBalls());
         jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
                     .bind("gameNum", draw.getGameNum())
-//                    .bind("status",draw.getStatus())
-//                    .bind("retry",draw.isRetry())
-//                    .bind("retryCount",draw.getRetryCount())
                     .bind("balls", json).execute());
-
-//
-//        DRAW_UPDATE_BY_GAME_NUM = UPDATE draw SET balls = CAST(:balls AS JSONB), \
-//        update_date = now() , status = :status, \
-//        retry = :retry , retry_count = :retryCount \
-//        WHERE game_num = :gameNum
 
     }
 

@@ -3,6 +3,7 @@ package com.nexio.autoball.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jdbi.v3.json.Json;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
@@ -18,8 +19,9 @@ public class Draw {
     @Json
     Map<String,String> balls;
 
-    Date createtDate;
-    Date updateDate;
+    Timestamp createtDate;
+
+    Timestamp updateDate;
 
 //    @JsonIgnore
 //    boolean retry;
@@ -52,22 +54,21 @@ public class Draw {
         this.balls = balls;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Date getCreatetDate() {
+    public Timestamp getCreatetDate() {
         return createtDate;
     }
 
-    public void setCreatetDate(Date createtDate) {
+    public void setCreatetDate(Timestamp createtDate) {
         this.createtDate = createtDate;
     }
 
+    public Timestamp getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Timestamp updateDate) {
+        this.updateDate = updateDate;
+    }
 //    public boolean isRetry() {
 //        return retry;
 //    }
