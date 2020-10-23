@@ -81,11 +81,11 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
-            logger.info("sleep 15sec for draw jackpot next five balls");
+            logger.info("sleep 20sec for draw jackpot next five balls");
             Thread.sleep(20000);
             fiveBalls(gameNum);
-            Thread.sleep(5000);
-            drawAutoBall(gameNum);
+//            Thread.sleep(5000);
+//            drawAutoBall(gameNum);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
@@ -135,8 +135,9 @@ public class AutoBallService {
             Thread.sleep(sleep);
             //開始啟動開球
             logger.info("自動排程－呼叫API開球");
-            requset = "startGame," + gameNum + ",1,0";
-            new NewSocketClient(requset);
+//            requset = "startGame," + gameNum + ",1,0";
+             requset = "startGame,2010,1,0";
+            new NewSocketClient("startGame,2010231515,1,0");
 
         } catch (Exception e) {
             logger.error("Task error", e);
