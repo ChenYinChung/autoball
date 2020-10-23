@@ -135,9 +135,8 @@ public class AutoBallService {
             Thread.sleep(sleep);
             //開始啟動開球
             logger.info("自動排程－呼叫API開球");
-//            requset = "startGame," + gameNum + ",1,0";
-             requset = "startGame,2010,1,0";
-            new NewSocketClient("startGame,2010231515,1,0");
+            requset = "startGame," + gameNum + ",1,0";
+            new NewSocketClient(requset);
 
         } catch (Exception e) {
             logger.error("Task error", e);
