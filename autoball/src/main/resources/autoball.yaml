@@ -7,7 +7,7 @@ socket :
 
 #回傳球號給SLE CMS Server API , skey = 我是autoball加yeekee加jackpot
 cms :
-    endpoint : http://localhost:8008/AutoBall
+    endpoint : https://crawler.stgdevops.site/crawler/api/v2/third-party/result/AutoBall
     skey : ji3g4autoballru8yeekeeru8jackpot
 
 draw:
