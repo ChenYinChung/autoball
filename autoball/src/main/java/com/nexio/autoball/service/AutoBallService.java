@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 配合DLL操作API
@@ -32,8 +34,8 @@ public class AutoBallService {
     static final String ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
     static final String ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
 
-//    @Autowired
-//    SocketClient socketClient;
+    @Autowired
+    SocketClient socketClient;
 
     @Autowired
     DrawRepo drawRepo;
@@ -80,9 +82,6 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
-            logger.info("sleep 20sec for draw jackpot next five balls");
-            setAntenna(ANT_FIVE_BALLS);
-            Thread.sleep(60000);
             fiveBalls(gameNum);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
@@ -108,41 +107,38 @@ public class AutoBallService {
         try {
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.YEEKEE);
-            fiveBalls(gameNum,5000);
+            fiveBalls(gameNum,5);
         } catch (JsonProcessingException e) {
             logger.error("Yeekee error", e);
         }
     }
 
     public void fiveBalls(String gameNum) {
-        fiveBalls(gameNum, 5000);
+        fiveBalls(gameNum, 5);
     }
 
-    public void fiveBalls(String gameNum, long sleep) {
+    public void fiveBalls(String gameNum, int delay) {
         logger.info("自動排程－設定第1-5管");
-        drawAutoBall(ANT_FIVE_BALLS, gameNum, sleep);
+        drawAutoBall(ANT_FIVE_BALLS, gameNum, delay);
     }
 
-    void drawAutoBall(String requset, String gameNum) {
-        drawAutoBall(requset,gameNum,5000);
+    void drawAutoBall(String request, String gameNum) {
+        drawAutoBall(request,gameNum,5);
     }
 
-    void drawAutoBall(String requset, String gameNum , long sleep) {
+    void drawAutoBall(String request, String gameNum , int delay) {
         try {
             //控制開球筒
-            new NewSocketClient(requset);
-            Thread.sleep(sleep);
+            socketClient.send(request,delay);
+            logger.info("自動排程－呼叫API變更筒delay[{}][{}]",delay,request);
             //開始啟動開球
-            logger.info("自動排程－呼叫API開球");
-            requset = "startGame," + gameNum + ",1,0";
-            new NewSocketClient(requset);
+
+            request = "startGame," + gameNum + ",1,0";
+            logger.info("自動排程－呼叫API開球delay[{}][{}]",delay*2,request);
+            socketClient.send(request,delay*2);
 
         } catch (Exception e) {
             logger.error("Task error", e);
         }
-    }
-
-    void setAntenna(String request){
-        new NewSocketClient(request);
     }
 }

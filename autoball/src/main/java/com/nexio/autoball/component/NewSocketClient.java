@@ -8,11 +8,21 @@ import java.io.DataOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class NewSocketClient {
+public class NewSocketClient implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(NewSocketClient.class);
 
-    public NewSocketClient(String message) {
-        try(Socket socket =  new Socket(InetAddress.getByName("127.0.0.1"), 5566);
+    String message;
+    String host;
+    int port;
+    public NewSocketClient(String host, int port,String message) {
+        this.host = host;
+        this.port = port;
+        this.message = message;
+    }
+
+    @Override
+    public void run() {
+        try(Socket socket =  new Socket(InetAddress.getByName(host), port);
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());) {
             byte[] b = message.getBytes();
@@ -26,9 +36,5 @@ public class NewSocketClient {
         catch(Throwable e) {
             e.printStackTrace();
         }
-    }
-    public static void main(String args[]) {
-        new NewSocketClient("startGame,101,1,0");
-        new NewSocketClient("ant,1,1,1,1,1,1,1");
     }
 }
