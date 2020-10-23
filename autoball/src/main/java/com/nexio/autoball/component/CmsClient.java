@@ -42,11 +42,11 @@ public class CmsClient {
         SecureRandom prng = new SecureRandom();
         prng.nextBytes(iv);
 
-        byte[] encryptedData = CryptoUtils.aesEncrypt(skeySpec, iv, objectMapper.writeValueAsString(draw));
+        String drawJson = objectMapper.writeValueAsString(draw);
+        byte[] encryptedData = CryptoUtils.aesEncrypt(skeySpec, iv, drawJson);
         Map<String, Object> map = new HashMap<>();
         map.put("iv", iv);
         map.put("value", encryptedData);
-        map.put("mac", "509e641eb94ccda29dc8d873e32e33836aacc7264af20da20687abb906bd9696");
 
         String data = Base64Utils.encodeToString(objectMapper.writeValueAsString(map).getBytes());
 //        //填入hedaer & body

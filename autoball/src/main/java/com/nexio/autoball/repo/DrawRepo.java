@@ -39,6 +39,7 @@ public class DrawRepo {
             jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
                     .bind("gameNum", draw.getGameNum())
                     .bind("balls", json).execute());
+
     }
 
     public Draw findByGameNum(String gameNum) {

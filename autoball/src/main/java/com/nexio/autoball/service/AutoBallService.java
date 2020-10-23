@@ -62,25 +62,28 @@ public class AutoBallService {
      */
     @Retryable(value = {RetryException.class}, maxAttempts = 3, backoff = @Backoff(value = 2000))
     public void drawResult(String gameNum, String drawResult) throws Exception {
-
-
-        logger.info("開獎期號　gameNum src[{}]", gameNum);
-        logger.info("開獎結果　drawResult src[{}]", drawResult);
         Map<String, String> balls = BallUtils.parse(drawResult);
-
         Draw draw = drawRepo.findByGameNum(gameNum);
-        if (draw.getBalls() != null) {
-            balls.putAll(draw.getBalls());
+
+        //發生在手動執行AutoBall介面開獎
+        if(draw == null){
+            logger.error("無法找到對應期號[{}]",gameNum);
+            return;
         }
+
+        balls.putAll(draw.getBalls());
         draw.setBalls(balls);
         drawRepo.update(draw);
+        draw = drawRepo.findByGameNum(gameNum);
 
         //如果只有一個號碼6，則要呼叫jackpot
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
             fiveBalls(gameNum);
-        } else {
+        } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
+                || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
+        ) {
             String message = cmsClient.send(draw);
             logger.info("SLE message[{}]", message);
         }

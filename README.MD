@@ -1,17 +1,9 @@
-### 還沒好
+### AutoBall 搖彩機API串接測試
 
-AutoBall 搖彩機API串接測試
 
-接口使用DLL串接，先行測試API是否能正常運作
+### 流程說明　###
+透過socket自動觸發AutoBallController
 
- curl http://localhost:8008/connectReader -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
-  
- curl http://localhost:8008/hasGamePlayed -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
- 
- curl http://localhost:8008/getGameInfo -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
- 
- curl http://localhost:8008/getLastError -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
-
- curl http://localhost:8008/getAntennaPara -X POST -i -H "Content-Type:application/json" -H "Accept:application/json"
- 
- curl http://localhost:8008/socket?nCurGameNum=20201019110&nGameCount=1&nTimeSpan=0 -X POST -i -H "Content-Type:application/json"
+1:JackPot每個整點執行
+　-> 先搖出第六筒比例的球號數字,透過http url /draw呼叫本地website
+　-> 本地website

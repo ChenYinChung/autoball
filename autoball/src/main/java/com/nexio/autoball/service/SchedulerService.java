@@ -43,7 +43,7 @@ public class SchedulerService {
      *  第一組
      */
     @Async
-    @Scheduled(cron = "0 0 07-23 * * *")
+    @Scheduled(cron = "3 0 7-23 * * *")
     public void scheduleSmallJackPotPartOne() {
         autoBallService.percent();
     }
@@ -53,7 +53,7 @@ public class SchedulerService {
      *  0 0 00-04 * * *     表示每天，00點到04點的0分0秒執行
      */
     @Async
-    @Scheduled(cron = "0 0 00-04 * * *")
+    @Scheduled(cron = "3 0 0-4 * * *")
     public void scheduleSmallJackPotPartTwo() {
         autoBallService.percent();
     }
@@ -64,7 +64,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 07 07-23 * * *")
+    @Scheduled(cron = "3 07 7-23 * * *")
     public void scheduleYeeKee7PartOne() {
         autoBallService.yeekee();
     }
@@ -74,7 +74,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 07 00-04 * * *")
+    @Scheduled(cron = "3 07 0-4 * * *")
     public void scheduleYeeKee7PartTwo() {
         autoBallService.yeekee();
     }
@@ -84,7 +84,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 22 06-23 * * *")
+    @Scheduled(cron = "3 22 6-23 * * *")
     public void scheduleYeeKee22PartOne() {
         autoBallService.yeekee();
     }
@@ -94,7 +94,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 22 00-03 * * *")
+    @Scheduled(cron = "3 22 0-3 * * *")
     public void scheduleYeeKee22PartTwo() {
         autoBallService.yeekee();
     }
@@ -105,7 +105,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 37 06-23 * * *")
+    @Scheduled(cron = "3 37 6-23 * * *")
     public void scheduleYeeKee37PartOne() {
         autoBallService.yeekee();
     }
@@ -115,7 +115,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 37 00-03 * * *")
+    @Scheduled(cron = "3 37 0-3 * * *")
     public void scheduleYeeKee37PartTwo() {
         autoBallService.yeekee();
     }
@@ -125,7 +125,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 52 06-23 * * *")
+    @Scheduled(cron = "3 52 6-23 * * *")
     public void scheduleYeeKee52PartOne() {
         autoBallService.yeekee();
     }
@@ -135,9 +135,19 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 52 00-03 * * *")
+    @Scheduled(cron = "3 52 0-3 * * *")
     public void scheduleYeeKee52PartTwo() {
         autoBallService.yeekee();
+    }
+
+    /**
+     * PURGE
+     * 04:22~06:07 不開
+     */
+    @Async
+    @Scheduled(cron = "0 0 6 * * *")
+    public void purge() {
+
     }
 
 //    /**
