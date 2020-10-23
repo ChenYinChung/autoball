@@ -1,5 +1,6 @@
 package com.nexio.autoball.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jdbi.v3.json.Json;
 
 import java.util.Date;
@@ -17,8 +18,9 @@ public class Draw {
     @Json
     Map<String,String> balls;
 
+    @JsonIgnore
     Date startDate;
-
+    @JsonIgnore
     Date updateDate;
 
     public DrawType getGameId() {

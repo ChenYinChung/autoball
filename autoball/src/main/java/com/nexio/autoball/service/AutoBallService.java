@@ -123,6 +123,7 @@ public class AutoBallService {
             String json = socketClient.send(requset);
             Thread.sleep(5000);
             //開始啟動開球
+            logger.info("自動排程－呼叫API開球");
             requset = "startGame," + gameNum + ",1,0";
             json = socketClient.send(requset);
 
