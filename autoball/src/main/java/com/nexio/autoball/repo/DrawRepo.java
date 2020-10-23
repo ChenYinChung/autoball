@@ -24,6 +24,9 @@ public class DrawRepo {
     @Value("${DRAW_UPDATE_BY_GAME_NUM}")
     private String updateByGameNum;
 
+    @Value("${DRAW_PURGE}")
+    private String purge;
+
     public void insert(Draw draw) throws JsonProcessingException {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(draw.getBalls());
@@ -36,7 +39,7 @@ public class DrawRepo {
     public void update(Draw draw) throws JsonProcessingException {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(draw.getBalls());
-            jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
+        jdbi.withHandle(handle -> handle.createUpdate(updateByGameNum)
                     .bind("gameNum", draw.getGameNum())
                     .bind("balls", json).execute());
 
@@ -46,6 +49,11 @@ public class DrawRepo {
         Optional<Draw> optional = jdbi.withHandle(handle -> handle.createQuery(queryByGameNum).
                 bind("gameNum", gameNum).mapTo(Draw.class).findFirst());
         return optional.isEmpty() ? null : optional.get();
+    }
+
+    public int purge(){
+        int del = jdbi.withHandle(handle -> handle.execute(purge));
+        return del;
     }
 
 }
