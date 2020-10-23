@@ -80,9 +80,9 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
-            Thread.sleep(15000);
+            Thread.sleep(5000);
             logger.info("sleep 15sec for draw jackpot next five balls");
-            fiveBalls(gameNum);
+            fiveBalls(gameNum,15000);
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
         ) {
@@ -96,7 +96,7 @@ public class AutoBallService {
             logger.info("自動排程－設定第6管");
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.SMALLJACKPOT);
-            drawAutoBall(ANT_PERCENT_BALL, gameNum);
+            drawAutoBall(ANT_PERCENT_BALL, gameNum,5000);
         } catch (JsonProcessingException e) {
             logger.error("percent error", e);
         }
@@ -106,23 +106,23 @@ public class AutoBallService {
         try {
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.YEEKEE);
-            fiveBalls(gameNum);
+            fiveBalls(gameNum,5000);
         } catch (JsonProcessingException e) {
             logger.error("Yeekee error", e);
         }
     }
 
-    public void fiveBalls(String gameNum) {
+    public void fiveBalls(String gameNum, long sleep) {
         logger.info("自動排程－設定第1-5管");
-        drawAutoBall(ANT_FIVE_BALLS, gameNum);
+        drawAutoBall(ANT_FIVE_BALLS, gameNum, sleep);
     }
 
 
-    void drawAutoBall(String requset, String gameNum) {
+    void drawAutoBall(String requset, String gameNum , long sleep) {
         try {
             //控制開球筒
             String json = socketClient.send(requset);
-            Thread.sleep(5000);
+            Thread.sleep(sleep);
             //開始啟動開球
             logger.info("自動排程－呼叫API開球");
             requset = "startGame," + gameNum + ",1,0";
