@@ -43,7 +43,7 @@ public class SchedulerService {
      *  第一組
      */
     @Async
-    @Scheduled(cron = "0 0 0-4,7-23 * * *")
+    @Scheduled(cron = "1 0 0-4,7-23 * * *")
     public void scheduleSmallJackPotPartOne() {
         autoBallService.percent();
     }
