@@ -62,7 +62,7 @@ project("autoball"){
         implementation "org.springframework.boot:spring-boot-starter-undertow:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-log4j2:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-data-rest:${SpringBootStarterVersion}"
-        implementation "org.springframework.boot:spring-boot-starter-data-jpa:${SpringBootStarterVersion}"
+//        implementation "org.springframework.boot:spring-boot-starter-data-jpa:${SpringBootStarterVersion}"
         implementation "org.springframework.boot:spring-boot-starter-jdbc:${SpringBootStarterVersion}"
 
         /**

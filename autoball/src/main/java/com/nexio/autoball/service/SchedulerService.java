@@ -43,7 +43,7 @@ public class SchedulerService {
      *  第一組
      */
     @Async
-    @Scheduled(cron = "0 0 7-23,0-4 * * *")
+    @Scheduled(cron = "0 0 0-4,7-23 * * *")
     public void scheduleSmallJackPotPartOne() {
         autoBallService.percent();
     }
@@ -53,7 +53,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 07 7-23,0-4 * * *")
+    @Scheduled(cron = "2 07 0-4,7-23, * * *")
     public void scheduleYeeKee7PartOne() {
         autoBallService.yeekee();
     }
@@ -63,7 +63,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 22 6-23,0-3 * * *")
+    @Scheduled(cron = "2 22 0-3,6-23 * * *")
     public void scheduleYeeKee22PartOne() {
         autoBallService.yeekee();
     }
@@ -73,7 +73,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 37 6-23,0-3 * * *")
+    @Scheduled(cron = "2 37 0-3,6-23 * * *")
     public void scheduleYeeKee37PartOne() {
         autoBallService.yeekee();
     }
@@ -83,7 +83,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "0 52 6-23,0-3 * * *")
+    @Scheduled(cron = "2 52 0-3,6-23 * * *")
     public void scheduleYeeKee52PartOne() {
         autoBallService.yeekee();
     }
