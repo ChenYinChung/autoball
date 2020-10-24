@@ -53,7 +53,7 @@ public class SchedulerService {
      * 04:22~06:07 不開
      */
     @Async
-    @Scheduled(cron = "2 07 0-4,7-23, * * *")
+    @Scheduled(cron = "2 07 0-4,7-23 * * *")
     public void scheduleYeeKee7PartOne() {
         autoBallService.yeekee();
     }
