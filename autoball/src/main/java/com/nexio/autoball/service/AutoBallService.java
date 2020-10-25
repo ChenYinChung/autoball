@@ -31,12 +31,6 @@ import java.util.concurrent.Executors;
 @EnableRetry
 public class AutoBallService {
     private static final Logger logger = LoggerFactory.getLogger(AutoBallService.class);
-    static final String ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
-    static final String ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
-    static final int DELAY_ZERO_SEC = 0;
-    static final int DELAY_FIVE_SEC = 5;
-    static final int DELAY_TEN_SEC = 10;
-
     @Autowired
     SocketClient socketClient;
 
@@ -85,8 +79,8 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
-            setAntenna(ANT_FIVE_BALLS,DELAY_FIVE_SEC);
-            drawAutoBall(gameNum,DELAY_TEN_SEC);
+            setAntenna(SchedulerService.SETTING_ANT_FIVE_BALLS,SchedulerService.DELAY_2D3D_ANT);
+            drawAutoBall(gameNum,SchedulerService.DELAY_2D3D_DRAW);
 
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
@@ -101,24 +95,24 @@ public class AutoBallService {
      * 排程只有開第六球，
      * 其餘１－５球，由auto ball callback /drawresut才會開出
      */
-    public void percent() {
+    public void percent(String antenna , int antDelay , int drawDealy) {
         try {
             logger.info("自動排程－設定第6管");
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.SMALLJACKPOT);
-            setAntenna(ANT_PERCENT_BALL,DELAY_ZERO_SEC);
-            drawAutoBall(gameNum,DELAY_FIVE_SEC);
+            setAntenna(antenna,antDelay);
+            drawAutoBall(gameNum,drawDealy);
         } catch (JsonProcessingException e) {
             logger.error("percent error", e);
         }
     }
 
-    public void yeekee() {
+    public void yeekee(String antenna , int antDelay , int drawDealy) {
         try {
             String gameNum = DateUtils.getIssue();
             insertDraw(gameNum, DrawType.YEEKEE);
-            setAntenna(ANT_FIVE_BALLS,DELAY_ZERO_SEC);
-            drawAutoBall(gameNum,DELAY_FIVE_SEC);
+            setAntenna(antenna,antDelay);
+            drawAutoBall(gameNum,drawDealy);
         } catch (JsonProcessingException e) {
             logger.error("Yeekee error", e);
         }

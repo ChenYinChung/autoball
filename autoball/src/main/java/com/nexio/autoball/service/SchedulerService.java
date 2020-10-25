@@ -28,6 +28,17 @@ import java.util.List;
 public class SchedulerService {
     private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
+    static final String SETTING_ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
+    static final String SETTING_ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
+    static final int DELAY_PERCENT_ANT = 0;
+    static final int DELAY_PERCENT_DRAW = 5;
+    static final int DELAY_2D3D_ANT = 5;
+    static final int DELAY_2D3D_DRAW = 10;
+    static final int DELAY_YEEKEE_ANT = 0;
+    static final int DELAY_YEEKEE_DRAW = 5;
+
+
+
     @Autowired
     AutoBallService autoBallService;
 
@@ -44,8 +55,8 @@ public class SchedulerService {
      */
     @Async
     @Scheduled(cron = "3 0 0-4,7-23 * * *")
-    public void scheduleSmallJackPotPartOne() {
-        autoBallService.percent();
+    public void scheduleSmallJackPot() {
+        autoBallService.percent(SETTING_ANT_PERCENT_BALL,DELAY_PERCENT_ANT,DELAY_PERCENT_DRAW);
     }
 
     /**
@@ -54,8 +65,8 @@ public class SchedulerService {
      */
     @Async
     @Scheduled(cron = "3 07 0-4,7-23 * * *")
-    public void scheduleYeeKee7PartOne() {
-        autoBallService.yeekee();
+    public void scheduleYeeKee7() {
+        yeekee();
     }
 
     /**
@@ -64,8 +75,8 @@ public class SchedulerService {
      */
     @Async
     @Scheduled(cron = "3 22 0-3,6-23 * * *")
-    public void scheduleYeeKee22PartOne() {
-        autoBallService.yeekee();
+    public void scheduleYeeKee22() {
+        yeekee();
     }
 
     /**
@@ -74,8 +85,8 @@ public class SchedulerService {
      */
     @Async
     @Scheduled(cron = "3 37 0-3,6-23 * * *")
-    public void scheduleYeeKee37PartOne() {
-        autoBallService.yeekee();
+    public void scheduleYeeKee37() {
+        yeekee();
     }
 
     /**
@@ -84,11 +95,13 @@ public class SchedulerService {
      */
     @Async
     @Scheduled(cron = "3 52 0-3,6-23 * * *")
-    public void scheduleYeeKee52PartOne() {
-        autoBallService.yeekee();
+    public void scheduleYeeKee52(){
+        yeekee();
     }
 
-
+    private void yeekee(){
+        autoBallService.yeekee(SETTING_ANT_FIVE_BALLS,DELAY_YEEKEE_ANT,DELAY_YEEKEE_DRAW);
+    }
     /**
      * PURGE
      * 04:22~06:07 不開
