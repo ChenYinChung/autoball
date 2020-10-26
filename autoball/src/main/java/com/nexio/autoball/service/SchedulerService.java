@@ -30,14 +30,20 @@ public class SchedulerService {
 
     static final String SETTING_ANT_PERCENT_BALL = "ant,0,0,0,0,0,1";
     static final String SETTING_ANT_FIVE_BALLS = "ant,1,1,1,1,1,0";
-    static final int DELAY_PERCENT_ANT = 0;
-    static final int DELAY_PERCENT_DRAW = 5;
-    static final int DELAY_2D3D_ANT = 5;
-    static final int DELAY_2D3D_DRAW = 10;
-    static final int DELAY_YEEKEE_ANT = 0;
-    static final int DELAY_YEEKEE_DRAW = 5;
 
+    //啟動彩金百分比天線延遲時間
+    @Value("${delay.percent.ant:0}")
+    int delayPercentAnt;
+    //啟動彩金百分比開獎延遲時間
+    @Value("${delay.percent.draw:5}")
+    int delayPercentDraw;
 
+    //啟動彩金2D3D天線延遲時間
+    @Value("${delay.yeekee.ant:0}")
+    int delayYeekeeAnt;
+    //啟動彩金2D3D開獎延遲時間
+    @Value("${delay.yeekee.draw:5}")
+    int delayYeekeeDraw;
 
     @Autowired
     AutoBallService autoBallService;
@@ -50,18 +56,21 @@ public class SchedulerService {
 
     /**
      * JP
-     *  0 0 07-23 * * *     表示每天，07點到23點的0分0秒執行
-     *  第一組
+     *  0 0 0-4,07-23 * * *     表示每天，0到４，07到23點的0分0秒執行
+     *  分別為二個動作
+     *  第一部分由Scheduler發起，通知開球機，只開第六球
+     *  第二部分由開球機發起，通知第六球結果，並發起http reqeust(/drawResult)
+     *  http接收後，接續發起開球1-5的動作
      */
     @Async
     @Scheduled(cron = "3 0 0-4,7-23 * * *")
     public void scheduleSmallJackPot() {
-        autoBallService.percent(SETTING_ANT_PERCENT_BALL,DELAY_PERCENT_ANT,DELAY_PERCENT_DRAW);
+        autoBallService.percent(SETTING_ANT_PERCENT_BALL,delayPercentAnt,delayPercentDraw);
     }
 
     /**
      * YEEKEE
-     * 04:22~06:07 不開
+     * 每7分在0-4,7-23執行
      */
     @Async
     @Scheduled(cron = "3 07 0-4,7-23 * * *")
@@ -71,7 +80,7 @@ public class SchedulerService {
 
     /**
      * YEEKEE
-     * 04:22~06:07 不開
+     * 每22分在0-3,6-23執行
      */
     @Async
     @Scheduled(cron = "3 22 0-3,6-23 * * *")
@@ -81,7 +90,7 @@ public class SchedulerService {
 
     /**
      * YEEKEE
-     * 04:22~06:07 不開
+     * 每37分在0-3,6-23執行
      */
     @Async
     @Scheduled(cron = "3 37 0-3,6-23 * * *")
@@ -91,7 +100,7 @@ public class SchedulerService {
 
     /**
      * YEEKEE
-     * 04:22~06:07 不開
+     * 每52分在0-3,6-23執行
      */
     @Async
     @Scheduled(cron = "3 52 0-3,6-23 * * *")
@@ -100,7 +109,7 @@ public class SchedulerService {
     }
 
     private void yeekee(){
-        autoBallService.yeekee(SETTING_ANT_FIVE_BALLS,DELAY_YEEKEE_ANT,DELAY_YEEKEE_DRAW);
+        autoBallService.yeekee(SETTING_ANT_FIVE_BALLS,delayYeekeeAnt,delayYeekeeDraw);
     }
     /**
      * PURGE
@@ -110,6 +119,7 @@ public class SchedulerService {
     @Scheduled(cron = "0 0 6 * * *")
     public void purge() {
         int delete = drawRepo.purge();
+        logger.info("Purge data count[{}]",delete);
     }
 
 //    /**

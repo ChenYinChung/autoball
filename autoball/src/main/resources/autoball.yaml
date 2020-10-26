@@ -13,3 +13,20 @@ cms :
 draw:
 #    path: /Users/sammy/git/survey/autoball/
     path: C:/Ray/AutoBallController/Data/
+
+delay:
+    percent:
+        #啟動彩金百分比天線延遲時間
+        ant: 0
+        #啟動彩金百分比開獎延遲時間
+        draw: 5
+    2d3d:
+        #啟動彩金2D3D天線延遲時間
+        ant: 5
+        #啟動彩金2D3D開獎延遲時間
+        draw: 10
+    yeekee:
+        #啟動彩金YEEKEE天線延遲時間
+        ant: 0
+        #啟動彩金YEEKEE開獎延遲時間
+        draw: 5

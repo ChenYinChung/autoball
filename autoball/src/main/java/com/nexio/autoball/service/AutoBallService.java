@@ -12,6 +12,7 @@ import com.nexio.autoball.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
@@ -39,6 +40,12 @@ public class AutoBallService {
 
     @Autowired
     CmsClient cmsClient;
+    //啟動彩金YEEKEE天線延遲時間
+    @Value("${delay.2d3d.ant:5}")
+    int delay2D3DAnt;
+    //啟動彩金YEEKEE開獎延遲時間
+    @Value("${delay.2d3d.draw:10}")
+    int delay2D3DDraw;
 
     /**
      * 初始化開獎期號
@@ -79,8 +86,8 @@ public class AutoBallService {
         //如果是五個號碼，更新DB後，call back cms
 
         if (balls.size() == 1 && balls.containsKey("6")) { //這是jp的百分比位置，還要呼叫2d,3d
-            setAntenna(SchedulerService.SETTING_ANT_FIVE_BALLS,SchedulerService.DELAY_2D3D_ANT);
-            drawAutoBall(gameNum,SchedulerService.DELAY_2D3D_DRAW);
+            setAntenna(SchedulerService.SETTING_ANT_FIVE_BALLS,delay2D3DAnt);
+            drawAutoBall(gameNum,delay2D3DDraw);
 
         } else if((draw.getGameId().equals(DrawType.SMALLJACKPOT) && draw.getBalls().size()==6)
                 || (draw.getGameId().equals(DrawType.YEEKEE) && draw.getBalls().size()==5)
