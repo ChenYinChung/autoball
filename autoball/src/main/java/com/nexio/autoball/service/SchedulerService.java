@@ -54,7 +54,7 @@ public class SchedulerService {
      *  第一組
      */
     @Async
-    @Scheduled(cron = "3 0/5 0-4,7-23 * * *")
+    @Scheduled(cron = "3 0 0-4,7-23 * * *")
     public void scheduleSmallJackPot() {
         autoBallService.percent(SETTING_ANT_PERCENT_BALL,DELAY_PERCENT_ANT,DELAY_PERCENT_DRAW);
     }
@@ -100,7 +100,7 @@ public class SchedulerService {
     }
 
     private void yeekee(){
-//        autoBallService.yeekee(SETTING_ANT_FIVE_BALLS,DELAY_YEEKEE_ANT,DELAY_YEEKEE_DRAW);
+        autoBallService.yeekee(SETTING_ANT_FIVE_BALLS,DELAY_YEEKEE_ANT,DELAY_YEEKEE_DRAW);
     }
     /**
      * PURGE
