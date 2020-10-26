@@ -26,7 +26,7 @@
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
-<!--            <AppenderRef ref="R"/>-->
+            <AppenderRef ref="R"/>
         </Root>
     </Loggers>
 </Configuration>
