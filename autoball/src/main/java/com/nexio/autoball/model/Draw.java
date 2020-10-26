@@ -1,9 +1,7 @@
 package com.nexio.autoball.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jdbi.v3.json.Json;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,16 +17,10 @@ public class Draw {
     @Json
     Map<String,String> balls;
 
-    Timestamp createtDate;
+    Date createDate;
 
-    Timestamp updateDate;
+    Date updateDate;
 
-//    @JsonIgnore
-//    boolean retry;
-//    @JsonIgnore
-//    int retryCount;
-//    @JsonIgnore
-//    int status;
 
     public DrawType getGameId() {
         return gameId;
@@ -54,42 +46,19 @@ public class Draw {
         this.balls = balls;
     }
 
-    public Timestamp getCreatetDate() {
-        return createtDate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreatetDate(Timestamp createtDate) {
-        this.createtDate = createtDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Timestamp getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Timestamp updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-//    public boolean isRetry() {
-//        return retry;
-//    }
-//
-//    public void setRetry(boolean retry) {
-//        this.retry = retry;
-//    }
-//
-//    public int getRetryCount() {
-//        return retryCount;
-//    }
-//
-//    public void setRetryCount(int retryCount) {
-//        this.retryCount = retryCount;
-//    }
-//
-//    public int getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(int status) {
-//        this.status = status;
-//    }
 }
